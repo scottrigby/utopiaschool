@@ -308,5 +308,8 @@ ul.triangles {
     top: inherit;
     left: inherit;
 }
-
+/* Set margin to value of ".triangle, .triangle:before" */
+.item-list ul.triangles li {
+    margin: -0.58457em -0.675em;
+}
 
