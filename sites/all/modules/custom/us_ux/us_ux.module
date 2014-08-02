@@ -43,3 +43,40 @@ function us_ux_filter_process_format($element) {
 
   return $element;
 }
+
+/**
+ * Implements hook_field_access().
+ *
+ * Note field_permissions module is overkill here.
+ */
+function us_ux_field_access($op, $field, $entity_type, $entity, $account) {
+  if ($field['field_name'] == 'field_status' && $op == 'edit') {
+    return in_array('committee', $account->roles);
+  }
+  return TRUE;
+}
+
+/**
+ * Implements hook_views_pre_view().
+ */
+function us_ux_views_pre_view(&$view, &$display_id, &$args) {
+  if ($view->name == 'classes' && $display_id == 'block_1') {
+    if (arg(0) == 'user' && !arg(2)) {
+      global $user;
+      if ($user->uid == arg(1)) {
+        // Use user-specific language.
+        $header = '<p><a class="button" href="/node/add/class">+ Submit a new proposal</a></p>';
+        $empty = '<div class="alert alert-warning">You have not submitted any classes yet.</div>';
+      }
+      else {
+        $header = '';
+        $empty = '<div class="alert alert-warning">This person has not submitted any classes yet.</div>';
+      }
+      $view->set_item_option('block_1', 'header', 'area', 'content', $header);
+      $view->set_item_option('block_1', 'header', 'area', 'format', 'full_html');
+      $view->set_item_option('block_1', 'header', 'area', 'empty', 1);
+      $view->set_item_option('block_1', 'empty', 'area', 'content', $empty);
+      $view->set_item_option('block_1', 'empty', 'area', 'format', 'full_html');
+    }
+  }
+}
