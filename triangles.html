@@ -27,46 +27,45 @@
             float: left;
         }
 
-        .svg-triangle{
-            margin: 0 auto;
-            width: 400px;
-            height: 400px;
-        }
-
-        .svg-triangle polygon {
+        /*.svg-triangle{*/
+            /*margin: 0 auto;*/
+            /*width: 400px;*/
+            /*height: 400px;*/
+        /*}*/
+        /*.svg-triangle polygon {*/
             /*fill:#98d02e;*/
-            stroke:#65b81d;
-            stroke-width:2;
+            /*stroke:#65b81d;*/
+            /*stroke-width:2;*/
             /*fill: url('http://placekitten.com/400/400');*/
-            fill="url(#img1)";
-        }
+            /*fill="url(#img1)";*/
+        /*}*/
 
 
         /* set viewBox="0 0 100 100" on svg. See http://stackoverflow.com/questions/8919076/how-to-make-a-svg-element-expand-or-contract-to-its-parent-container */
-        /*svg.kitten, #container {*/
-            /*height: 100%;*/
-            /*width: 100%;*/
+        /*#container {*/
+            /*height: 1040px;*/
+            /*width: 1200px;*/
         /*}*/
-        .kitten {
-            width: 600;
-            height: 520;
-        }
-        #kitten-one {
-            margin-left: 300px;
-        }
-        #kitten-two {
+        /*.kitten {*/
+            /*width: 600px;*/
+            /*height: 520px;*/
+        /*}*/
+        /*#kitten-one {*/
+            /*margin-left: 300px;*/
+        /*}*/
+        /*#kitten-two {*/
             /*float: left;*/
-        }
-        #kitten-three {
+        /*}*/
+        /*#kitten-three {*/
             /*float: left;*/
-            margin-left: -306px;
+            /*margin-left: -306px;*/
             /*margin-right: -300px;*/
-        }
-        #kitten-four {
+        /*}*/
+        /*#kitten-four {*/
             /*float: left;*/
             /*margin-left: -300px;*/
-            margin-left: -303px;
-        }
+            /*margin-left: -303px;*/
+        /*}*/
     </style>
     </head>
     <body>
@@ -90,41 +89,65 @@
         </svg>
     </div>-->
 
-    <div id="container">
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="kitten" id="kitten-one">
-            <defs>
-                <pattern id="img1" patternUnits="userSpaceOnUse" width="600" height="600">
-                    <image xlink:href="http://placekitten.com/605/605" x="0" y="0" width="600" height="600" />
-                </pattern>
-            </defs>
-            <path d="M300,0.3 L600,521.75 L-1,520.5 C100,348 198,172.5 299.3,0.28z" fill="url(#img1)" />
-        </svg>
+    <!--<div id="container">-->
+        <!--<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="kitten" id="kitten-one">-->
+            <!--<defs>-->
+                <!--<pattern id="img1" patternUnits="userSpaceOnUse" width="600" height="600">-->
+                    <!--<image xlink:href="http://placekitten.com/605/605" x="0" y="0" width="600" height="600" />-->
+                <!--</pattern>-->
+            <!--</defs>-->
+            <!--<path d="M300,0.3 L600,521.75 L-1,520.5 C100,348 198,172.5 299.3,0.28z" fill="url(#img1)" />-->
+        <!--</svg>-->
 
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="kitten" id="kitten-two">
+        <!--<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="kitten" id="kitten-two">-->
+            <!--<defs>-->
+                <!--<pattern id="img1" patternUnits="userSpaceOnUse" width="600" height="600">-->
+                    <!--<image xlink:href="http://placekitten.com/600/600" x="0" y="0" width="600" height="600" />-->
+                <!--</pattern>-->
+            <!--</defs>-->
+            <!--<path d="M300,0.3 L600,521.75 L-1,520.5 C100,348 198,172.5 299.3,0.28z" fill="url(#img1)" />-->
+        <!--</svg>-->
+
+        <!--<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="kitten" id="kitten-three">-->
+            <!--<defs>-->
+                <!--<pattern id="img1" patternUnits="userSpaceOnUse" width="600" height="600">-->
+                    <!--<image xlink:href="http://placekitten.com/610/610" x="0" y="0" width="600" height="600" />-->
+                <!--</pattern>-->
+            <!--</defs>-->
+            <!--<path d="M300,0.3 L600,521.75 L-1,520.5 C100,348 198,172.5 299.3,0.28z" fill="url(#img1)" transform="rotate(180, 300, 300) translate(0,80)" />-->
+        <!--</svg>-->
+
+        <!--<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="kitten" id="kitten-four">-->
+            <!--<defs>-->
+                <!--<pattern id="img1" patternUnits="userSpaceOnUse" width="600" height="600">-->
+                    <!--<image xlink:href="http://placekitten.com/620/620" x="0" y="0" width="600" height="600" />-->
+                <!--</pattern>-->
+            <!--</defs>-->
+            <!--<path d="M300,0.3 L600,521.75 L-1,520.5 C100,348 198,172.5 299.3,0.28z" fill="url(#img1)" />-->
+        <!--</svg>-->
+    <!--</div>-->
+
+    <div>
+        <svg width="1200" height="1040">
             <defs>
                 <pattern id="img1" patternUnits="userSpaceOnUse" width="600" height="600">
                     <image xlink:href="http://placekitten.com/600/600" x="0" y="0" width="600" height="600" />
                 </pattern>
-            </defs>
-            <path d="M300,0.3 L600,521.75 L-1,520.5 C100,348 198,172.5 299.3,0.28z" fill="url(#img1)" />
-        </svg>
-
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="kitten" id="kitten-three">
-            <defs>
-                <pattern id="img1" patternUnits="userSpaceOnUse" width="600" height="600">
+                <pattern id="img2" patternUnits="userSpaceOnUse" width="600" height="600">
+                    <image xlink:href="http://placekitten.com/605/605" x="0" y="0" width="600" height="600" />
+                </pattern>
+                <pattern id="img3" patternUnits="userSpaceOnUse" width="600" height="600" patternTransform="rotate(180)">
                     <image xlink:href="http://placekitten.com/610/610" x="0" y="0" width="600" height="600" />
                 </pattern>
-            </defs>
-            <path d="M300,0.3 L600,521.75 L-1,520.5 C100,348 198,172.5 299.3,0.28z" fill="url(#img1)" transform="rotate(180, 300, 300) translate(0,80)" />
-        </svg>
-
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="kitten" id="kitten-four">
-            <defs>
-                <pattern id="img1" patternUnits="userSpaceOnUse" width="600" height="600">
-                    <image xlink:href="http://placekitten.com/620/620" x="0" y="0" width="600" height="600" />
+                <pattern id="img4" patternUnits="userSpaceOnUse" width="600" height="600">
+                    <image xlink:href="http://placekitten.com/615/615" x="0" y="0" width="600" height="600" />
                 </pattern>
             </defs>
-            <path d="M300,0.3 L600,521.75 L-1,520.5 C100,348 198,172.5 299.3,0.28z" fill="url(#img1)" />
+            <path d="M300,0.3 L600,521.75 L-1,520.5 C100,348 198,172.5 299.3,0.28z" fill="url(#img1)" transform="translate(300,0)" />
+            <path d="M300,0.3 L600,521.75 L-1,520.5 C100,348 198,172.5 299.3,0.28z" fill="url(#img2)" transform="translate(0,520)" />
+            <!-- 442 is 520 - 80 (the approx rotation difference. Not sure why we need the extra 2 though. -->
+            <path d="M300,0.3 L600,521.75 L-1,520.5 C100,348 198,172.5 299.3,0.28z" fill="url(#img3)" transform="rotate(180, 300, 300) translate(-300,-442)" />
+            <path d="M300,0.3 L600,521.75 L-1,520.5 C100,348 198,172.5 299.3,0.28z" fill="url(#img4)" transform="translate(600,520)" />
         </svg>
     </div>
 
