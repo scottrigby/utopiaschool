@@ -243,33 +243,42 @@ $c: #ffffde #91b48f #fc8781 #cafdca #f86968 #c8a58f
     content: '';
 }
 
+/*
+3px 0 0 rgb(217,31,38) #D91F26
+6px 0 0 rgb(226,91,14) #E25B0E
+9px 0 0 rgb(245,221,8) #F1DD08
+12px 0 0 rgb(5,148,68) #059444
+15px 0 0 rgb(2,135,206) #0287CE
+18px 0 0 rgb(4,77,145) #044D91
+21px 0 0 rgb(42,21,113) #2A1571
+*/
 @-webkit-keyframes ani {
     0% {
-        background: #50625f;
+        background: white;
     }
 
     8.33333% {
-        background: #b9e2db;
+        background: rgb(226,91,14);
     }
 
     16.66667% {
-        background: #3faeff;
+        background: rgb(245,221,8);
     }
 
     25% {
-        background: #2777b1;
+        background: rgb(5,148,68);
     }
 
     33.33333% {
-        background: #16648b;
+        background: rgb(2,135,206);
     }
 
     41.66667% {
-        background: #d15c46;
+        background: rgb(4,77,145);
     }
 
     50% {
-        background: #8fd7c8;
+        background: black;
     }
 
     58.33333% {
@@ -277,23 +286,23 @@ $c: #ffffde #91b48f #fc8781 #cafdca #f86968 #c8a58f
     }
 
     66.66667% {
-        background: #585657;
+        background: rgb(217,31,38);
     }
 
     75% {
-        background: #44ffdc;
+        background: rgb(226,91,14);
     }
 
     83.33333% {
-        background: #f1614b;
+        background: rgb(245,221,8);
     }
 
     91.66667% {
-        background: #bfeae2;
+        background: rgb(5,148,68);
     }
 
     100% {
-        background: #50625f;
+        background: rgb(2,135,206);
     }
 }
 

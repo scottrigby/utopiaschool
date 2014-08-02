@@ -106,7 +106,6 @@
           <div id="site-name-slogan" class="brand navbar-brand <?php if ($hide_site_name && $hide_site_slogan) { print ' element-invisible'; } ?>">
 
             <?php if ($site_name): ?>
-              <?php print $triangle; ?>
               <h1 id="site-name"<?php if ($hide_site_name) { print ' class="element-invisible"'; } ?>>
                 <strong>
                   <a href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>" rel="home"><span><?php print $site_name; ?></span></a>
