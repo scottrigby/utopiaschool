@@ -5,6 +5,8 @@
  * Hooks and API functions for Utopia School UX module.
  */
 
+define ('US_UX_NAME_FIELD', 'field_name');
+
 /**
  * Implements hook_element_info_alter().
  *
@@ -77,6 +79,31 @@ function us_ux_views_pre_view(&$view, &$display_id, &$args) {
       $view->set_item_option('block_1', 'header', 'area', 'empty', 1);
       $view->set_item_option('block_1', 'empty', 'area', 'content', $empty);
       $view->set_item_option('block_1', 'empty', 'area', 'format', 'full_html');
+    }
+  }
+}
+
+/**
+ * Implements hook_username_alter().
+ *
+ * The Name module has way too much that we don't want. But it also solves some
+ * things in a nicer way than Realname module (which has other things we don't
+ * want, and also does not support profile2).
+ *
+ * @see name_username_alter()
+ */
+function us_ux_username_alter(&$name, $account) {
+  // Don't alter anonymous users or objects that do not have any user ID.
+  if (empty($account->uid)) {
+    return;
+  }
+
+  // We store the user name in a custom profile2 field.
+  if($data = profile2_load_by_user($account, 'main')) {
+    if ($items = field_get_items('profile2', $data, US_UX_NAME_FIELD)) {
+      if (isset($items[0]['safe_value']) && drupal_strlen($items[0]['safe_value'])) {
+        $name = $items[0]['safe_value'];
+      }
     }
   }
 }
