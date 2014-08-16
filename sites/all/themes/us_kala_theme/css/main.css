@@ -148,6 +148,30 @@ a.button:focus {
     text-decoration: none;
 }
 
+/* Views */
+
+/* Style grouping fields like H2s */
+/*.view-content caption {*/
+    /*font-size: 32px;*/
+
+    /*margin-top: 21px;*/
+    /*margin-bottom: 10.5px;*/
+    /*font-family: "Open Sans",Calibri,Candara,Arial,sans-serif;*/
+    /*font-weight: 300;*/
+    /*line-height: 1.1;*/
+    /*color: inherit;*/
+
+    /*text-align: -webkit-left;*/
+/*}*/
+
+.view-classes .views-row {
+    padding: 0 1em;
+}
+
+.view-classes .views-row-odd {
+    background-color: rgba(255, 255, 255, .5);
+}
+
 /* Hacks */
 #edit-field-images {
     clear: both;
