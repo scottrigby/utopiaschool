@@ -56,4 +56,13 @@ function us_ux_install() {
 
   // Clean up navigation.
   module_disable(array('toolbar'));
+
+  // Disable plain_text after it's no longer the fallback.
+  // This is the lightest way to remove the confusing option for users to post
+  // in plain text.
+  // @see filter_fallback_format().
+  variable_set('filter_fallback_format', 'filtered_html');
+  // Now we can safely disable plain text format.
+  $format = filter_format_load('plain_text');
+  filter_format_disable($format);
 }
