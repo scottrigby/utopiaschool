@@ -4,7 +4,7 @@
  * Primary pre/preprocess functions and alterations.
  */ 
 
-function us_kala_theme_process_page(&$variables) {
+function us_kalatheme_process_page(&$variables) {
   $triangle[] = array(
     '#theme' => 'item_list',
     '#items' => array_fill(0, 21, array('data' => '', 'class' => array('triangle'))),
@@ -17,7 +17,7 @@ function us_kala_theme_process_page(&$variables) {
 /**
  * Implements theme_field__field_type().
  */
-function us_kala_theme_field__taxonomy_term_reference($variables) {
+function us_kalatheme_field__taxonomy_term_reference($variables) {
   $output = '';
 
   // Render the label, if it's not hidden.
@@ -44,7 +44,7 @@ function us_kala_theme_field__taxonomy_term_reference($variables) {
  *
  * Implements template_preprocess_node().
  */
-function us_kala_theme_preprocess_node(&$variables) {
+function us_kalatheme_preprocess_node(&$variables) {
   // From kalatheme_preprocess_node().
   if ($variables['view_mode'] == 'full' && node_is_page($variables['node'])) {
     $variables['classes_array'][] = 'node-full';

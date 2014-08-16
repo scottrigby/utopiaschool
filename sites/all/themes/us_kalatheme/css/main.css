@@ -188,11 +188,16 @@ img.avatar {
     height: 30px;
 }
 .submitted {
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
+}
+
+/* Fields */
+.field {
+    padding-top: .5em;
 }
 
 /* Entity links */
-ul.links {
+.node ul.links {
     padding-top: 1em;
 }
 
