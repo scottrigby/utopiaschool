@@ -183,6 +183,14 @@ tbody {
     border-color: transparent;
 }
 
+/* Submitted */
+img.avatar {
+    height: 30px;
+}
+.submitted {
+    margin-bottom: 1em;
+}
+
 /* Override Kalatheme */
 html.js input.form-autocomplete {
     background-image: none;

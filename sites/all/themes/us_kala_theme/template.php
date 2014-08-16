@@ -38,3 +38,37 @@ function us_kala_theme_field__taxonomy_term_reference($variables) {
 
   return $output;
 }
+
+/**
+ * Override or insert variables into the node template.
+ *
+ * Implements template_preprocess_node().
+ */
+function us_kala_theme_preprocess_node(&$variables) {
+  // From kalatheme_preprocess_node().
+  if ($variables['view_mode'] == 'full' && node_is_page($variables['node'])) {
+    $variables['classes_array'][] = 'node-full';
+  }
+
+  // Change submitted by.
+  if ($variables['node']->type == 'class') {
+    $user = user_load($variables['node']->uid);
+    $default = 'public://default_images/600.jpeg';
+    if ($items = field_get_items('user', $user, 'field_avatar')) {
+      if (!empty($items[0]['uri'])) {
+        $uri = $items[0]['uri'];
+      }
+    }
+    $uri = !empty($uri) ? $uri : $default;
+    $avatar = theme_image_style(
+      array(
+        'style_name' => 'thumbnail',
+        'path' => $uri,
+        'attributes' => array('class' => 'avatar'),
+        'width' => NULL,
+        'height' => NULL
+      )
+    );
+    $variables['submitted'] = t('!avatar Proposed by !username', array('!username' => $variables['name'], '!avatar' => $avatar));
+  }
+}
