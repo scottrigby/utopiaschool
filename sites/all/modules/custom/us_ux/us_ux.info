@@ -1,3 +1,6 @@
 name = Utopia School UX
 core = 7.x
+dependencies[] = jquery_update
+dependencies[] = libraries
+dependencies[] = panels
 dependencies[] = textformatter

@@ -50,6 +50,10 @@ function us_ux_install() {
   );
   variable_set('theme_' . $theme . '_settings', $settings);
 
+  // Jquery update settings.
+  variable_set('jquery_update_compression_type', 'min');
+  variable_set('jquery_update_jquery_version', '1.7');
+
   // Clean up navigation.
   module_disable(array('toolbar'));
 }
