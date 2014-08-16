@@ -191,6 +191,11 @@ img.avatar {
     margin-bottom: 1em;
 }
 
+/* Entity links */
+ul.links {
+    padding-top: 1em;
+}
+
 /* Override Kalatheme */
 html.js input.form-autocomplete {
     background-image: none;
