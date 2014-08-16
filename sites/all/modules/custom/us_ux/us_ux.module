@@ -107,8 +107,8 @@ function us_ux_username_alter(&$name, $account) {
   }
 
   // We store the user name in a custom profile2 field.
-  if($data = profile2_load_by_user($account, 'main')) {
-    if (field_info_instance('profile2', US_UX_NAME_FIELD, 'main') && $items = field_get_items('profile2', $data, US_UX_NAME_FIELD)) {
+  if (field_info_instance('profile2', US_UX_NAME_FIELD, 'main') && $data = profile2_load_by_user($account, 'main')) {
+    if ($items = field_get_items('profile2', $data, US_UX_NAME_FIELD)) {
       if (isset($items[0]['safe_value']) && drupal_strlen($items[0]['safe_value'])) {
         $name = $items[0]['safe_value'];
       }
