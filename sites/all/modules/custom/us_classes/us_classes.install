@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * Unpublish the classes node and delete the alias.
+ */
+function us_classes_update_7000() {
+  // The current classes node ID.
+  $nid = 8;
+
+  // Unpublish it.
+  $node = node_load($nid);
+  $node->status = NODE_NOT_PUBLISHED;
+  node_save($node);
+
+  // Remove the path, so our classes View can take it.
+  path_delete(array('source' => 'node/' . $id));
+}
