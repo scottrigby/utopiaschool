@@ -14,7 +14,6 @@ function us_classes_user_default_permissions() {
   $permissions['create class content'] = array(
     'name' => 'create class content',
     'roles' => array(
-      'anonymous user' => 'anonymous user',
       'authenticated user' => 'authenticated user',
     ),
     'module' => 'node',

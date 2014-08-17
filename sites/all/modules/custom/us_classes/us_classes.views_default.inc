@@ -50,7 +50,7 @@ function us_classes_views_default_views() {
   $handler->display->display_options['empty']['area']['field'] = 'area';
   $handler->display->display_options['empty']['area']['label'] = 'No classes text';
   $handler->display->display_options['empty']['area']['empty'] = TRUE;
-  $handler->display->display_options['empty']['area']['content'] = '<div class="alert alert-warning">There are no classes matching that filter criteria. Select different criteria, or click <em>Reset</em>.</div>';
+  $handler->display->display_options['empty']['area']['content'] = '<div class="alert alert-warning">There are no classes matching that filter criteria. Select different criteria, or click <em>See all</em>.</div>';
   $handler->display->display_options['empty']['area']['format'] = 'full_html';
   /* Relationship: Content: Author */
   $handler->display->display_options['relationships']['uid']['id'] = 'uid';
@@ -70,18 +70,6 @@ function us_classes_views_default_views() {
   $handler->display->display_options['fields']['field_topics']['table'] = 'field_data_field_topics';
   $handler->display->display_options['fields']['field_topics']['field'] = 'field_topics';
   $handler->display->display_options['fields']['field_topics']['delta_offset'] = '0';
-  /* Field: User: Avatar */
-  $handler->display->display_options['fields']['field_avatar']['id'] = 'field_avatar';
-  $handler->display->display_options['fields']['field_avatar']['table'] = 'field_data_field_avatar';
-  $handler->display->display_options['fields']['field_avatar']['field'] = 'field_avatar';
-  $handler->display->display_options['fields']['field_avatar']['relationship'] = 'uid';
-  $handler->display->display_options['fields']['field_avatar']['label'] = '';
-  $handler->display->display_options['fields']['field_avatar']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_avatar']['click_sort_column'] = 'fid';
-  $handler->display->display_options['fields']['field_avatar']['settings'] = array(
-    'image_style' => 'thumbnail',
-    'image_link' => 'content',
-  );
   /* Field: User: Name */
   $handler->display->display_options['fields']['name']['id'] = 'name';
   $handler->display->display_options['fields']['name']['table'] = 'users';
