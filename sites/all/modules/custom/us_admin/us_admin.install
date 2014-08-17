@@ -1,0 +1,9 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function us_admin_install() {
+  // Remove toolbars in favor of mobile friendly navigation.
+  module_disable(array('admin_menu', 'toolbar'));
+}
