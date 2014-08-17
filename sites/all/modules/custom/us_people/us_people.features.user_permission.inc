@@ -27,6 +27,7 @@ function us_people_user_default_permissions() {
       'anonymous user' => 'anonymous user',
       'authenticated user' => 'authenticated user',
     ),
+    'module' => 'profile2',
   );
 
   return $permissions;
