@@ -14,10 +14,8 @@ function us_people_user_default_permissions() {
   $permissions['access user profiles'] = array(
     'name' => 'access user profiles',
     'roles' => array(
-      'administrator' => 'administrator',
       'anonymous user' => 'anonymous user',
       'authenticated user' => 'authenticated user',
-      'committee' => 'committee',
     ),
     'module' => 'user',
   );
@@ -26,7 +24,8 @@ function us_people_user_default_permissions() {
   $permissions['view any main profile'] = array(
     'name' => 'view any main profile',
     'roles' => array(
-      'administrator' => 'administrator',
+      'anonymous user' => 'anonymous user',
+      'authenticated user' => 'authenticated user',
     ),
   );
 
