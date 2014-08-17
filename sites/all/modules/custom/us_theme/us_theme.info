@@ -2,6 +2,7 @@ name = us_theme
 core = 7.x
 package = Other
 dependencies[] = ctools
+dependencies[] = imagecache_external
 dependencies[] = jquery_update
 dependencies[] = libraries
 dependencies[] = panels
