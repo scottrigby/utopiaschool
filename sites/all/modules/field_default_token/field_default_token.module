@@ -1,7 +1,12 @@
 <?php
 
 /**
- * Implements image_field_update_instance().
+ * @file
+ * Enables to use tokens as field default values.
+ */
+
+/**
+ * Implements hook_field_update_instance().
  */
 function field_default_token_field_update_instance($instance, $prior_instance) {
   $has_tokens = FALSE;
@@ -32,7 +37,7 @@ function field_default_token_field_update_instance($instance, $prior_instance) {
       $update = TRUE;
     }
   }
-  else if ($instance['default_value_function'] == 'field_default_token_default_value_function') {
+  elseif ($instance['default_value_function'] == 'field_default_token_default_value_function') {
     if (!$has_tokens) {
       unset($instance['default_value_function']);
       $update = TRUE;
@@ -40,14 +45,15 @@ function field_default_token_field_update_instance($instance, $prior_instance) {
   }
 
   if ($update) {
-    // Resave the instance and reclear caches.
+    // Save the instance and clear caches again without hook invoking.
+    // @see field_update_instance()
     _field_write_instance($instance, TRUE);
     field_cache_clear();
   }
 }
 
 /**
- * Function for token replacementment of default values.
+ * Function for token replacement of default values.
  */
 function field_default_token_default_value_function($entity_type, $entity, $field, $instance, $langcode) {
   $token_type = $entity_type;
@@ -59,14 +65,23 @@ function field_default_token_default_value_function($entity_type, $entity, $fiel
     $token_type => $entity,
   );
 
+  $token_is_label = (isset($field['settings']['allowed_values']) && (is_array($field['settings']['allowed_values']))
+    && (!empty($instance['default_value_label_token'])));
+
   $items = $instance['default_value'];
   foreach ($items as &$item) {
     if (!is_array($item)) {
       $item = token_replace($item, $data, array('clear' => TRUE));
+      if ($token_is_label) {
+        $item = array_search($item, $field['settings']['allowed_values']);
+      }
     }
     else {
       foreach ($item as $column_name => $column_value) {
         $item[$column_name] = token_replace($column_value, $data, array('clear' => TRUE));
+        if ($token_is_label) {
+          $item[$column_name] = array_search($item[$column_name], $field['settings']['allowed_values']);
+        }
       }
     }
   }
@@ -77,20 +92,25 @@ function field_default_token_default_value_function($entity_type, $entity, $fiel
  * Implements hook_form_FORM_ID_alter().
  */
 function field_default_token_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id) {
+  $field = $form['#field'];
+  $instance = $form['#instance'];
+
   if (!isset($form['instance']['default_value_widget'])) {
-    $field = $form['#field'];
-    $instance = $form['#instance'];
     if ((field_behaviors_widget('default value', $instance) == FIELD_BEHAVIOR_DEFAULT)
-        && (!empty($instance['default_value_function'])) && ($instance['default_value_function'] === 'field_default_token_default_value_function')) {
-      //Readd default value widget hidden by core.
+        && (!empty($instance['default_value_function']))
+        && ($instance['default_value_function'] === 'field_default_token_default_value_function')) {
+      // Read default value widget hidden by core.
       $form['instance']['default_value_widget'] = field_ui_default_value_widget($field, $instance, $form, $form_state);
     }
   }
 
-  if ((isset($form['#instance']['widget']['type'])) && ($form['#instance']['widget']['type'] == 'options_select')) {
+  $options_widgets = array('options_select', 'options_buttons', 'options_onoff');
+
+  if ((isset($instance['widget']['type'])) && (in_array($instance['widget']['type'], $options_widgets))) {
     $default_value = '';
-    if (!empty($form['#instance']['default_value'])) {
-      foreach ($form['#instance']['default_value'] as $values) {
+
+    if (!empty($instance['default_value'])) {
+      foreach ($instance['default_value'] as $values) {
         foreach ($values as $value) {
           if (strpos($value, '[') !== FALSE) {
             $default_value = $value;
@@ -98,19 +118,71 @@ function field_default_token_form_field_ui_field_edit_form_alter(&$form, &$form_
         }
       }
     }
+
     $form['instance']['default_value_widget']['default_value_token'] = array(
       '#type' => 'textfield',
       '#title' => t('Token for default value'),
       '#description' => t('If set, this token will be used as the field default value instead.'),
+      '#maxlength' => 1024,
       '#default_value' => $default_value,
       '#weight' => 100,
     );
   }
 
-  // Replace validator to disable validation of strings with tokens in Field UI forms.
+  if (isset($form['instance']['default_value_widget'])) {
+    field_default_token_enlarge_max_length($form['instance']['default_value_widget']);
+
+    // Allow tokens to be field value labels, not just field values.
+    if ((isset($field['settings']['allowed_values'])) && (is_array($field['settings']['allowed_values']))) {
+      $form['instance']['default_value_label_token'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Token for default value contains field value label, not stored key'),
+        '#description' => t('If checked, token value must be field value label from allowed values list of key|label pairs.'),
+        '#default_value' => isset($instance['default_value_label_token']) ? $instance['default_value_label_token'] : FALSE,
+        '#weight' => 150,
+      );
+    }
+
+    $entity_type = $form['#instance']['entity_type'];
+    $token_type = $entity_type;
+    $entity_info = entity_get_info($entity_type);
+    if (isset($entity_info['token type'])) {
+      $token_type = $entity_info['token type'];
+    }
+
+    $form['instance']['default_value_widget']['token_tree'] = array(
+      '#theme' => 'token_tree',
+      '#token_types' => array($token_type),
+      '#dialog' => TRUE,
+      '#weight' => 200,
+    );
+  }
+
+  // Replace validator to disable validation of strings with tokens
+  // in Field UI forms.
   foreach ($form['#validate'] as &$validator) {
     if ($validator == 'field_ui_field_edit_form_validate') {
       $validator = 'field_default_token_field_ui_field_edit_form_validate';
+    }
+  }
+}
+
+/**
+ * Sets maximum length of descendant text input elements to 1024.
+ *
+ * @param array $element
+ *   Root form element.
+ */
+function field_default_token_enlarge_max_length(&$element) {
+  if ((isset($element['#type']) && ($element['#type'] === 'textfield'))
+      || (isset($element['#base_type']) && ($element['#base_type'] === 'textfield'))) {
+    if (!isset($element['#maxlength']) || ($element['#maxlength'] < 1024)) {
+      $element['#maxlength'] = 1024;
+    }
+  }
+  foreach (element_children($element) as $key) {
+    if (isset($element[$key]) && $element[$key]) {
+      field_default_token_enlarge_max_length($element[$key]);
     }
   }
 }
@@ -136,22 +208,27 @@ function field_default_token_field_widget_form_alter(&$element, &$form_state, $c
 }
 
 /**
- * Modify Field UI form.
+ * Modifies Field UI form.
  */
 function field_default_token_modify_field_ui_form(&$element, &$form_state, $context) {
-  if (isset($element['#options'])) { // Selector, checkboxes, radio buttons.
+  // Selector, checkboxes, radio buttons.
+  if (isset($element['#options'])) {
     $element['#value_callback'] = 'field_default_token_selection_element_value';
   }
 }
 
 /**
- * Replacement for form_type_select_value() functions for selectors, checkboxes, radio buttons (Field UI forms only).
+ * Form element value callback.
+ *
+ * Replacement for form_type_select_value() functions
+ * for selectors, checkboxes, radio buttons (Field UI forms only).
  */
 function field_default_token_selection_element_value(&$element, $input, $form_state) {
   if (!empty($form_state['input']['default_value_token'])) {
     // Disable validation on Field UI forms.
     $element['#after_build'][] = 'field_default_token_remove_validation';
     $token = $form_state['input']['default_value_token'];
+
     if ($input !== FALSE) {
       if (isset($element['#multiple']) && $element['#multiple']) {
         $input = array($token);
@@ -161,11 +238,15 @@ function field_default_token_selection_element_value(&$element, $input, $form_st
       }
     }
   }
+
   return form_type_select_value($element, $input);
 }
 
 /**
- * Disables field validation on Field UI forms for selectors, checkboxes, radio buttons.
+ * Form element #after_build handler.
+ *
+ * Disables field validation on Field UI forms
+ * for selectors, checkboxes and radio buttons.
  */
 function field_default_token_remove_validation(&$element, &$form_state) {
   unset($element['#needs_validation']);
@@ -173,7 +254,9 @@ function field_default_token_remove_validation(&$element, &$form_state) {
 }
 
 /**
- * Form validation handler for field_ui_field_edit_form, replacement for field_ui_field_edit_form_validate().
+ * Form validation handler for field_ui_field_edit_form.
+ *
+ * Replacement for field_ui_field_edit_form_validate().
  */
 function field_default_token_field_ui_field_edit_form_validate($form, &$form_state) {
   // Take the incoming values as the $instance definition, so that the 'default
