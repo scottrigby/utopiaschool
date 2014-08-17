@@ -30,5 +30,6 @@ features[user_permission][] = view any main profile
 features[user_role][] = administrator
 features[user_role][] = committee
 features[user_role][] = resident
+features[variable][] = field_bundle_settings_user__user
 features[variable][] = user_picture_default
 features[views_view][] = people
