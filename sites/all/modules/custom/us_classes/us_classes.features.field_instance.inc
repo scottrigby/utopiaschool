@@ -217,7 +217,7 @@ function us_classes_field_default_field_instances() {
     'bundle' => 'class',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Optional link to TPS class or proposal (example: <em>http://ThePublicSchool.org/node/1</em>).',
     'display' => array(
       'default' => array(
         'label' => 'inline',
@@ -270,6 +270,7 @@ function us_classes_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Description');
   t('Images');
+  t('Optional link to TPS class or proposal (example: <em>http://ThePublicSchool.org/node/1</em>).');
   t('Status');
   t('TPS class');
   t('Topics');
