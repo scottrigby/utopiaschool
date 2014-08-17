@@ -74,7 +74,7 @@ function us_people_views_default_views() {
   $handler->display->display_options['fields']['picture']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['picture']['alter']['path'] = 'user/[uid]';
   $handler->display->display_options['fields']['picture']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['picture']['empty'] = '<a href="/user/[uid]"><img src="http://placekitten.com/600/600" height="220" width="220" /></a>';
+  $handler->display->display_options['fields']['picture']['empty'] = '<a href="/user/[uid]"><img src="http://placekitten.com/480/480" height="220" width="220" /></a>';
   $handler->display->display_options['fields']['picture']['link_photo_to_profile'] = FALSE;
   $handler->display->display_options['fields']['picture']['image_style'] = 'medium';
   /* Sort criterion: User: Picture */
