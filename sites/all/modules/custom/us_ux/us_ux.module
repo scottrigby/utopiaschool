@@ -1,9 +1,10 @@
 <?php
-
 /**
  * @file
- * Hooks and API functions for Utopia School UX module.
+ * Code for the us_ux feature.
  */
+
+include_once 'us_ux.features.inc';
 
 define ('US_UX_NAME_FIELD', 'field_name');
 
