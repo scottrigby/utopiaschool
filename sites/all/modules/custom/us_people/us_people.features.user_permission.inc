@@ -22,5 +22,15 @@ function us_people_user_default_permissions() {
     'module' => 'user',
   );
 
+  // Exported permission: 'view any main profile'.
+  $permissions['view any main profile'] = array(
+    'name' => 'view any main profile',
+    'roles' => array(
+      'administrator' => 'administrator',
+      'authenticated user' => 'authenticated user',
+    ),
+    'module' => 'profile2',
+  );
+
   return $permissions;
 }
