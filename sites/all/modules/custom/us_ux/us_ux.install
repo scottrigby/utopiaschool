@@ -17,7 +17,7 @@ function us_ux_install() {
   variable_set('theme_default', $theme);
 
   // Clean up navigation.
-  module_disable(array('toolbar'));
+  module_disable(array('toolbar, overlay'));
 
   // Disable plain_text after it's no longer the fallback.
   // This is the lightest way to remove the confusing option for users to post
