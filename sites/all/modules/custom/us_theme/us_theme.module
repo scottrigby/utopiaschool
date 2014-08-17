@@ -1,4 +1,10 @@
 <?php
+/**
+ * @file
+ * Code for the us_theme feature.
+ */
+
+include_once 'us_theme.features.inc';
 
 /**
  * Utopia School default theme.
