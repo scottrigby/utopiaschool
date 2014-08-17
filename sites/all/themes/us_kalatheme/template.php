@@ -53,22 +53,20 @@ function us_kalatheme_preprocess_node(&$variables) {
   // Change submitted by.
   if ($variables['node']->type == 'class') {
     $user = user_load($variables['node']->uid);
-    $default = 'public://default_images/600.jpeg';
-    if ($items = field_get_items('user', $user, 'field_avatar')) {
-      if (!empty($items[0]['uri'])) {
-        $uri = $items[0]['uri'];
-      }
+    if (!empty($user->picture->uri)) {
+      $path = $user->picture->uri;
+      $function = 'image_style';
     }
-    $uri = !empty($uri) ? $uri : $default;
-    $avatar = theme_image_style(
-      array(
-        'style_name' => 'thumbnail',
-        'path' => $uri,
-        'attributes' => array('class' => 'avatar'),
-        'width' => NULL,
-        'height' => NULL
-      )
+    else {
+      $path = variable_get('user_picture_default');
+      $function = 'imagecache_external';
+    }
+    $avatar = array(
+      '#theme' => $function,
+      '#path' => $path,
+      '#attributes' => array('class' => 'avatar'),
+      '#style_name' => 'thumbnail',
     );
-    $variables['submitted'] = t('!avatar Proposed by !username', array('!username' => $variables['name'], '!avatar' => $avatar));
+    $variables['submitted'] = t('!avatar Proposed by !username', array('!username' => $variables['name'], '!avatar' => drupal_render($avatar)));
   }
 }
