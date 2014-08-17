@@ -11,4 +11,5 @@ features[user_permission][] = access user profiles
 features[user_permission][] = view any main profile
 features[user_role][] = administrator
 features[user_role][] = committee
+features[user_role][] = resident
 features[views_view][] = people

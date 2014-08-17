@@ -22,5 +22,11 @@ function us_people_user_default_roles() {
     'weight' => 3,
   );
 
+  // Exported role: resident.
+  $roles['resident'] = array(
+    'name' => 'resident',
+    'weight' => 4,
+  );
+
   return $roles;
 }
