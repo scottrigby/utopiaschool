@@ -1,9 +1,23 @@
 <?php
 
 /**
+ * Implements hook_install().
+ */
+function us_classes_install() {
+  us_classes_node_to_view();
+}
+
+/**
  * Unpublish the classes node and delete the alias.
  */
 function us_classes_update_7000() {
+  us_classes_node_to_view();
+}
+
+/**
+ * Helper function moves from the old classes node to the new View.
+ */
+function us_classes_node_to_view() {
   // The current classes node and menu link IDs.
   $nid = 8;
   $mlid = 420;
