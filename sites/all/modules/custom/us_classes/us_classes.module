@@ -5,3 +5,18 @@
  */
 
 include_once 'us_classes.features.inc';
+
+/**
+ * Implements hook_field_access().
+ *
+ * Note field_permissions module is overkill here.
+ */
+function us_classes_field_access($op, $field, $entity_type, $entity, $account) {
+  $is_committee = in_array('committee', $account->roles);
+
+  if ($field['field_name'] == 'field_status' && $op == 'edit') {
+    return $is_committee;
+  }
+
+  return TRUE;
+}

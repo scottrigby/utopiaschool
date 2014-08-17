@@ -55,10 +55,6 @@ function us_ux_filter_process_format($element) {
 function us_ux_field_access($op, $field, $entity_type, $entity, $account) {
   $is_committee = in_array('committee', $account->roles);
 
-  if ($field['field_name'] == 'field_status' && $op == 'edit') {
-    return $is_committee;
-  }
-
   // Potentially hide this too. For now, we've determined it can be public.
 //  if ($field['field_name'] == 'field_collaboration_info' && $op == 'view') {
 //    return $is_committee;
