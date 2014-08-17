@@ -45,28 +45,48 @@ function us_kalatheme_field__taxonomy_term_reference($variables) {
  * Implements template_preprocess_node().
  */
 function us_kalatheme_preprocess_node(&$variables) {
-  // From kalatheme_preprocess_node().
-  if ($variables['view_mode'] == 'full' && node_is_page($variables['node'])) {
-    $variables['classes_array'][] = 'node-full';
-  }
+  kalatheme_preprocess_node($variables);
 
   // Change submitted by.
-  if ($variables['node']->type == 'class') {
-    $user = user_load($variables['node']->uid);
-    if (!empty($user->picture->uri)) {
-      $path = $user->picture->uri;
-      $function = 'image_style';
-    }
-    else {
-      $path = variable_get('user_picture_default');
-      $function = 'imagecache_external';
-    }
-    $avatar = array(
-      '#theme' => $function,
-      '#path' => $path,
-      '#attributes' => array('class' => 'avatar'),
-      '#style_name' => 'thumbnail',
-    );
-    $variables['submitted'] = t('!avatar Proposed by !username', array('!username' => $variables['name'], '!avatar' => drupal_render($avatar)));
+  $verb = $variables['node']->type == 'class' ? 'Proposed' : 'Posted';
+  $avatar = us_kalatheme_get_user_avatar($variables['node']->uid);
+  $variables['submitted'] = t('!avatar !verb by !username', array('!username' => $variables['name'], '!verb' => $verb, '!avatar' => drupal_render($avatar)));
+}
+
+/**
+ * Implements template_preprocess_comment().
+ */
+function us_kalatheme_preprocess_comment(&$variables) {
+  kalatheme_preprocess_comment($variables);
+
+  // Change submitted by.
+  $avatar = us_kalatheme_get_user_avatar($variables['comment']->uid);
+  $variables['submitted'] = t('!avatar Posted by !username on !datetime', array('!username' => $variables['author'], '!avatar' => drupal_render($avatar), '!datetime' => $variables['created']));
+}
+
+/**
+ * Gets user avatar for submitted by line.
+ *
+ * @param int $uid
+ *   The user ID.
+ *
+ * @return array
+ *   Render array for user avatar.
+ */
+function us_kalatheme_get_user_avatar($uid) {
+  $user = user_load($uid);
+  if (!empty($user->picture->uri)) {
+    $path = $user->picture->uri;
+    $function = 'image_style';
   }
+  else {
+    $path = variable_get('user_picture_default');
+    $function = 'imagecache_external';
+  }
+  return array(
+    '#theme' => $function,
+    '#path' => $path,
+    '#attributes' => array('class' => 'avatar'),
+    '#style_name' => 'thumbnail',
+  );
 }
