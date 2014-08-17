@@ -13,5 +13,5 @@ function us_classes_update_7000() {
   node_save($node);
 
   // Remove the path, so our classes View can take it.
-  path_delete(array('source' => 'node/' . $id));
+  path_delete(array('source' => 'node/' . $nid));
 }
