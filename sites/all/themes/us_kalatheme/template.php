@@ -61,7 +61,7 @@ function us_kalatheme_preprocess_comment(&$variables) {
 
   // Change submitted by.
   $avatar = us_kalatheme_get_user_avatar($variables['comment']->uid);
-  $variables['submitted'] = t('!avatar Posted by !username on !datetime', array('!username' => $variables['author'], '!avatar' => drupal_render($avatar), '!datetime' => $variables['created']));
+  $variables['submitted'] = t('!avatar Posted by !username on <time datetime="!datetime">!date</time>', array('!username' => $variables['author'], '!avatar' => drupal_render($avatar), '!datetime' => $variables['comment']->created, '!date' => $variables['created']));
 }
 
 /**

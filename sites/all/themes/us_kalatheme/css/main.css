@@ -194,6 +194,14 @@ img.avatar {
 .submitted {
     margin-bottom: 0.5em;
 }
+.submitted time {
+    font-style: italic;
+}
+#content .submitted,
+#content .modified,
+#content .comment .links {
+    color: #999999;
+}
 
 /* Fields */
 .field {
