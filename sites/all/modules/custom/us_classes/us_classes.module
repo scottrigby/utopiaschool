@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the us_classes feature.
+ */
+
+include_once 'us_classes.features.inc';
