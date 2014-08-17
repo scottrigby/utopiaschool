@@ -27,9 +27,7 @@ function us_people_user_default_permissions() {
     'name' => 'view any main profile',
     'roles' => array(
       'administrator' => 'administrator',
-      'authenticated user' => 'authenticated user',
     ),
-    'module' => 'profile2',
   );
 
   return $permissions;

@@ -1,8 +1,10 @@
 <?php
 /**
  * @file
- * Drupal needs this blank file.
+ * Code for the us_people feature.
  */
+
+include_once 'us_people.features.inc';
 
 /**
  * User name field.
