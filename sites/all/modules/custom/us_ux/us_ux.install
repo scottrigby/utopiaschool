@@ -2,20 +2,13 @@
 
 /**
  * @file
- * TPS Appearance module installation and updates.
+ * us_ux module installation and updates.
  */
 
 /**
  * Implements hook_install().
  */
 function us_ux_install() {
-  // Set theme. @todo Change this to our subtheme.
-  //$theme = 'aurora';
-  // Temporary, until we create an aurora subtheme.
-  $theme = 'us_kalatheme';
-  theme_enable(array($theme));
-  variable_set('theme_default', $theme);
-
   // Clean up navigation.
   module_disable(array('toolbar, overlay'));
 

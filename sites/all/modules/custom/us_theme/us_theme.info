@@ -1,0 +1,5 @@
+name = us_theme
+core = 7.x
+dependencies[] = jquery_update
+dependencies[] = libraries
+dependencies[] = panels

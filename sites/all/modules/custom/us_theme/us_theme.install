@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * us_theme module installation and updates.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function us_theme_enable() {
+  us_theme_set_default();
+}
+
+/**
+ * Implements hook_disable().
+ */
+function us_theme_disable() {
+  us_theme_restore_default();
+}

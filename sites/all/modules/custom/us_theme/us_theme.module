@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * Utopia School default theme.
+ */
+define('US_THEME_DEFAULT', 'us_kalatheme');
+
+/**
+ * Swaps the default theme with ours.
+ */
+function us_theme_set_default() {
+  // Stash old theme name so we can toggle between the two.
+  $old = variable_get('theme_default', 'bartik');
+  variable_set('theme_default_old', $old);
+
+  // Set our new theme.
+  theme_enable(array(US_THEME_DEFAULT));
+  variable_set('theme_default', US_THEME_DEFAULT);
+
+  // Disable the old theme.
+  theme_disable(array($old));
+}
+
+/**
+ * Restores the default theme.
+ */
+function us_theme_restore_default() {
+  // Restore the old theme.
+  $old = variable_get('theme_default_old', 'bartik');
+  theme_enable(array($old));
+  variable_set('theme_default', $old);
+
+  // Disable the new theme.
+  theme_disable(array(US_THEME_DEFAULT));
+}
