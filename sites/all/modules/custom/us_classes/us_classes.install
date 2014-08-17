@@ -4,13 +4,17 @@
  * Unpublish the classes node and delete the alias.
  */
 function us_classes_update_7000() {
-  // The current classes node ID.
+  // The current classes node and menu link IDs.
   $nid = 8;
+  $mlid = 420;
 
   // Unpublish it.
   $node = node_load($nid);
   $node->status = NODE_NOT_PUBLISHED;
   node_save($node);
+
+  // Delete the menu item.
+  menu_link_delete($mlid);
 
   // Remove the path, so our classes View can take it.
   path_delete(array('source' => 'node/' . $nid));
