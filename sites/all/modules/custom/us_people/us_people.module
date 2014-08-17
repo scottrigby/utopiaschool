@@ -3,3 +3,33 @@
  * @file
  * Drupal needs this blank file.
  */
+
+/**
+ * User name field.
+ */
+define ('US_PEOPLE_NAME_FIELD', 'field_name');
+
+/**
+ * Implements hook_username_alter().
+ *
+ * The Name module has way too much that we don't want. But it also solves some
+ * things in a nicer way than Realname module (which has other things we don't
+ * want, and also does not support profile2).
+ *
+ * @see name_username_alter()
+ */
+function us_people_username_alter(&$name, $account) {
+  // Don't alter anonymous users or objects that do not have any user ID.
+  if (empty($account->uid)) {
+    return;
+  }
+
+  // We store the user name in a custom profile2 field.
+  if (field_info_instance('profile2', US_PEOPLE_NAME_FIELD, 'main') && $data = profile2_load_by_user($account, 'main')) {
+    if ($items = field_get_items('profile2', $data, US_PEOPLE_NAME_FIELD)) {
+      if (isset($items[0]['safe_value']) && drupal_strlen($items[0]['safe_value'])) {
+        $name = $items[0]['safe_value'];
+      }
+    }
+  }
+}
