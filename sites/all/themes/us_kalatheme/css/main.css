@@ -183,6 +183,10 @@ tbody {
     border-color: transparent;
 }
 
+.profile .user-picture {
+     float: none;
+}
+
 /* Submitted */
 img.avatar {
     height: 30px;
