@@ -69,7 +69,13 @@
 
         .tri {
             stroke: black;
+            stroke-width:0.5;
         }
+
+        svg {
+            display: block;
+        }
+
     </style>
     </head>
     <body>
@@ -155,7 +161,7 @@
         </svg>
     </div>
 
-    <!-- TEST -->
+    <!-- TEST 330x286, 165x143 -->
 
     <svg width="330" height="286">
         <pattern id="tri1" patternUnits="userSpaceOnUse" width="165" height="143">
@@ -174,6 +180,27 @@
         <path class="tri two" d="M 82,0 L 165,143 L 0,143 z" fill="url(#tri2)" transform="translate(0,143)" />
         <path class="tri three" d="M 82,0 L 165,143 L 0,143 z" fill="url(#tri3)" transform="rotate(180,165,165)  translate(82,44)" />
         <path class="tri four" d="M 82,0 L 165,143 L 0,143 z" fill="url(#tri4)" transform="translate(165,143)" />
+    </svg>
+
+    <!-- TEST 130x112, 65x56 -->
+
+    <svg width="130" height="112">
+        <pattern id="1" patternUnits="userSpaceOnUse" width="65" height="56">
+            <image xlink:href="/sites/all/themes/us_kalatheme/images/1.jpg" x="0" y="0" width="65" height="65" />
+        </pattern>
+        <pattern id="2" patternUnits="userSpaceOnUse" width="65" height="56">
+            <image xlink:href="/sites/all/themes/us_kalatheme/images/2.jpg" x="0" y="0" width="65" height="65" />
+        </pattern>
+        <pattern id="3" patternUnits="userSpaceOnUse" width="65" height="56">
+            <image xlink:href="/sites/all/themes/us_kalatheme/images/3.jpg" x="0" y="0" width="65" height="65" />
+        </pattern>
+        <pattern id="4" patternUnits="userSpaceOnUse" width="65" height="56"">
+            <image xlink:href="/sites/all/themes/us_kalatheme/images/4.jpg" x="0" y="0" width="65" height="65" />
+        </pattern>
+        <path class="tri one" d="M 32.5,0 L 65,56 L 0,56 z" fill="url(#1)" transform="translate(32.5,0)" />
+        <path class="tri two" d="M 32.5,0 L 65,56 L 0,56 z" fill="url(#2)" transform="translate(0,56)" />
+        <path class="tri three" d="M 32.5,0 L 65,56 L 0,56 z" fill="url(#3)" transform="rotate(180,65,65)  translate(32.5,18)" />
+        <path class="tri four" d="M 32.5,0 L 65,56 L 0,56 z" fill="url(#4)" transform="translate(65,56)" />
     </svg>
 
     </body>
