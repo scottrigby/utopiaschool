@@ -15,24 +15,26 @@ function us_kalatheme_process_page(&$variables) {
 
   // Get our 65x65 square thumbnail image style.
   // @todo Add this logo to it's own template.
+  // @todo Do the math, passing in only the height.
+  // 154x134, 77x67.
   $triangle = '
-  <svg id="logo" width="130" height="112">
-        <pattern id="1" patternUnits="userSpaceOnUse" width="65" height="65">
-            <image xlink:href="/sites/all/themes/us_kalatheme/images/8.jpg" x="0" y="0" width="65" height="65" />
+    <svg id="logo" width="154" height="134">
+        <pattern id="1" patternUnits="userSpaceOnUse" width="77" height="77">
+            <image xlink:href="/sites/all/themes/us_kalatheme/images/8.jpg" x="0" y="0" width="77" height="77" />
         </pattern>
-        <pattern id="2" patternUnits="userSpaceOnUse" width="65" height="65">
-            <image xlink:href="/sites/all/themes/us_kalatheme/images/2.jpg" x="0" y="0" width="65" height="65" />
+        <pattern id="2" patternUnits="userSpaceOnUse" width="77" height="77">
+            <image xlink:href="/sites/all/themes/us_kalatheme/images/2.jpg" x="0" y="0" width="77" height="77" />
         </pattern>
-        <pattern id="3" patternUnits="userSpaceOnUse" width="65" height="65" patternTransform="rotate(180)">
-            <image xlink:href="/sites/all/themes/us_kalatheme/images/3.jpg" x="0" y="0" width="65" height="65" />
+        <pattern id="3" patternUnits="userSpaceOnUse" width="77" height="77" patternTransform="rotate(180)">
+            <image xlink:href="/sites/all/themes/us_kalatheme/images/3.jpg" x="0" y="0" width="77" height="77" />
         </pattern>
-        <pattern id="4" patternUnits="userSpaceOnUse" width="65" height="86">
-            <image xlink:href="/sites/all/themes/us_kalatheme/images/4.jpg" x="0" y="0" width="65" height="85" />
+        <pattern id="4" patternUnits="userSpaceOnUse" width="77" height="77">
+            <image xlink:href="/sites/all/themes/us_kalatheme/images/4.jpg" x="0" y="0" width="77" height="77" />
         </pattern>
-        <path class="tri one" d="M 32.5,0 L 65,56 L 0,56 z" fill="url(#1)" transform="translate(32.5,0)" stroke="black" stroke-width="0.5" />
-        <path class="tri two" d="M 32.5,0 L 65,56 L 0,56 z" fill="url(#2)" transform="translate(0,56)" stroke="black" stroke-width="0.5" />
-        <path class="tri three" d="M 32.5,0 L 65,56 L 0,56 z" fill="url(#3)" transform="rotate(180,65,65)  translate(32.5,18)" stroke="black" stroke-width="0.5" />
-        <path class="tri four" d="M 32.5,0 L 65,56 L 0,56 z" fill="url(#4)" transform="translate(65,56)" stroke="black" stroke-width="0.5" />
+        <path class="tri one" d="M 38.5,0 L 77,67 L 0,67 z" fill="url(#1)" transform="translate(38.5,0)" stroke="black" stroke-width="0.5" />
+        <path class="tri two" d="M 38.5,0 L 77,67 L 0,67 z" fill="url(#2)" transform="translate(0,67)" stroke="black" stroke-width="0.5" />
+        <path class="tri three" d="M 38.5,0 L 77,67 L 0,67 z" fill="url(#3)" transform="rotate(180,77,77)  translate(38.5,20)" stroke="black" stroke-width="0.5" />
+        <path class="tri four" d="M 38.5,0 L 77,67 L 0,67 z" fill="url(#4)" transform="translate(77,67)" stroke="black" stroke-width="0.5" />
     </svg>
   ';
   $variables['triangle'] = $triangle;
