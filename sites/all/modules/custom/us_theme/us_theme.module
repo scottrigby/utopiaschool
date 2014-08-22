@@ -39,3 +39,119 @@ function us_theme_restore_default() {
   // Disable the new theme.
   theme_disable(array(US_THEME_DEFAULT));
 }
+
+/**
+ * Generates an SVG 4-triangle image rotator.
+ *
+ * @param $h
+ *   The total height of the pyramid.
+ *
+ * @return string
+ *   A rendered pyramid image rotator. This should look like:
+ * @code
+ * <svg id="logo" width="154" height="134">
+ *   <pattern id="1" patternUnits="userSpaceOnUse" width="77" height="77">
+ *   <image xlink:href="/sites/all/themes/us_kalatheme/images/8.jpg" x="0" y="0" width="77" height="77" />
+ *   </pattern>
+ *   <pattern id="2" patternUnits="userSpaceOnUse" width="77" height="77">
+ *   <image xlink:href="/sites/all/themes/us_kalatheme/images/2.jpg" x="0" y="0" width="77" height="77" />
+ *   </pattern>
+ *   <pattern id="3" patternUnits="userSpaceOnUse" width="77" height="77" patternTransform="rotate(180)">
+ *   <image xlink:href="/sites/all/themes/us_kalatheme/images/3.jpg" x="0" y="0" width="77" height="77" />
+ *   </pattern>
+ *   <pattern id="4" patternUnits="userSpaceOnUse" width="77" height="77">
+ *   <image xlink:href="/sites/all/themes/us_kalatheme/images/4.jpg" x="0" y="0" width="77" height="77" />
+ *   </pattern>
+ *   <path class="tri one" d="M 38.5,0 L 77,67 L 0,67 z" fill="url(#1)" transform="translate(38.5,0)" stroke="black" stroke-width="0.5" />
+ *   <path class="tri two" d="M 38.5,0 L 77,67 L 0,67 z" fill="url(#2)" transform="translate(0,67)" stroke="black" stroke-width="0.5" />
+ *   <path class="tri three" d="M 38.5,0 L 77,67 L 0,67 z" fill="url(#3)" transform="rotate(180,77,77)  translate(38.5,20)" stroke="black" stroke-width="0.5" />
+ *   <path class="tri four" d="M 38.5,0 L 77,67 L 0,67 z" fill="url(#4)" transform="translate(77,67)" stroke="black" stroke-width="0.5" />
+ *   </svg>
+ * @code
+ */
+function us_theme_pyramid($h) {
+  // Calculate width, and 4-triangle SVG placement, given a height.
+  $w = $h / (sqrt(3) / 2);
+  $d = 'M ' . $w / 4 . ',0 L ' . $w / 2 . ',' . $h / 2 . ' L 0,' . $h / 2 . ' z';
+
+  // SVG pattern attributes.
+  $pattern_attributes = array();
+  $pattern_attributes['patternUnits'] = 'userSpaceOnUse';
+  $pattern_attributes['width'] = $w / 2;
+  $pattern_attributes['height'] = $w / 2;
+
+  // SVG pattern image attributes.
+  $image_attributes = array();
+  $image_attributes['x'] = 0;
+  $image_attributes['y'] = 0;
+  $image_attributes['width'] = $w / 2;
+  $image_attributes['height'] = $w / 2;
+
+  // Render SVG patterns.
+  $patterns = '';
+
+  $pattern_attributes['id'] = 1;
+  $image_attributes['xlink:href'] = '/sites/all/themes/us_kalatheme/images/8.jpg';
+  $patterns .= '<pattern ' . drupal_attributes($pattern_attributes) . ' >';
+  $patterns .= '<image ' . drupal_attributes($image_attributes) . ' />';
+  $patterns .= '</pattern>';
+
+  $pattern_attributes['id'] = 2;
+  $image_attributes['xlink:href'] = '/sites/all/themes/us_kalatheme/images/2.jpg';
+  $patterns .= '<pattern ' . drupal_attributes($pattern_attributes) . ' >';
+  $patterns .= '<image ' . drupal_attributes($image_attributes) . ' />';
+  $patterns .= '</pattern>';
+
+  $pattern_attributes['id'] = 3;
+  $pattern_attributes['patternTransform'] = 'rotate(180)';
+  $image_attributes['xlink:href'] = '/sites/all/themes/us_kalatheme/images/3.jpg';
+  $patterns .= '<pattern ' . drupal_attributes($pattern_attributes) . ' >';
+  $patterns .= '<image ' . drupal_attributes($image_attributes) . ' />';
+  $patterns .= '</pattern>';
+
+  $pattern_attributes['id'] = 4;
+  $image_attributes['xlink:href'] = '/sites/all/themes/us_kalatheme/images/4.jpg';
+  $patterns .= '<pattern ' . drupal_attributes($pattern_attributes) . ' >';
+  $patterns .= '<image ' . drupal_attributes($image_attributes) . ' />';
+  $patterns .= '</pattern>';
+
+  // SVG path attributes.
+  $path_attributes = array();
+  $path_attributes['d'] = $d;
+  $path_attributes['stroke'] = 'black';
+  $path_attributes['stroke-width'] = '0.5';
+
+  // Render SVG paths.
+  $paths = '';
+
+  $path_attributes['fill'] = 'url(#1)';
+  $path_attributes['transform'] = 'translate(' . $w / 4 . ',0)';
+  $paths .= '<path ' . drupal_attributes($path_attributes) . ' />';
+
+  $path_attributes['fill'] = 'url(#2)';
+  $path_attributes['transform'] = 'translate(0,' . $h / 2 . ')';
+  $paths .= '<path ' . drupal_attributes($path_attributes) . ' />';
+
+  $path_attributes['fill'] = 'url(#3)';
+  $path_attributes['transform'] = 'rotate(180,' . $w / 2 . ',' . $w / 2 . ') translate(' . ($w / 4) . ',' . ($w - $h) . ')';
+  $paths .= '<path ' . drupal_attributes($path_attributes) . ' />';
+
+  $path_attributes['fill'] = 'url(#4)';
+  $path_attributes['transform'] = 'translate(' . $w / 2 . ',' . $h / 2 . ')';
+  $paths .= '<path ' . drupal_attributes($path_attributes) . ' />';
+
+  // SVG wrapper attributes.
+  $svg_attributes = array();
+  $svg_attributes['id'] = 'logo';
+  $svg_attributes['width'] = $w;
+  $svg_attributes['height'] = $h;
+
+  // Render SVG wrapper.
+  $svg = '';
+  $svg .= '<svg ' . drupal_attributes($svg_attributes) . ' >';
+  $svg .= $patterns;
+  $svg .= $paths;
+  $svg .= '</svg>';
+
+  return $svg;
+}
