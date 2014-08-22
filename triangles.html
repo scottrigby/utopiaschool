@@ -66,6 +66,11 @@
             /*margin-left: -300px;*/
             /*margin-left: -303px;*/
         /*}*/
+
+        .tri-test {
+            /*fill: url(#img1);*/
+            stroke: black;
+        }
     </style>
     </head>
     <body>
@@ -151,7 +156,15 @@
         </svg>
     </div>
 
+    <!-- TEST -->
 
+    <svg width="165" height="143">
+        <pattern id="img1" patternUnits="userSpaceOnUse" width="165" height="143">
+            <image xlink:href="http://placekitten.com/600/600" x="0" y="0" width="165" height="165" />
+        </pattern>
+        <!--<path class="tri-test" d="M 200,65 L 340,330 L 60,330 z" fill="url(#img1)" transform="translate(0,0)" />-->
+        <path class="tri-test" d="M 82,0 L 165,143 L 0,143 z" fill="url(#img1)" transform="translate(0,0)" />
+    </svg>
 
     </body>
 </html>
