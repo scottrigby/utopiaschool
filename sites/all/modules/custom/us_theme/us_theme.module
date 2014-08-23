@@ -41,6 +41,15 @@ function us_theme_restore_default() {
 }
 
 /**
+ * Implements hook_query_TAG_alter().
+ *
+ * @see us_theme_pyramid()
+ */
+function us_theme_query_random_alter($query){
+  $query->orderRandom();
+}
+
+/**
  * Generates an SVG 4-triangle image rotator.
  *
  * @param $h
@@ -68,11 +77,59 @@ function us_theme_restore_default() {
  *   <path class="tri four" d="M 38.5,0 L 77,67 L 0,67 z" fill="url(#4)" transform="translate(77,67)" stroke="black" stroke-width="0.5" />
  *   </svg>
  * @code
+ *
+ * @see us_theme_query_random_alter()
  */
 function us_theme_pyramid($h) {
   // Calculate width, and 4-triangle SVG placement, given a height.
   $w = $h / (sqrt(3) / 2);
   $d = 'M ' . $w / 4 . ',0 L ' . $w / 2 . ',' . $h / 2 . ' L 0,' . $h / 2 . ' z';
+
+  // Ensure we have a square image style to match our width.
+  $style_name = 'pyramid';
+  // Regenerate the style if the width doesn't match.
+  if ($w != variable_get('us_theme_pyramid_width')) {
+    image_style_delete(image_style_load($style_name));
+  }
+  if (!$style = image_style_load($style_name)) {
+    // Create it.
+    $style = image_style_save(array('name' => $style_name));
+    $effect = array(
+      'name' => 'image_scale_and_crop',
+      'data' => array(
+        'width' => $w / 2,
+        'height' => $w / 2,
+      ),
+      'isid' => $style['isid'],
+    );
+    image_effect_save($effect);
+    variable_set('us_theme_pyramid_width', $w);
+  }
+
+  // Get images.
+  $entity_type = 'node';
+  $bundle = 'resource';
+  $published_column = 'status';
+  $field_name = 'field_resource_image';
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', $entity_type)
+    ->entityCondition('bundle', $bundle)
+    ->propertyCondition($published_column, 1)
+    ->fieldCondition($field_name, 'fid', 'NULL', '!=')
+    ->addTag('random')
+    ->range(0, 4)
+    ->execute();
+  $entities = isset($result[$entity_type]) ? entity_load($entity_type, array_keys($result[$entity_type])) : array();
+
+  // Build an array of image style paths from our uploaded resources.
+  $hrefs = array(0 => NULL);
+  foreach ($entities as $entity) {
+    $image = field_get_items($entity_type, $entity, $field_name);
+    if ($path = $image[0]['uri']) {
+      $hrefs[] = image_style_url($style_name, $path);
+    }
+  }
 
   // SVG pattern attributes.
   $pattern_attributes = array();
@@ -89,31 +146,42 @@ function us_theme_pyramid($h) {
 
   // Render SVG patterns.
   $patterns = '';
+  // Loop over 4 items to build the patterns.
+  for ($i = 1; $i <= 4; $i++) {
+    $pattern_attributes['id'] = $i;
+    // Give a backup image, in case there are less than 4 iamges in the library.
+    $image_attributes['xlink:href'] = isset($hrefs[$i]) ? $hrefs[$i] : '/sites/all/themes/us_kalatheme/images/3.jpg';
+    // Rotate the third image in the pyramid, since we rotate the triangle.
+    $pattern_attributes['patternTransform'] = $i == 3 ? 'rotate(180)' : NULL;
+    $patterns .= '<pattern ' . drupal_attributes($pattern_attributes) . ' >';
+    $patterns .= '<image ' . drupal_attributes($image_attributes) . ' />';
+    $patterns .= '</pattern>';
+  }
 
-  $pattern_attributes['id'] = 1;
-  $image_attributes['xlink:href'] = '/sites/all/themes/us_kalatheme/images/8.jpg';
-  $patterns .= '<pattern ' . drupal_attributes($pattern_attributes) . ' >';
-  $patterns .= '<image ' . drupal_attributes($image_attributes) . ' />';
-  $patterns .= '</pattern>';
-
-  $pattern_attributes['id'] = 2;
-  $image_attributes['xlink:href'] = '/sites/all/themes/us_kalatheme/images/2.jpg';
-  $patterns .= '<pattern ' . drupal_attributes($pattern_attributes) . ' >';
-  $patterns .= '<image ' . drupal_attributes($image_attributes) . ' />';
-  $patterns .= '</pattern>';
-
-  $pattern_attributes['id'] = 3;
-  $pattern_attributes['patternTransform'] = 'rotate(180)';
-  $image_attributes['xlink:href'] = '/sites/all/themes/us_kalatheme/images/3.jpg';
-  $patterns .= '<pattern ' . drupal_attributes($pattern_attributes) . ' >';
-  $patterns .= '<image ' . drupal_attributes($image_attributes) . ' />';
-  $patterns .= '</pattern>';
-
-  $pattern_attributes['id'] = 4;
-  $image_attributes['xlink:href'] = '/sites/all/themes/us_kalatheme/images/4.jpg';
-  $patterns .= '<pattern ' . drupal_attributes($pattern_attributes) . ' >';
-  $patterns .= '<image ' . drupal_attributes($image_attributes) . ' />';
-  $patterns .= '</pattern>';
+//  $pattern_attributes['id'] = 1;
+//  $image_attributes['xlink:href'] = '/sites/all/themes/us_kalatheme/images/8.jpg';
+//  $patterns .= '<pattern ' . drupal_attributes($pattern_attributes) . ' >';
+//  $patterns .= '<image ' . drupal_attributes($image_attributes) . ' />';
+//  $patterns .= '</pattern>';
+//
+//  $pattern_attributes['id'] = 2;
+//  $image_attributes['xlink:href'] = '/sites/all/themes/us_kalatheme/images/2.jpg';
+//  $patterns .= '<pattern ' . drupal_attributes($pattern_attributes) . ' >';
+//  $patterns .= '<image ' . drupal_attributes($image_attributes) . ' />';
+//  $patterns .= '</pattern>';
+//
+//  $pattern_attributes['id'] = 3;
+//  $pattern_attributes['patternTransform'] = 'rotate(180)';
+//  $image_attributes['xlink:href'] = '/sites/all/themes/us_kalatheme/images/3.jpg';
+//  $patterns .= '<pattern ' . drupal_attributes($pattern_attributes) . ' >';
+//  $patterns .= '<image ' . drupal_attributes($image_attributes) . ' />';
+//  $patterns .= '</pattern>';
+//
+//  $pattern_attributes['id'] = 4;
+//  $image_attributes['xlink:href'] = '/sites/all/themes/us_kalatheme/images/4.jpg';
+//  $patterns .= '<pattern ' . drupal_attributes($pattern_attributes) . ' >';
+//  $patterns .= '<image ' . drupal_attributes($image_attributes) . ' />';
+//  $patterns .= '</pattern>';
 
   // SVG path attributes.
   $path_attributes = array();
