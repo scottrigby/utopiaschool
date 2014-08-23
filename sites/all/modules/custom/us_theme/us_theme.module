@@ -81,6 +81,8 @@ function us_theme_query_random_alter($query){
  * @see us_theme_query_random_alter()
  */
 function us_theme_pyramid($h) {
+  global $base_url;
+
   // Calculate width, and 4-triangle SVG placement, given a height.
   $w = $h / (sqrt(3) / 2);
   $d = 'M ' . $w / 4 . ',0 L ' . $w / 2 . ',' . $h / 2 . ' L 0,' . $h / 2 . ' z';
@@ -123,11 +125,17 @@ function us_theme_pyramid($h) {
   $entities = isset($result[$entity_type]) ? entity_load($entity_type, array_keys($result[$entity_type])) : array();
 
   // Build an array of image style paths from our uploaded resources.
+  $resources = array(0 => NULL);
   $hrefs = array(0 => NULL);
   foreach ($entities as $entity) {
     $image = field_get_items($entity_type, $entity, $field_name);
     if ($path = $image[0]['uri']) {
       $hrefs[] = image_style_url($style_name, $path);
+      $resources[] = array(
+        'image' => image_style_url($style_name, $path),
+        'node' => $base_url . '/' . drupal_get_path_alias('node/' . $entity->nid),
+        'title' => check_plain($entity->title),
+      );
     }
   }
 
@@ -150,7 +158,7 @@ function us_theme_pyramid($h) {
   for ($i = 1; $i <= 4; $i++) {
     $pattern_attributes['id'] = $i;
     // Give a backup image, in case there are less than 4 iamges in the library.
-    $image_attributes['xlink:href'] = isset($hrefs[$i]) ? $hrefs[$i] : '/sites/all/themes/us_kalatheme/images/3.jpg';
+    $image_attributes['xlink:href'] = isset($resources[$i]) ? $resources[$i]['image'] : '/sites/all/themes/us_kalatheme/images/3.jpg';
     // Rotate the third image in the pyramid, since we rotate the triangle.
     $pattern_attributes['patternTransform'] = $i == 3 ? 'rotate(180)' : NULL;
     $patterns .= '<pattern ' . drupal_attributes($pattern_attributes) . ' >';
@@ -192,21 +200,33 @@ function us_theme_pyramid($h) {
   // Render SVG paths.
   $paths = '';
 
-  $path_attributes['fill'] = 'url(#1)';
+  $key = 1;
+  $path_attributes['fill'] = 'url(#'. $key .')';
   $path_attributes['transform'] = 'translate(' . $w / 4 . ',0)';
+  $paths .= isset($resources[$key]) ? '<a xlink:href= "'. $resources[$key]['node'] .'" xlink:title="'. $resources[$key]['title'] .'">' : '';
   $paths .= '<path ' . drupal_attributes($path_attributes) . ' />';
+  $paths .= isset($resources[$key]) ? '</a>' : '';
 
-  $path_attributes['fill'] = 'url(#2)';
+  $key = 2;
+  $path_attributes['fill'] = 'url(#'. $key .')';
   $path_attributes['transform'] = 'translate(0,' . $h / 2 . ')';
+  $paths .= isset($resources[$key]) ? '<a xlink:href= "'. $resources[$key]['node'] .'" xlink:title="'. $resources[$key]['title'] .'">' : '';
   $paths .= '<path ' . drupal_attributes($path_attributes) . ' />';
+  $paths .= isset($resources[$key]) ? '</a>' : '';
 
-  $path_attributes['fill'] = 'url(#3)';
+  $key = 3;
+  $path_attributes['fill'] = 'url(#'. $key .')';
   $path_attributes['transform'] = 'rotate(180,' . $w / 2 . ',' . $w / 2 . ') translate(' . ($w / 4) . ',' . ($w - $h) . ')';
+  $paths .= isset($resources[$key]) ? '<a xlink:href= "'. $resources[$key]['node'] .'" xlink:title="'. $resources[$key]['title'] .'">' : '';
   $paths .= '<path ' . drupal_attributes($path_attributes) . ' />';
+  $paths .= isset($resources[$key]) ? '</a>' : '';
 
-  $path_attributes['fill'] = 'url(#4)';
+  $key = 4;
+  $path_attributes['fill'] = 'url(#'. $key .')';
   $path_attributes['transform'] = 'translate(' . $w / 2 . ',' . $h / 2 . ')';
+  $paths .= isset($resources[$key]) ? '<a xlink:href= "'. $resources[$key]['node'] .'" xlink:title="'. $resources[$key]['title'] .'">' : '';
   $paths .= '<path ' . drupal_attributes($path_attributes) . ' />';
+  $paths .= isset($resources[$key]) ? '</a>' : '';
 
   // SVG wrapper attributes.
   $svg_attributes = array();
