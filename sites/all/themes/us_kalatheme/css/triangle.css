@@ -7,6 +7,16 @@ $c: #ffffde #91b48f #fc8781 #cafdca #f86968 #c8a58f
     #ffffe7 #57e9ab #b3fcc7 #bbbaa7 #fff7d6 #dfada0;
 */
 
+.triangles {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .triangles {
+        display: block;
+    }
+}
+
 .triangles, .triangles *, .triangles *:before {
     position: absolute;
     top: 50%;

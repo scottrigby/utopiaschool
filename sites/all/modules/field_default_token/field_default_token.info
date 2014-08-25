@@ -3,9 +3,9 @@ description = Enables to use tokens as field default values.
 package = Fields
 core = 7.x
 
-; Information added by drupal.org packaging script on 2013-09-04
-version = "7.x-1.1"
+; Information added by Drupal.org packaging script on 2014-01-20
+version = "7.x-1.2"
 core = "7.x"
 project = "field_default_token"
-datestamp = "1378305998"
+datestamp = "1390208305"
 

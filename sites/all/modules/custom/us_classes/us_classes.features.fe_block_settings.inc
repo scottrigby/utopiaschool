@@ -18,7 +18,7 @@ function us_classes_default_fe_block_settings() {
     'delta' => 'classes-block_1',
     'module' => 'views',
     'node_types' => array(),
-    'pages' => 'user/*',
+    'pages' => 'user/*/*',
     'roles' => array(),
     'themes' => array(
       'bartik' => array(

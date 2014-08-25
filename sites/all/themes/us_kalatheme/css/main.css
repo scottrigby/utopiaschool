@@ -20,22 +20,6 @@ html {
         #044D91,
         #2A1571
     );
-
-    /*background-image: linear-gradient(left,*/
-    /*blue,*/
-    /*blue 25%,*/
-    /*red 25%,*/
-    /*red 50%,*/
-    /*orange 50%,*/
-    /*orange 75%,*/
-    /*green 75%);*/
-
-    /*background-image:-webkit-linear-gradient( 45deg, red, orange, yellow, green, blue, indigo, violet );*/
-    /*background-image:-moz-linear-gradient( 45deg, red, orange, yellow, green, blue, indigo, violet );*/
-    /*background-image:-o-linear-gradient( 45deg, red, orange, yellow, green, blue, indigo, violet );*/
-    /*background-image:-ms-linear-gradient( 45deg, red, orange, yellow, green, blue, indigo, violet );*/
-    /*background-image:-khtml-linear-gradient( 45deg, red, orange, yellow, green, blue, indigo, violet );*/
-    /*background-image:linear-gradient( 45deg, red, orange, yellow, green, blue, indigo, violet );*/
 }
 body {
     background-color: inherit;
@@ -198,6 +182,14 @@ img.avatar {
 }
 .submitted {
     margin-bottom: 0.5em;
+}
+.submitted time {
+    font-style: italic;
+}
+#content .submitted,
+#content .modified,
+#content .comment .links {
+    color: #999999;
 }
 
 /* Fields */
