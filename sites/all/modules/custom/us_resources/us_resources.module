@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the us_resources feature.
+ */
+
+include_once 'us_resources.features.inc';
