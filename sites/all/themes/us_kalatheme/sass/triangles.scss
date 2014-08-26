@@ -35,7 +35,7 @@ $t: .1s;
   padding: 0;
   margin: -3*$l*sqrt(3)/2 (-3*$l);
   width: 6*$l; height: 3*$l*sqrt(3);
-  transform: translateY(-25%) skewX(30deg);
+  transform: translateX(-25%) skewX(30deg);
   list-style: none;
 }
 .triangle, .triangle:before {

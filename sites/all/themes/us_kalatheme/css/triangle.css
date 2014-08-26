@@ -1,3 +1,7 @@
+/*
+Triangles originally from:
+http://codepen.io/thebabydino/pen/ivbaF
+*/
 /*$c: rgb(226,91,14) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135,206) rgb(4,77,145)
 black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135,206);*/
 .triangles {
@@ -21,7 +25,7 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
     margin: -3.5074em -4.05em;
     width: 8.1em;
     height: 7.01481em;
-    transform: translateY(-25%) skewX(30deg);
+    transform: translateX(-25%) skewX(30deg);
     list-style: none;
 }
 
