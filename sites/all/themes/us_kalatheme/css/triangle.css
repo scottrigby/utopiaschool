@@ -3,7 +3,7 @@ Triangles originally from:
 http://codepen.io/thebabydino/pen/ivbaF
 */
 /*$c: rgb(226,91,14) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135,206) rgb(4,77,145)
-black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135,206);*/
+black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68);*/
 .triangles {
     display: none;
 }
@@ -40,10 +40,10 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
 }
 .triangle:nth-child(1) {
     transform: skewX(-30deg) rotate(-60deg) translate(-3.0375em, 0.58457em) skewX(30deg);
-    -webkit-animation: ani 2.1s infinite -0.7s;
-    -moz-animation: ani 2.1s infinite -0.7s;
-    -o-animation: ani 2.1s infinite -0.7s;
-    animation: ani 2.1s infinite -0.7s;
+    -webkit-animation: ani 2.1s infinite -0.1s;
+    -moz-animation: ani 2.1s infinite -0.1s;
+    -o-animation: ani 2.1s infinite -0.1s;
+    animation: ani 2.1s infinite -0.1s;
 }
 .triangle:nth-child(1):before {
     transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
@@ -51,18 +51,18 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
     -moz-animation: inherit;
     -o-animation: inherit;
     animation: inherit;
-    -webkit-animation-delay: -0.8s;
-    -moz-animation-delay: -0.8s;
-    -o-animation-delay: -0.8s;
-    animation-delay: -0.8s;
+    -webkit-animation-delay: -0.2s;
+    -moz-animation-delay: -0.2s;
+    -o-animation-delay: -0.2s;
+    animation-delay: -0.2s;
     content: '';
 }
 .triangle:nth-child(2) {
     transform: skewX(-30deg) rotate(-60deg) translate(-1.6875em, 0.58457em) skewX(30deg);
-    -webkit-animation: ani 2.1s infinite -0.9s;
-    -moz-animation: ani 2.1s infinite -0.9s;
-    -o-animation: ani 2.1s infinite -0.9s;
-    animation: ani 2.1s infinite -0.9s;
+    -webkit-animation: ani 2.1s infinite -0.3s;
+    -moz-animation: ani 2.1s infinite -0.3s;
+    -o-animation: ani 2.1s infinite -0.3s;
+    animation: ani 2.1s infinite -0.3s;
 }
 .triangle:nth-child(2):before {
     transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
@@ -70,20 +70,58 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
     -moz-animation: inherit;
     -o-animation: inherit;
     animation: inherit;
-    -webkit-animation-delay: -1s;
-    -moz-animation-delay: -1s;
-    -o-animation-delay: -1s;
-    animation-delay: -1s;
+    -webkit-animation-delay: -0.4s;
+    -moz-animation-delay: -0.4s;
+    -o-animation-delay: -0.4s;
+    animation-delay: -0.4s;
     content: '';
 }
 .triangle:nth-child(3) {
     transform: skewX(-30deg) rotate(-60deg) translate(-0.3375em, 0.58457em) skewX(30deg);
+    -webkit-animation: ani 2.1s infinite -0.3s;
+    -moz-animation: ani 2.1s infinite -0.3s;
+    -o-animation: ani 2.1s infinite -0.3s;
+    animation: ani 2.1s infinite -0.3s;
+}
+.triangle:nth-child(3):before {
+    transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
+    -webkit-animation: inherit;
+    -moz-animation: inherit;
+    -o-animation: inherit;
+    animation: inherit;
+    -webkit-animation-delay: -0.4s;
+    -moz-animation-delay: -0.4s;
+    -o-animation-delay: -0.4s;
+    animation-delay: -0.4s;
+    content: '';
+}
+.triangle:nth-child(4) {
+    transform: skewX(-30deg) rotate(-60deg) translate(1.0125em, 0.58457em) skewX(30deg);
+    -webkit-animation: ani 2.1s infinite -0.4s;
+    -moz-animation: ani 2.1s infinite -0.4s;
+    -o-animation: ani 2.1s infinite -0.4s;
+    animation: ani 2.1s infinite -0.4s;
+}
+.triangle:nth-child(4):before {
+    transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
+    -webkit-animation: inherit;
+    -moz-animation: inherit;
+    -o-animation: inherit;
+    animation: inherit;
+    -webkit-animation-delay: -0.5s;
+    -moz-animation-delay: -0.5s;
+    -o-animation-delay: -0.5s;
+    animation-delay: -0.5s;
+    content: '';
+}
+.triangle:nth-child(5) {
+    transform: skewX(-30deg) rotate(-60deg) translate(2.3625em, 0.58457em) skewX(30deg);
     -webkit-animation: ani 2.1s infinite -0.2s;
     -moz-animation: ani 2.1s infinite -0.2s;
     -o-animation: ani 2.1s infinite -0.2s;
     animation: ani 2.1s infinite -0.2s;
 }
-.triangle:nth-child(3):before {
+.triangle:nth-child(5):before {
     transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
     -webkit-animation: inherit;
     -moz-animation: inherit;
@@ -95,50 +133,12 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
     animation-delay: -0.3s;
     content: '';
 }
-.triangle:nth-child(4) {
-    transform: skewX(-30deg) rotate(-60deg) translate(1.0125em, 0.58457em) skewX(30deg);
-    -webkit-animation: ani 2.1s infinite -1.3s;
-    -moz-animation: ani 2.1s infinite -1.3s;
-    -o-animation: ani 2.1s infinite -1.3s;
-    animation: ani 2.1s infinite -1.3s;
-}
-.triangle:nth-child(4):before {
-    transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
-    -webkit-animation: inherit;
-    -moz-animation: inherit;
-    -o-animation: inherit;
-    animation: inherit;
-    -webkit-animation-delay: -0.1s;
-    -moz-animation-delay: -0.1s;
-    -o-animation-delay: -0.1s;
-    animation-delay: -0.1s;
-    content: '';
-}
-.triangle:nth-child(5) {
-    transform: skewX(-30deg) rotate(-60deg) translate(2.3625em, 0.58457em) skewX(30deg);
-    -webkit-animation: ani 2.1s infinite -1.2s;
-    -moz-animation: ani 2.1s infinite -1.2s;
-    -o-animation: ani 2.1s infinite -1.2s;
-    animation: ani 2.1s infinite -1.2s;
-}
-.triangle:nth-child(5):before {
-    transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
-    -webkit-animation: inherit;
-    -moz-animation: inherit;
-    -o-animation: inherit;
-    animation: inherit;
-    -webkit-animation-delay: -1.3s;
-    -moz-animation-delay: -1.3s;
-    -o-animation-delay: -1.3s;
-    animation-delay: -1.3s;
-    content: '';
-}
 .triangle:nth-child(6) {
     transform: skewX(-30deg) rotate(-60deg) translate(3.7125em, 0.58457em) skewX(30deg);
-    -webkit-animation: ani 2.1s infinite -1.1s;
-    -moz-animation: ani 2.1s infinite -1.1s;
-    -o-animation: ani 2.1s infinite -1.1s;
-    animation: ani 2.1s infinite -1.1s;
+    -webkit-animation: ani 2.1s infinite -0.3s;
+    -moz-animation: ani 2.1s infinite -0.3s;
+    -o-animation: ani 2.1s infinite -0.3s;
+    animation: ani 2.1s infinite -0.3s;
 }
 .triangle:nth-child(6):before {
     transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
@@ -146,18 +146,18 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
     -moz-animation: inherit;
     -o-animation: inherit;
     animation: inherit;
-    -webkit-animation-delay: -1.2s;
-    -moz-animation-delay: -1.2s;
-    -o-animation-delay: -1.2s;
-    animation-delay: -1.2s;
+    -webkit-animation-delay: -0.4s;
+    -moz-animation-delay: -0.4s;
+    -o-animation-delay: -0.4s;
+    animation-delay: -0.4s;
     content: '';
 }
 .triangle:nth-child(7) {
     transform: skewX(-30deg) rotate(-60deg) translate(-2.3625em, 1.7537em) skewX(30deg);
-    -webkit-animation: ani 2.1s infinite -1.3s;
-    -moz-animation: ani 2.1s infinite -1.3s;
-    -o-animation: ani 2.1s infinite -1.3s;
-    animation: ani 2.1s infinite -1.3s;
+    -webkit-animation: ani 2.1s infinite -0.4s;
+    -moz-animation: ani 2.1s infinite -0.4s;
+    -o-animation: ani 2.1s infinite -0.4s;
+    animation: ani 2.1s infinite -0.4s;
 }
 .triangle:nth-child(7):before {
     transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
@@ -165,10 +165,10 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
     -moz-animation: inherit;
     -o-animation: inherit;
     animation: inherit;
-    -webkit-animation-delay: -0.1s;
-    -moz-animation-delay: -0.1s;
-    -o-animation-delay: -0.1s;
-    animation-delay: -0.1s;
+    -webkit-animation-delay: -0.5s;
+    -moz-animation-delay: -0.5s;
+    -o-animation-delay: -0.5s;
+    animation-delay: -0.5s;
     content: '';
 }
 .triangle:nth-child(8) {
@@ -192,10 +192,10 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
 }
 .triangle:nth-child(9) {
     transform: skewX(-30deg) rotate(-60deg) translate(0.3375em, 1.7537em) skewX(30deg);
-    -webkit-animation: ani 2.1s infinite -1.3s;
-    -moz-animation: ani 2.1s infinite -1.3s;
-    -o-animation: ani 2.1s infinite -1.3s;
-    animation: ani 2.1s infinite -1.3s;
+    -webkit-animation: ani 2.1s infinite -0.6s;
+    -moz-animation: ani 2.1s infinite -0.6s;
+    -o-animation: ani 2.1s infinite -0.6s;
+    animation: ani 2.1s infinite -0.6s;
 }
 .triangle:nth-child(9):before {
     transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
@@ -203,18 +203,18 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
     -moz-animation: inherit;
     -o-animation: inherit;
     animation: inherit;
-    -webkit-animation-delay: -0.1s;
-    -moz-animation-delay: -0.1s;
-    -o-animation-delay: -0.1s;
-    animation-delay: -0.1s;
+    -webkit-animation-delay: -0.7s;
+    -moz-animation-delay: -0.7s;
+    -o-animation-delay: -0.7s;
+    animation-delay: -0.7s;
     content: '';
 }
 .triangle:nth-child(10) {
     transform: skewX(-30deg) rotate(-60deg) translate(1.6875em, 1.7537em) skewX(30deg);
-    -webkit-animation: ani 2.1s infinite -1.3s;
-    -moz-animation: ani 2.1s infinite -1.3s;
-    -o-animation: ani 2.1s infinite -1.3s;
-    animation: ani 2.1s infinite -1.3s;
+    -webkit-animation: ani 2.1s infinite -0.4s;
+    -moz-animation: ani 2.1s infinite -0.4s;
+    -o-animation: ani 2.1s infinite -0.4s;
+    animation: ani 2.1s infinite -0.4s;
 }
 .triangle:nth-child(10):before {
     transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
@@ -222,10 +222,10 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
     -moz-animation: inherit;
     -o-animation: inherit;
     animation: inherit;
-    -webkit-animation-delay: -0.1s;
-    -moz-animation-delay: -0.1s;
-    -o-animation-delay: -0.1s;
-    animation-delay: -0.1s;
+    -webkit-animation-delay: -0.5s;
+    -moz-animation-delay: -0.5s;
+    -o-animation-delay: -0.5s;
+    animation-delay: -0.5s;
     content: '';
 }
 .triangle:nth-child(11) {
@@ -268,50 +268,12 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
 }
 .triangle:nth-child(13) {
     transform: skewX(-30deg) rotate(-60deg) translate(-0.3375em, 2.92284em) skewX(30deg);
-    -webkit-animation: ani 2.1s infinite -0.2s;
-    -moz-animation: ani 2.1s infinite -0.2s;
-    -o-animation: ani 2.1s infinite -0.2s;
-    animation: ani 2.1s infinite -0.2s;
-}
-.triangle:nth-child(13):before {
-    transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
-    -webkit-animation: inherit;
-    -moz-animation: inherit;
-    -o-animation: inherit;
-    animation: inherit;
-    -webkit-animation-delay: -0.3s;
-    -moz-animation-delay: -0.3s;
-    -o-animation-delay: -0.3s;
-    animation-delay: -0.3s;
-    content: '';
-}
-.triangle:nth-child(14) {
-    transform: skewX(-30deg) rotate(-60deg) translate(1.0125em, 2.92284em) skewX(30deg);
-    -webkit-animation: ani 2.1s infinite -0.7s;
-    -moz-animation: ani 2.1s infinite -0.7s;
-    -o-animation: ani 2.1s infinite -0.7s;
-    animation: ani 2.1s infinite -0.7s;
-}
-.triangle:nth-child(14):before {
-    transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
-    -webkit-animation: inherit;
-    -moz-animation: inherit;
-    -o-animation: inherit;
-    animation: inherit;
-    -webkit-animation-delay: -0.8s;
-    -moz-animation-delay: -0.8s;
-    -o-animation-delay: -0.8s;
-    animation-delay: -0.8s;
-    content: '';
-}
-.triangle:nth-child(15) {
-    transform: skewX(-30deg) rotate(-60deg) translate(2.3625em, 2.92284em) skewX(30deg);
     -webkit-animation: ani 2.1s infinite -0.6s;
     -moz-animation: ani 2.1s infinite -0.6s;
     -o-animation: ani 2.1s infinite -0.6s;
     animation: ani 2.1s infinite -0.6s;
 }
-.triangle:nth-child(15):before {
+.triangle:nth-child(13):before {
     transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
     -webkit-animation: inherit;
     -moz-animation: inherit;
@@ -323,14 +285,14 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
     animation-delay: -0.7s;
     content: '';
 }
-.triangle:nth-child(16) {
-    transform: skewX(-30deg) rotate(-60deg) translate(-1.0125em, 4.09197em) skewX(30deg);
+.triangle:nth-child(14) {
+    transform: skewX(-30deg) rotate(-60deg) translate(1.0125em, 2.92284em) skewX(30deg);
     -webkit-animation: ani 2.1s infinite -1s;
     -moz-animation: ani 2.1s infinite -1s;
     -o-animation: ani 2.1s infinite -1s;
     animation: ani 2.1s infinite -1s;
 }
-.triangle:nth-child(16):before {
+.triangle:nth-child(14):before {
     transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
     -webkit-animation: inherit;
     -moz-animation: inherit;
@@ -342,14 +304,14 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
     animation-delay: -1.1s;
     content: '';
 }
-.triangle:nth-child(17) {
-    transform: skewX(-30deg) rotate(-60deg) translate(0.3375em, 4.09197em) skewX(30deg);
+.triangle:nth-child(15) {
+    transform: skewX(-30deg) rotate(-60deg) translate(2.3625em, 2.92284em) skewX(30deg);
     -webkit-animation: ani 2.1s infinite -1.1s;
     -moz-animation: ani 2.1s infinite -1.1s;
     -o-animation: ani 2.1s infinite -1.1s;
     animation: ani 2.1s infinite -1.1s;
 }
-.triangle:nth-child(17):before {
+.triangle:nth-child(15):before {
     transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
     -webkit-animation: inherit;
     -moz-animation: inherit;
@@ -361,14 +323,90 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
     animation-delay: -1.2s;
     content: '';
 }
+.triangle:nth-child(16) {
+    transform: skewX(-30deg) rotate(-60deg) translate(-1.0125em, 4.09197em) skewX(30deg);
+    -webkit-animation: ani 2.1s infinite -1.2s;
+    -moz-animation: ani 2.1s infinite -1.2s;
+    -o-animation: ani 2.1s infinite -1.2s;
+    animation: ani 2.1s infinite -1.2s;
+}
+.triangle:nth-child(16):before {
+    transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
+    -webkit-animation: inherit;
+    -moz-animation: inherit;
+    -o-animation: inherit;
+    animation: inherit;
+    -webkit-animation-delay: -0.1s;
+    -moz-animation-delay: -0.1s;
+    -o-animation-delay: -0.1s;
+    animation-delay: -0.1s;
+    content: '';
+}
+.triangle:nth-child(17) {
+    transform: skewX(-30deg) rotate(-60deg) translate(0.3375em, 4.09197em) skewX(30deg);
+    -webkit-animation: ani 2.1s infinite -0.4s;
+    -moz-animation: ani 2.1s infinite -0.4s;
+    -o-animation: ani 2.1s infinite -0.4s;
+    animation: ani 2.1s infinite -0.4s;
+}
+.triangle:nth-child(17):before {
+    transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
+    -webkit-animation: inherit;
+    -moz-animation: inherit;
+    -o-animation: inherit;
+    animation: inherit;
+    -webkit-animation-delay: -0.5s;
+    -moz-animation-delay: -0.5s;
+    -o-animation-delay: -0.5s;
+    animation-delay: -0.5s;
+    content: '';
+}
 .triangle:nth-child(18) {
     transform: skewX(-30deg) rotate(-60deg) translate(1.6875em, 4.09197em) skewX(30deg);
+    -webkit-animation: ani 2.1s infinite -1.2s;
+    -moz-animation: ani 2.1s infinite -1.2s;
+    -o-animation: ani 2.1s infinite -1.2s;
+    animation: ani 2.1s infinite -1.2s;
+}
+.triangle:nth-child(18):before {
+    transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
+    -webkit-animation: inherit;
+    -moz-animation: inherit;
+    -o-animation: inherit;
+    animation: inherit;
+    -webkit-animation-delay: -0.1s;
+    -moz-animation-delay: -0.1s;
+    -o-animation-delay: -0.1s;
+    animation-delay: -0.1s;
+    content: '';
+}
+.triangle:nth-child(19) {
+    transform: skewX(-30deg) rotate(-60deg) translate(-0.3375em, 5.2611em) skewX(30deg);
+    -webkit-animation: ani 2.1s infinite -0.8s;
+    -moz-animation: ani 2.1s infinite -0.8s;
+    -o-animation: ani 2.1s infinite -0.8s;
+    animation: ani 2.1s infinite -0.8s;
+}
+.triangle:nth-child(19):before {
+    transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
+    -webkit-animation: inherit;
+    -moz-animation: inherit;
+    -o-animation: inherit;
+    animation: inherit;
+    -webkit-animation-delay: -0.9s;
+    -moz-animation-delay: -0.9s;
+    -o-animation-delay: -0.9s;
+    animation-delay: -0.9s;
+    content: '';
+}
+.triangle:nth-child(20) {
+    transform: skewX(-30deg) rotate(-60deg) translate(1.0125em, 5.2611em) skewX(30deg);
     -webkit-animation: ani 2.1s infinite -1s;
     -moz-animation: ani 2.1s infinite -1s;
     -o-animation: ani 2.1s infinite -1s;
     animation: ani 2.1s infinite -1s;
 }
-.triangle:nth-child(18):before {
+.triangle:nth-child(20):before {
     transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
     -webkit-animation: inherit;
     -moz-animation: inherit;
@@ -380,50 +418,12 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
     animation-delay: -1.1s;
     content: '';
 }
-.triangle:nth-child(19) {
-    transform: skewX(-30deg) rotate(-60deg) translate(-0.3375em, 5.2611em) skewX(30deg);
-    -webkit-animation: ani 2.1s infinite -0.3s;
-    -moz-animation: ani 2.1s infinite -0.3s;
-    -o-animation: ani 2.1s infinite -0.3s;
-    animation: ani 2.1s infinite -0.3s;
-}
-.triangle:nth-child(19):before {
-    transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
-    -webkit-animation: inherit;
-    -moz-animation: inherit;
-    -o-animation: inherit;
-    animation: inherit;
-    -webkit-animation-delay: -0.4s;
-    -moz-animation-delay: -0.4s;
-    -o-animation-delay: -0.4s;
-    animation-delay: -0.4s;
-    content: '';
-}
-.triangle:nth-child(20) {
-    transform: skewX(-30deg) rotate(-60deg) translate(1.0125em, 5.2611em) skewX(30deg);
-    -webkit-animation: ani 2.1s infinite -0.9s;
-    -moz-animation: ani 2.1s infinite -0.9s;
-    -o-animation: ani 2.1s infinite -0.9s;
-    animation: ani 2.1s infinite -0.9s;
-}
-.triangle:nth-child(20):before {
-    transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
-    -webkit-animation: inherit;
-    -moz-animation: inherit;
-    -o-animation: inherit;
-    animation: inherit;
-    -webkit-animation-delay: -1s;
-    -moz-animation-delay: -1s;
-    -o-animation-delay: -1s;
-    animation-delay: -1s;
-    content: '';
-}
 .triangle:nth-child(21) {
     transform: skewX(-30deg) rotate(-60deg) translate(0.3375em, 6.43024em) skewX(30deg);
-    -webkit-animation: ani 2.1s infinite -0.9s;
-    -moz-animation: ani 2.1s infinite -0.9s;
-    -o-animation: ani 2.1s infinite -0.9s;
-    animation: ani 2.1s infinite -0.9s;
+    -webkit-animation: ani 2.1s infinite -0.2s;
+    -moz-animation: ani 2.1s infinite -0.2s;
+    -o-animation: ani 2.1s infinite -0.2s;
+    animation: ani 2.1s infinite -0.2s;
 }
 .triangle:nth-child(21):before {
     transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
@@ -431,10 +431,10 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
     -moz-animation: inherit;
     -o-animation: inherit;
     animation: inherit;
-    -webkit-animation-delay: -1s;
-    -moz-animation-delay: -1s;
-    -o-animation-delay: -1s;
-    animation-delay: -1s;
+    -webkit-animation-delay: -0.3s;
+    -moz-animation-delay: -0.3s;
+    -o-animation-delay: -0.3s;
+    animation-delay: -0.3s;
     content: '';
 }
 
@@ -442,41 +442,38 @@ black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135
     0% {
         background: #e25b0e;
     }
-    7.69231% {
+    8.33333% {
         background: #e25b0e;
     }
-    15.38462% {
+    16.66667% {
         background: #f5dd08;
     }
-    23.07692% {
+    25% {
         background: #059444;
     }
-    30.76923% {
+    33.33333% {
         background: #0287ce;
     }
-    38.46154% {
+    41.66667% {
         background: #044d91;
     }
-    46.15385% {
+    50% {
         background: black;
     }
-    53.84615% {
+    58.33333% {
         background: white;
     }
-    61.53846% {
+    66.66667% {
         background: #d91f26;
     }
-    69.23077% {
+    75% {
         background: #e25b0e;
     }
-    76.92308% {
+    83.33333% {
         background: #f5dd08;
     }
-    84.61538% {
+    91.66667% {
         background: #059444;
-    }
-    92.30769% {
-        background: #0287ce;
     }
     100% {
         background: #e25b0e;
