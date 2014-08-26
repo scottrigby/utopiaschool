@@ -438,6 +438,129 @@ http://codepen.io/thebabydino/pen/ivbaF
     content: '';
 }
 
+@-webkit-keyframes ani {
+    0% {
+        background: #FFFFFF;
+    }
+    8.33333% {
+        background: #E25B0E;
+    }
+    16.66667% {
+        background: #F1DD08;
+    }
+    25% {
+        background: #059444;
+    }
+    33.33333% {
+        background: #0287CE;
+    }
+    41.66667% {
+        background: #044D91;
+    }
+    50% {
+        background: #000000;
+    }
+    58.33333% {
+        background: #FFFFFF;
+    }
+    66.66667% {
+        background: #D91F26;
+    }
+    75% {
+        background: #E25B0E;
+    }
+    83.33333% {
+        background: #F1DD08;
+    }
+    91.66667% {
+        background: #059444;
+    }
+    100% {
+        background: #FFFFFF;
+    }
+}
+@-moz-keyframes ani {
+    0% {
+        background: #FFFFFF;
+    }
+    8.33333% {
+        background: #E25B0E;
+    }
+    16.66667% {
+        background: #F1DD08;
+    }
+    25% {
+        background: #059444;
+    }
+    33.33333% {
+        background: #0287CE;
+    }
+    41.66667% {
+        background: #044D91;
+    }
+    50% {
+        background: #000000;
+    }
+    58.33333% {
+        background: #FFFFFF;
+    }
+    66.66667% {
+        background: #D91F26;
+    }
+    75% {
+        background: #E25B0E;
+    }
+    83.33333% {
+        background: #F1DD08;
+    }
+    91.66667% {
+        background: #059444;
+    }
+    100% {
+        background: #FFFFFF;
+    }
+}
+@-o-keyframes ani {
+    0% {
+        background: #FFFFFF;
+    }
+    8.33333% {
+        background: #E25B0E;
+    }
+    16.66667% {
+        background: #F1DD08;
+    }
+    25% {
+        background: #059444;
+    }
+    33.33333% {
+        background: #0287CE;
+    }
+    41.66667% {
+        background: #044D91;
+    }
+    50% {
+        background: #000000;
+    }
+    58.33333% {
+        background: #FFFFFF;
+    }
+    66.66667% {
+        background: #D91F26;
+    }
+    75% {
+        background: #E25B0E;
+    }
+    83.33333% {
+        background: #F1DD08;
+    }
+    91.66667% {
+        background: #059444;
+    }
+    100% {
+        background: #FFFFFF;
+    }
+}
 @keyframes ani {
     0% {
         background: #FFFFFF;
