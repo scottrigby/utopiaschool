@@ -1,0 +1,92 @@
+/*
+Triangles originally from:
+http://codepen.io/thebabydino/pen/ivbaF
+*/
+
+$m: 6;
+$n: 21;
+$l: 1em;
+$data: 84 86 14 51 37 62 51 8 77 51 6 9 53 45 70 35 75 35 67 21 73;
+/*$c: rgb(226,91,14) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135,206) rgb(4,77,145)
+black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135,206);*/
+$c: rgb(226,91,14) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135,206) rgb(4,77,145)
+black white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135,206);
+$len: length($c);
+$sum: 0;
+$t: .1s;
+
+
+.triangles {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .triangles {
+    display: block;
+  }
+}
+
+.triangles, .triangles *, .triangles *:before {
+  position: absolute;
+  top: 50%; left: 50%;
+}
+.triangles {
+  overflow: hidden;
+  padding: 0;
+  margin: -3*$l*sqrt(3)/2 (-3*$l);
+  width: 6*$l; height: 3*$l*sqrt(3);
+  transform: translateY(-25%) skewX(30deg);
+  list-style: none;
+}
+.triangle, .triangle:before {
+  margin: -$l*sqrt(3)/4 (-$l/2);
+  width: $l; height: $l*sqrt(3)/2;
+}
+.triangle {
+  overflow: hidden;
+  @for $i from 0 to $m {
+    $currentlevel: $m - $i;
+    @for $j from 0 to $currentlevel {
+      &:nth-child(#{$sum + $j + 1}) {
+        transform: skewX(-30deg) rotate(-60deg) translate($i*$l/2 + $j*$l - 2.25*$l, $i*$l*sqrt(3)/2 + $l*sqrt(3)/4) skewX(30deg);
+        -webkit-animation: ani $n*$t infinite (-1)*(nth($data, $sum + $j + 1)%$len + 1)*$t;
+        -moz-animation: ani $n*$t infinite (-1)*(nth($data, $sum + $j + 1)%$len + 1)*$t;
+        -o-animation: ani $n*$t infinite (-1)*(nth($data, $sum + $j + 1)%$len + 1)*$t;
+        animation: ani $n*$t infinite (-1)*(nth($data, $sum + $j + 1)%$len + 1)*$t;
+        &:before {
+          transform: skewX(-30deg) translateX(-50%) skewX(-30deg);
+          -webkit-animation: inherit;
+          -moz-animation: inherit;
+          -o-animation: inherit;
+          animation: inherit;
+          -webkit-animation-delay: (-1)*((nth($data, $sum + $j + 1) + 1)%$len + 1)*$t;
+          -moz-animation-delay: (-1)*((nth($data, $sum + $j + 1) + 1)%$len + 1)*$t;
+          -o-animation-delay: (-1)*((nth($data, $sum + $j + 1) + 1)%$len + 1)*$t;
+          animation-delay: (-1)*((nth($data, $sum + $j + 1) + 1)%$len + 1)*$t;
+          content: '';
+        }
+      }
+    }
+    $sum: $sum + $currentlevel;
+  }
+}
+@keyframes ani {
+  @for $i from 0 through $len {
+    #{$i*100%/$len} {
+      background: nth($c, $i%$len + 1);
+    }
+  }
+}
+
+/** OVERRIDE **/
+ul.triangles {
+  position: relative;
+  float: left;
+  margin: 1em 0 0 0;
+  top: inherit;
+  left: inherit;
+}
+/* Set margin to value of ".triangle, .triangle:before" */
+.item-list ul.triangles li {
+  margin: -0.58457em -0.675em;
+}
