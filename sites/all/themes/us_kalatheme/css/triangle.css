@@ -2,8 +2,8 @@
 Triangles originally from:
 http://codepen.io/thebabydino/pen/ivbaF
 */
-/*$c: rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135,206) rgb(4,77,145) black
-      white rgb(217,31,38) rgb(226,91,14) rgb(245,221,8) rgb(5,148,68) rgb(2,135,206);*/
+/*$c: #FFFFFF #E25B0E #F1DD08 #059444 #0287CE #044D91
+    #000000 #FFFFFF #D91F26 #E25B0E #F1DD08 #059444;*/
 .triangles {
     display: none;
 }
@@ -440,43 +440,43 @@ http://codepen.io/thebabydino/pen/ivbaF
 
 @keyframes ani {
     0% {
-        background: #e25b0e;
+        background: #FFFFFF;
     }
     8.33333% {
-        background: #f5dd08;
+        background: #E25B0E;
     }
     16.66667% {
-        background: #059444;
+        background: #F1DD08;
     }
     25% {
-        background: #0287ce;
-    }
-    33.33333% {
-        background: #044d91;
-    }
-    41.66667% {
-        background: black;
-    }
-    50% {
-        background: white;
-    }
-    58.33333% {
-        background: #d91f26;
-    }
-    66.66667% {
-        background: #e25b0e;
-    }
-    75% {
-        background: #f5dd08;
-    }
-    83.33333% {
         background: #059444;
     }
+    33.33333% {
+        background: #0287CE;
+    }
+    41.66667% {
+        background: #044D91;
+    }
+    50% {
+        background: #000000;
+    }
+    58.33333% {
+        background: #FFFFFF;
+    }
+    66.66667% {
+        background: #D91F26;
+    }
+    75% {
+        background: #E25B0E;
+    }
+    83.33333% {
+        background: #F1DD08;
+    }
     91.66667% {
-        background: #0287ce;
+        background: #059444;
     }
     100% {
-        background: #e25b0e;
+        background: #FFFFFF;
     }
 }
 /** OVERRIDE **/
