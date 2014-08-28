@@ -5,15 +5,15 @@
  */
 
 function us_kalatheme_process_page(&$variables) {
-  $triangle[] = array(
-    '#theme' => 'item_list',
-    '#items' => array_fill(0, 21, array('data' => '', 'class' => array('triangle'))),
-    '#type' => 'ul',
-    '#attributes' => array('class' => 'triangles'),
-  );
-  $variables['triangle'] = drupal_render($triangle);
+//  $triangle[] = array(
+//    '#theme' => 'item_list',
+//    '#items' => array_fill(0, 21, array('data' => '', 'class' => array('triangle'))),
+//    '#type' => 'ul',
+//    '#attributes' => array('class' => 'triangles'),
+//  );
+//  $variables['triangle'] = drupal_render($triangle);
 
-  #$variables['triangle'] = module_exists('us_theme') ? us_theme_pyramid(134) : '';
+  $variables['triangle'] = module_exists('us_theme') ? us_theme_pyramid(134) : '';
 }
 
 /**
