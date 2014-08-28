@@ -65,7 +65,7 @@ function us_resources_field_default_field_instances() {
         'module' => 'image',
         'settings' => array(
           'image_link' => 'file',
-          'image_style' => 'pyramid',
+          'image_style' => 'large',
         ),
         'type' => 'image',
         'weight' => 0,
