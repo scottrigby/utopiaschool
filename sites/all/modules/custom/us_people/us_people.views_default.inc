@@ -101,6 +101,15 @@ function us_people_views_default_views() {
 
   /* Display: Page: Residents */
   $handler = $view->new_display('page', 'Page: Residents', 'page');
+  $handler->display->display_options['defaults']['header'] = FALSE;
+  /* Header: Global: Text area */
+  $handler->display->display_options['header']['area']['id'] = 'area';
+  $handler->display->display_options['header']['area']['table'] = 'views';
+  $handler->display->display_options['header']['area']['field'] = 'area';
+  $handler->display->display_options['header']['area']['label'] = 'Residency info';
+  $handler->display->display_options['header']['area']['empty'] = TRUE;
+  $handler->display->display_options['header']['area']['content'] = '<div class="alert alert-info">All residents will be listed here soon! In the meantime, see our <a href="/residencies">open call for residencies</a>.</div>';
+  $handler->display->display_options['header']['area']['format'] = 'full_html';
   $handler->display->display_options['defaults']['empty'] = FALSE;
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
@@ -154,8 +163,8 @@ function us_people_views_default_views() {
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
 
-  /* Display: Page: Attending */
-  $handler = $view->new_display('page', 'Page: Attending', 'page_2');
+  /* Display: Page: Community */
+  $handler = $view->new_display('page', 'Page: Community', 'page_2');
   $handler->display->display_options['defaults']['empty'] = FALSE;
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
@@ -173,18 +182,17 @@ function us_people_views_default_views() {
   $handler->display->display_options['filters']['status']['value'] = '1';
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  /* Filter criterion: User: Roles */
-  $handler->display->display_options['filters']['rid']['id'] = 'rid';
-  $handler->display->display_options['filters']['rid']['table'] = 'users_roles';
-  $handler->display->display_options['filters']['rid']['field'] = 'rid';
-  $handler->display->display_options['filters']['rid']['operator'] = 'not';
-  $handler->display->display_options['filters']['rid']['value'] = array(
-    4 => '4',
-    6 => '6',
+  /* Filter criterion: User: Community directory (field_directory) */
+  $handler->display->display_options['filters']['field_directory_value']['id'] = 'field_directory_value';
+  $handler->display->display_options['filters']['field_directory_value']['table'] = 'field_data_field_directory';
+  $handler->display->display_options['filters']['field_directory_value']['field'] = 'field_directory_value';
+  $handler->display->display_options['filters']['field_directory_value']['operator'] = 'not';
+  $handler->display->display_options['filters']['field_directory_value']['value'] = array(
+    'No' => 'No',
   );
-  $handler->display->display_options['path'] = 'people/attending';
+  $handler->display->display_options['path'] = 'people/community';
   $handler->display->display_options['menu']['type'] = 'default tab';
-  $handler->display->display_options['menu']['title'] = 'Attending';
+  $handler->display->display_options['menu']['title'] = 'Community';
   $handler->display->display_options['menu']['weight'] = '-10';
   $handler->display->display_options['menu']['name'] = 'user-menu';
   $handler->display->display_options['menu']['context'] = 0;

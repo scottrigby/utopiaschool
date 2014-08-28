@@ -24,7 +24,20 @@ function us_people_strongarm() {
       ),
     ),
     'extra_fields' => array(
-      'form' => array(),
+      'form' => array(
+        'ckeditor' => array(
+          'weight' => '10',
+        ),
+        'profile_main' => array(
+          'weight' => '0',
+        ),
+        'account' => array(
+          'weight' => '-10',
+        ),
+        'timezone' => array(
+          'weight' => '6',
+        ),
+      ),
       'display' => array(
         'profile_main' => array(
           'default' => array(

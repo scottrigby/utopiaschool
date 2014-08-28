@@ -68,13 +68,6 @@ function us_ux_ckeditor_profile_defaults() {
             ),
             'default' => 't',
           ),
-          'tableresize' => array(
-            'name' => 'tableresize',
-            'desc' => 'Table Resize plugin. See <a href="http://ckeditor.com/addon/tableresize">addon page</a> for more details.',
-            'path' => '//cdn.ckeditor.com/4.4.3/full-all/plugins/tableresize/',
-            'buttons' => FALSE,
-            'default' => 't',
-          ),
         ),
       ),
       'input_formats' => array(
@@ -138,13 +131,6 @@ function us_ux_ckeditor_profile_defaults() {
                 'icon' => 'images/drupalbreak.png',
               ),
             ),
-            'default' => 't',
-          ),
-          'tableresize' => array(
-            'name' => 'tableresize',
-            'desc' => 'Table Resize plugin. See <a href="http://ckeditor.com/addon/tableresize">addon page</a> for more details.',
-            'path' => '//cdn.ckeditor.com/4.4.3/full-all/plugins/tableresize/',
-            'buttons' => FALSE,
             'default' => 't',
           ),
         ),
