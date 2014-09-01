@@ -176,7 +176,7 @@ class fullcalendar_plugin_style_fullcalendar extends views_plugin_style {
 
     $labels = $this->display->handler->get_field_labels();
     $date_fields = array();
-    foreach ($this->view->field as $id => $field) {
+    foreach ($this->display->handler->handlers['field'] as $id => $field) {
       if (fullcalendar_field_is_date($field, $include_gcal)) {
         $date_fields[$id] = $labels[$id];
       }

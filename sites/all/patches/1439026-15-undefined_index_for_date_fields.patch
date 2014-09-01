@@ -1,0 +1,13 @@
+diff --git a/includes/views/plugins/fullcalendar_plugin_style_fullcalendar.inc b/includes/views/plugins/fullcalendar_plugin_style_fullcalendar.inc
+index eccc240..c8d03ec 100644
+--- a/includes/views/plugins/fullcalendar_plugin_style_fullcalendar.inc
++++ b/includes/views/plugins/fullcalendar_plugin_style_fullcalendar.inc
+@@ -176,7 +176,7 @@ class fullcalendar_plugin_style_fullcalendar extends views_plugin_style {
+ 
+     $labels = $this->display->handler->get_field_labels();
+     $date_fields = array();
+-    foreach ($this->view->field as $id => $field) {
++    foreach ($this->display->handler->handlers['field'] as $id => $field) {
+       if (fullcalendar_field_is_date($field, $include_gcal)) {
+         $date_fields[$id] = $labels[$id];
+       }
