@@ -10,16 +10,11 @@ img {
 
 /* Background */
 html {
-    background: repeating-linear-gradient(
-        60deg,
-        #D91F26,
-        #E25B0E,
-        #F1DD08,
-        #059444,
-        #0287CE,
-        #044D91,
-        #2A1571
-    ) fixed;
+    background: -webkit-repeating-linear-gradient(60deg, #D91F26, #E25B0E, #F1DD08, #059444, #0287CE, #044D91, #2A1571) fixed;
+    background:    -moz-repeating-linear-gradient(60deg, #D91F26, #E25B0E, #F1DD08, #059444, #0287CE, #044D91, #2A1571) fixed;
+    background:     -ms-repeating-linear-gradient(60deg, #D91F26, #E25B0E, #F1DD08, #059444, #0287CE, #044D91, #2A1571) fixed;
+    background:      -o-repeating-linear-gradient(60deg, #D91F26, #E25B0E, #F1DD08, #059444, #0287CE, #044D91, #2A1571) fixed;
+    background:         repeating-linear-gradient(60deg, #D91F26, #E25B0E, #F1DD08, #059444, #0287CE, #044D91, #2A1571) fixed;
 }
 body {
     background-color: inherit;
