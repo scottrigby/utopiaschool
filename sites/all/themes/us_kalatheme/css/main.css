@@ -19,7 +19,7 @@ html {
         #0287CE,
         #044D91,
         #2A1571
-    );
+    ) fixed;
 }
 body {
     background-color: inherit;
