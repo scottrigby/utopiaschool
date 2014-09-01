@@ -162,6 +162,26 @@ a.button:focus {
     background-color: rgba(255, 255, 255, .5);
 }
 
+/* Weird ghost outlines */
+.panel {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.navbar-collapse {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+/* Vertical tabs */
+div.vertical-tabs ul.vertical-tabs-list li {
+    background-color: rgba(255, 255, 255, .5);
+}
+div.vertical-tabs {
+    background-color: white;
+}
+
 /* Hacks */
 #edit-field-images {
     clear: both;
@@ -172,8 +192,21 @@ tbody {
     border-color: transparent;
 }
 
+.profile {
+     margin: 0;
+}
+
 .profile .user-picture {
      float: none;
+}
+
+.profile h3 {
+    border-bottom: 0;
+}
+
+.filter-wrapper .form-item {
+    float: none;
+    padding: 0;
 }
 
 /* Submitted */
@@ -189,7 +222,7 @@ img.avatar {
 #content .submitted,
 #content .modified,
 #content .comment .links {
-    color: #999999;
+    color: #666666;
 }
 
 /* Fields */
