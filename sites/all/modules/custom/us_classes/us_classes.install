@@ -33,3 +33,48 @@ function us_classes_node_to_view() {
   // Remove the path, so our classes View can take it.
   path_delete(array('source' => 'node/' . $nid));
 }
+
+/**
+ * Enable new modules for selecting facilitators.
+ */
+function us_classes_update_7002() {
+  module_enable(array('entityreference', 'multiple_selects', 'multiple_fields_remove_button'));
+  features_revert_module('us_classes');
+}
+
+/**
+ * Includes the node author in the list of facilitators, for all classes.
+ */
+function us_classes_update_7003(&$sandbox) {
+  $entity_type = 'node';
+  $bundle = 'class';
+  if (!isset($sandbox['total'])) {
+    $query = new EntityFieldQuery;
+    $total = $query
+      ->entityCondition('entity_type', $entity_type)
+      ->entityCondition('bundle', $bundle)
+      ->count()
+      ->execute();
+    $sandbox['total'] = $total;
+    $sandbox['current'] = 0;
+  }
+
+  $limit = 10;
+  $query = new EntityFieldQuery;
+  $result = $query
+    ->entityCondition('entity_type', $entity_type)
+    ->entityCondition('bundle', $bundle)
+    ->range($sandbox['current'], $limit)
+    ->execute();
+  $nodes = isset($result[$entity_type]) ? node_load_multiple(array_keys($result[$entity_type])) : array();
+  foreach ($nodes as $node) {
+    us_classes_add_author_as_facilitator($node);
+    drupal_set_message(t('Updated node @nid.', array('@nid' => $node->nid)));
+    $sandbox['current']++;
+  }
+  $sandbox['#finished'] = ($sandbox['current'] / $sandbox['total']);
+
+  if ($sandbox['finished'] === 1) {
+    drupal_set_message(t('Updated @nodes nodes.', array('@nodes' => $sandbox['total'])));
+  }
+}

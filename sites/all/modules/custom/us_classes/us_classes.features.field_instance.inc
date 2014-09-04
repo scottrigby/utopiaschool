@@ -112,7 +112,7 @@ function us_classes_field_default_field_instances() {
     'bundle' => 'class',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Add people who will be helping to lead this class. The person who proposed the class does not necessarily need to help facilitate, but if you do want to, add yourself to the list.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -138,14 +138,10 @@ function us_classes_field_default_field_instances() {
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 1,
-      'module' => 'entityreference',
-      'settings' => array(
-        'match_operator' => 'CONTAINS',
-        'path' => '',
-        'size' => 60,
-      ),
-      'type' => 'entityreference_autocomplete',
+      'active' => 0,
+      'module' => 'multiple_selects',
+      'settings' => array(),
+      'type' => 'multiple_selects',
       'weight' => 3,
     ),
   );
@@ -366,6 +362,7 @@ function us_classes_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Accepted classes with dates will appear on the public calendar.');
+  t('Add people who will be helping to lead this class. The person who proposed the class does not necessarily need to help facilitate, but if you do want to, add yourself to the list.');
   t('Dates');
   t('Description');
   t('Facilitators');
