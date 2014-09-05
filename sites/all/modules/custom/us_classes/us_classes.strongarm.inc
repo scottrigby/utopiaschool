@@ -90,7 +90,18 @@ function us_classes_strongarm() {
           'weight' => '0',
         ),
       ),
-      'display' => array(),
+      'display' => array(
+        'us_classes_involvement' => array(
+          'default' => array(
+            'weight' => '10',
+            'visible' => TRUE,
+          ),
+          'teaser' => array(
+            'weight' => '0',
+            'visible' => TRUE,
+          ),
+        ),
+      ),
     ),
   );
   $export['field_bundle_settings_node__class'] = $strongarm;
@@ -130,7 +141,7 @@ function us_classes_strongarm() {
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
   $strongarm->name = 'node_submitted_class';
-  $strongarm->value = 1;
+  $strongarm->value = 0;
   $export['node_submitted_class'] = $strongarm;
 
   return $export;
