@@ -182,12 +182,19 @@ div.vertical-tabs {
     clear: both;
 }
 
+/* Class involvement */
 .user-involved {
     color: #666666;
     margin-bottom: 0.5em;
 }
 .user-involved span {
     padding-right: 0.5em;
+}
+.user-involved span {
+    padding-right: 0.25em;
+}
+.user-involved .user-involvement {
+    font-style: italic;
 }
 
 /* Override core Drupal styles */

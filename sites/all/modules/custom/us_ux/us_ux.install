@@ -21,3 +21,12 @@ function us_ux_install() {
   $format = filter_format_load('plain_text');
   filter_format_disable($format);
 }
+
+/**
+ * Save default user picture to the managed files table.
+ */
+function us_ux_update_7000() {
+  $filename = 'user-picture-default.jpg';
+  $data = file_get_contents(__DIR__ . '/images/' . $filename);
+  file_save_data($data, 'public://' . $filename, FILE_EXISTS_RENAME);
+}

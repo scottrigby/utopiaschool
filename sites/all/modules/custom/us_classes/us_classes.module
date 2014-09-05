@@ -193,15 +193,8 @@ function theme_us_classes_involvement_user($variables) {
     ),
   );
 
-  // @todo Move to us_ux_preprocess_user_picture(), and theme('user_picture'),
-  //   so our module doesn't depend on a theme, but instead the theme can
-  //   override this theme function if it wants to.
-//    '#markup' => theme('user_picture', array('account' => $account)),
-  $avatar = us_kalatheme_get_user_avatar($user->uid);
   $build['avatar'] = array(
-    '#markup' => drupal_render($avatar),
-    '#prefix' => '<span class="user-avatar">',
-    '#suffix' => '</span>',
+    '#markup' => theme('user_picture', array('account' => $user, 'user_picture_style' => 'tiny')),
   );
 
   $build['name'] = array(
