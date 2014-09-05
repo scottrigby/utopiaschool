@@ -110,3 +110,7 @@ function us_ux_form_node_form_alter(&$form) {
     }
   }
 }
+
+//function us_ux_preprocess_user_picture(&$variables) {
+//
+//}

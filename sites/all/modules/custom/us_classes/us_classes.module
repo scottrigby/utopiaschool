@@ -7,6 +7,20 @@
 include_once 'us_classes.features.inc';
 
 /**
+ * Implements hook_theme().
+ */
+function us_classes_theme($existing, $type, $theme, $path) {
+  return array(
+    'us_classes_involvement_user' => array(
+      'variables' => array(
+        'user' => NULL,
+        'involvement' => NULL,
+      ),
+    ),
+  );
+}
+
+/**
  * Implements hook_field_access().
  *
  * Note field_permissions module is overkill here.
@@ -37,6 +51,38 @@ function us_classes_field_widget_multiple_selects_form_alter(&$element, &$form_s
 }
 
 /**
+ * Implements hook_node_view().
+ */
+function us_classes_node_view($node, $view_mode, $langcode) {
+  switch ($node->type) {
+    case 'class':
+      $build = array();
+      if ($view_mode == 'full') {
+        $build['title'] = array(
+          '#markup' => '<h2>' . t('Class involvement') . '</h2>',
+        );
+      }
+      $build['content'] = us_classes_involvement_render($node);
+      $node->content['us_classes_involvement'] = $build;
+      break;
+  }
+}
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function us_classes_field_extra_fields() {
+  $extra['node']['class']['display'] = array(
+    'us_classes_involvement' => array(
+      'label' => t('Class involvement'),
+      'description' => t('A list of users involved with the class.'),
+      'weight' => 10,
+    ),
+  );
+  return $extra;
+}
+
+/**
  * Includes the node author in the list of facilitators.
  *
  * @param object $node
@@ -56,4 +102,110 @@ function us_classes_add_author_as_facilitator($node) {
   catch(\EntityMetadataWrapperException $e) {
     // Do nothing. If this fails we have done something wrong.
   }
+}
+
+/**
+ * Function to render the class involvement list of users.
+ *
+ * Note we're not making a view mode on profile2 (we could, but we'd be
+ * repeating the query we need to do here anyway for sorting). And views would
+ * be overkill here, since we want each user's item to include reverse
+ * entity references, node authorship, and later flags (for interest) - and sort
+ * the list by those as well.
+ *
+ * @param object $node
+ *   The class node object.
+ *
+ * @return array
+ *   A render array for the class involvement list.
+ */
+function us_classes_involvement_render($node) {
+  try {
+    $wrapper = entity_metadata_wrapper('node', $node);
+
+    // Start the list of users involved in the class.
+    $list = array();
+
+    // @todo Consider supporting a multiple proposers field (for when a group
+    //   arrives at an idea together). For now, only the node author is
+    //   listed as having proposed the class.
+    $uid = $wrapper->author->uid->value();
+    $list[$uid][] = t('Proposed');
+
+    // Find the users who are helping to organize the class (facilitating). Add
+    // them to the list if they're not already (either way, add 'facilitating' to
+    // the user's level of participation comma-separated list.
+    $field_name = 'field_facilitators';
+    $uids = $wrapper->$field_name->raw();
+    foreach ($uids as $uid) {
+      $list[$uid][] = t('Facilitating');
+    }
+
+    // @todo, Find the users who are interested in the class, and add them too.
+
+    // Pass to a theme function, so I can wrap the user class involvement info in
+    // markup. theme_us_classes_involvement_user().
+    $build = array(
+      '#type' => 'container',
+      '#attributes' => array(
+        'class' => array('class-involvement'),
+      ),
+    );
+
+    foreach ($list as $uid => $involvement) {
+      $user = user_load($uid);
+      $variables = array(
+        'user' => user_load($uid),
+        'involvement' => $involvement,
+      );
+      $build[$uid] = theme('us_classes_involvement_user', $variables);
+    }
+    return $build;
+  }
+  catch(\EntityMetadataWrapperException $e) {
+    // Do nothing. If this fails we have done something wrong.
+  }
+}
+
+/**
+ * @param $user
+ *   A user object.
+ * @param $involvement
+ *   An array of strings describing the user's involvement.
+ */
+function theme_us_classes_involvement_user($variables) {
+  $user = $variables['user'];
+  $involvement = $variables['involvement'];
+
+  $build = array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array('user-involved'),
+    ),
+  );
+
+  // @todo Move to us_ux_preprocess_user_picture(), and theme('user_picture'),
+  //   so our module doesn't depend on a theme, but instead the theme can
+  //   override this theme function if it wants to.
+//    '#markup' => theme('user_picture', array('account' => $account)),
+  $avatar = us_kalatheme_get_user_avatar($user->uid);
+  $build['avatar'] = array(
+    '#markup' => drupal_render($avatar),
+    '#prefix' => '<span class="user-avatar">',
+    '#suffix' => '</span>',
+  );
+
+  $build['name'] = array(
+    '#markup' => theme('username', array('account' => $user)),
+    '#prefix' => '<span class="user-name">',
+    '#suffix' => '</span>',
+  );
+
+  $build['involvement'] = array(
+    '#markup' => implode(', ', $involvement),
+    '#prefix' => '<span class="user-involvement">',
+    '#suffix' => '</span>',
+  );
+
+  return $build;
 }

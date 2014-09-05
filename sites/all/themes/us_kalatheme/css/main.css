@@ -182,6 +182,14 @@ div.vertical-tabs {
     clear: both;
 }
 
+.user-involved {
+    color: #666666;
+    margin-bottom: 0.5em;
+}
+.user-involved span {
+    padding-right: 0.5em;
+}
+
 /* Override core Drupal styles */
 tbody {
     border-color: transparent;
