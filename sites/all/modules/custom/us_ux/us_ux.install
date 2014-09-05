@@ -24,6 +24,9 @@ function us_ux_install() {
 
 /**
  * Save default user picture to the managed files table.
+ *
+ * MOVED THE DEFAULT USER PICTURE TO US_PEOPLE.MODULE, BECAUSE IT BELONGS THERE.
+ * KEEP THIS FUNCTION HERE NOW THOUGH, TO TRACK THE MODULE SCHEMA VERSION.
  */
 function us_ux_update_7000() {
   $filename = 'user-picture-default.jpg';
