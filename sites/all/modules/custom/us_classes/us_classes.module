@@ -133,8 +133,8 @@ function us_classes_involvement_render($node) {
     $list[$uid][] = t('Proposed');
 
     // Find the users who are helping to organize the class (facilitating). Add
-    // them to the list if they're not already (either way, add 'facilitating' to
-    // the user's level of participation comma-separated list.
+    // them to the list if they're not already (either way, add 'facilitating'
+    // to the user's level of participation comma-separated list.
     $field_name = 'field_facilitators';
     $uids = $wrapper->$field_name->raw();
     foreach ($uids as $uid) {
@@ -143,8 +143,8 @@ function us_classes_involvement_render($node) {
 
     // @todo, Find the users who are interested in the class, and add them too.
 
-    // Pass to a theme function, so I can wrap the user class involvement info in
-    // markup. theme_us_classes_involvement_user().
+    // Pass to a theme function, to wrap the user class involvement info in
+    // markup that we can style.
     $build = array(
       '#type' => 'container',
       '#attributes' => array(
@@ -152,6 +152,7 @@ function us_classes_involvement_render($node) {
       ),
     );
 
+    // Loop over the list of users, and get the themed render array.
     foreach ($list as $uid => $involvement) {
       $user = user_load($uid);
       $variables = array(
@@ -168,10 +169,18 @@ function us_classes_involvement_render($node) {
 }
 
 /**
- * @param $user
- *   A user object.
- * @param $involvement
- *   An array of strings describing the user's involvement.
+ * Returns HTML for a foo.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - user: A user object that is being formatted.
+ *   - involvement: An array of strings describing the user's involvement. These
+ *     should be sanitized before being passed here.
+ *
+ * @ingroup themeable
+ *
+ * @return array
+ *   A Drupal render array for the class involvement section markup.
  */
 function theme_us_classes_involvement_user($variables) {
   $user = $variables['user'];
