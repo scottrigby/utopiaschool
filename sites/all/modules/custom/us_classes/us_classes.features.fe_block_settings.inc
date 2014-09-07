@@ -53,7 +53,7 @@ function us_classes_default_fe_block_settings() {
       ),
     ),
     'title' => '',
-    'visibility' => 1,
+    'visibility' => 0,
   );
 
   return $export;
