@@ -12,11 +12,11 @@ function us_classes_default_fe_block_settings() {
 
   $export['version'] = '2.0';
 
-  $export['views-classes-block_1'] = array(
-    'cache' => -1,
+  $export['us_classes-user_classes_involvement'] = array(
+    'cache' => 1,
     'custom' => 0,
-    'delta' => 'classes-block_1',
-    'module' => 'views',
+    'delta' => 'user_classes_involvement',
+    'module' => 'us_classes',
     'node_types' => array(),
     'pages' => 'user/*/*',
     'roles' => array(),
@@ -25,6 +25,12 @@ function us_classes_default_fe_block_settings() {
         'region' => '',
         'status' => 0,
         'theme' => 'bartik',
+        'weight' => 0,
+      ),
+      'rainbow' => array(
+        'region' => '',
+        'status' => 0,
+        'theme' => 'rainbow',
         'weight' => 0,
       ),
       'responsive_bartik' => array(
@@ -43,11 +49,11 @@ function us_classes_default_fe_block_settings() {
         'region' => 'content',
         'status' => 1,
         'theme' => 'us_kalatheme',
-        'weight' => 0,
+        'weight' => -7,
       ),
     ),
     'title' => '',
-    'visibility' => 0,
+    'visibility' => 1,
   );
 
   return $export;

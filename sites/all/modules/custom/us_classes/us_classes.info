@@ -20,6 +20,7 @@ dependencies[] = textformatter
 dependencies[] = views
 features[ctools][] = strongarm:strongarm:1
 features[ctools][] = views:views_default:3.0
+features[fe_block_settings][] = us_classes-user_classes_involvement
 features[fe_block_settings][] = views-classes-block_1
 features[features_api][] = api:2
 features[field_base][] = body
