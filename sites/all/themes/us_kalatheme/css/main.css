@@ -197,6 +197,13 @@ div.vertical-tabs {
     font-style: italic;
 }
 
+#block-us-classes-user-classes-involvement>.content>article {
+    padding: 0 1em;
+}
+#block-us-classes-user-classes-involvement>.content>article:nth-child(odd) {
+    background-color: rgba(255, 255, 255, .5);
+}
+
 /* Override core Drupal styles */
 tbody {
     border-color: transparent;

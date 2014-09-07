@@ -51,6 +51,40 @@ function us_classes_field_widget_multiple_selects_form_alter(&$element, &$form_s
 }
 
 /**
+ * Implements hook_block_info().
+ *
+ * @todo Remove this when hook_user_view() bus is fixed.
+ */
+function us_classes_block_info() {
+  // This example comes from node.module.
+  $blocks['user_classes_involvement'] = array(
+    'info' => t('Classes involved in'),
+//    'cache' => DRUPAL_NO_CACHE
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ *
+ * @todo Remove this when hook_user_view() bus is fixed.
+ */
+function us_classes_block_view($delta = '') {
+  $block = array();
+
+  switch ($delta) {
+    case 'user_classes_involvement':
+      if ($account = menu_get_object('user')) {
+        $block['subject'] = t('Classes involved in');
+        $block['content'] = us_classes_user_classes_involvement_render($account);
+      }
+      break;
+  }
+  return $block;
+}
+
+/**
  * Implements hook_node_view().
  */
 function us_classes_node_view($node, $view_mode, $langcode) {
@@ -69,6 +103,26 @@ function us_classes_node_view($node, $view_mode, $langcode) {
 }
 
 /**
+ * Implements hook_user_view().
+ *
+ * @todo Why is this not displaying?
+ */
+function us_classes_user_view($account, $view_mode, $langcode) {
+//  $build = array();
+//  $build['title'] = array(
+//    '#markup' => '<h2>' . t('Classes involved in') . '</h2>',
+//  );
+//  $build['classes'] = us_classes_user_classes_involvement_render($account);
+//  $rendered = drupal_render($build);
+//  $account->content['summary']['us_classes_user_classes_involvement'] =  array(
+//    '#type' => 'user_profile_item',
+//    '#title' => t('Classes involved in'),
+//    '#markup' => $rendered,
+//    '#attributes' => array('class' => array('classes')),
+//  );
+}
+
+/**
  * Implements hook_field_extra_fields().
  */
 function us_classes_field_extra_fields() {
@@ -79,7 +133,76 @@ function us_classes_field_extra_fields() {
       'weight' => 10,
     ),
   );
+//  $extra['user']['user']['display'] = array(
+//    'us_classes_user_classes_involvement' => array(
+//      'label' => t('Class involvement'),
+//      'description' => t('A list of classes this user is involved with.'),
+//      'weight' => 10,
+//    ),
+//  );
   return $extra;
+}
+
+/**
+ * Renders a list of classes the user is involved in.
+ *
+ * @param $account
+ */
+function us_classes_user_classes_involvement_render($account) {
+  $entity_type = 'node';
+  $bundle = 'class';
+  $field_name = 'field_facilitators';
+  $ids = array();
+
+  // Find classes this user proposed.
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', $entity_type)
+    ->entityCondition('bundle', $bundle)
+    ->propertyCondition('uid', $account->uid)
+    ->execute();
+  if (isset($result[$entity_type])) {
+    $ids = array_merge($ids, array_keys($result[$entity_type]));
+  }
+
+  // Find classes this user is facilitating.
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', $entity_type)
+    ->entityCondition('bundle', $bundle)
+    ->fieldCondition($field_name, 'target_id', $account->uid)
+    ->execute();
+  if (isset($result[$entity_type])) {
+    $ids = array_merge($ids, array_keys($result[$entity_type]));
+  }
+
+  // Remove duplicates.
+  $ids = array_unique($ids);
+
+  // Order by title here as opposed to the query, because we are merging two
+  // query results together.
+  $nodes = node_load_multiple($ids);
+  $keyed = array();
+  foreach ($nodes as $node) {
+    $keyed[check_plain($node->title)] = $node;
+  }
+  ksort($keyed);
+  // Reset to their original IDs so _field_invoke_multiple() doesn't freak.
+  $rekeyed = array();
+  foreach ($nodes as $node) {
+    $rekeyed[$node->nid] = $node;
+  }
+
+  if (!empty($ids)) {
+    $output = node_view_multiple($rekeyed);
+  }
+  else {
+    $output = array(
+      '#markup' => '<div class="alert alert-warning">' . t('This person is not involved in any classes yet.') . '</div>',
+    );
+  }
+
+  return $output;
 }
 
 /**
