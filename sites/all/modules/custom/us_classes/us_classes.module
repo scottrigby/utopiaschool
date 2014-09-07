@@ -147,6 +147,9 @@ function us_classes_field_extra_fields() {
  * Renders a list of classes the user is involved in.
  *
  * @param $account
+ *
+ * @return array
+ *   A Drupal render array - either a list of nodes, or empty text.
  */
 function us_classes_user_classes_involvement_render($account) {
   $entity_type = 'node';
@@ -184,12 +187,12 @@ function us_classes_user_classes_involvement_render($account) {
   $nodes = node_load_multiple($ids);
   $keyed = array();
   foreach ($nodes as $node) {
-    $keyed[check_plain($node->title)] = $node;
+    $keyed[drupal_html_class(check_plain($node->title))] = $node;
   }
   ksort($keyed);
   // Reset to their original IDs so _field_invoke_multiple() doesn't freak.
   $rekeyed = array();
-  foreach ($nodes as $node) {
+  foreach ($keyed as $node) {
     $rekeyed[$node->nid] = $node;
   }
 
