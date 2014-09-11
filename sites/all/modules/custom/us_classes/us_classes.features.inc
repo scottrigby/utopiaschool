@@ -14,6 +14,13 @@ function us_classes_ctools_plugin_api($module = NULL, $api = NULL) {
 }
 
 /**
+ * Implements hook_views_api().
+ */
+function us_classes_views_api($module = NULL, $api = NULL) {
+  return array("api" => "3.0");
+}
+
+/**
  * Implements hook_flag_default_flags().
  */
 function us_classes_flag_default_flags() {
@@ -55,20 +62,14 @@ function us_classes_flag_default_flags() {
     'form_unflagging_button' => 'Confirm',
     'form_unflag_link_leads_to_edit' => 1,
     'form_interaction' => 'flagging_inline',
-    'module' => 'tps_discussion',
+    'module' => 'us_classes',
     'locked' => array(
-      'name' => 'name',
+      0 => 'name',
     ),
     'api_version' => 3,
   );
   return $flags;
-}
 
-/**
- * Implements hook_views_api().
- */
-function us_classes_views_api($module = NULL, $api = NULL) {
-  return array("api" => "3.0");
 }
 
 /**

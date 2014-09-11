@@ -93,12 +93,22 @@ function us_classes_strongarm() {
       'display' => array(
         'us_classes_involvement' => array(
           'default' => array(
-            'weight' => '10',
+            'weight' => '7',
             'visible' => TRUE,
           ),
           'teaser' => array(
             'weight' => '0',
             'visible' => TRUE,
+          ),
+        ),
+        'flag_subscribe_class' => array(
+          'default' => array(
+            'weight' => '6',
+            'visible' => TRUE,
+          ),
+          'teaser' => array(
+            'weight' => '10',
+            'visible' => FALSE,
           ),
         ),
       ),
