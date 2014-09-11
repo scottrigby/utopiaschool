@@ -1,0 +1,1514 @@
+From c25e5ae7fb5ffeb6a45d8635db3ac74ffb25f700 Mon Sep 17 00:00:00 2001
+From: Scott Rigby <scott@r6by.com>
+Date: Sun, 11 May 2014 08:52:00 +0000
+Subject: [PATCH] Issue #1839830 by jarrodirwin | joknjokn | scottrigby: Show
+ form directly without redirect/popup.
+
+---
+ flagging_inline.info                   |    5 +
+ flagging_inline.js                     |  142 ++++++
+ flagging_inline.module                 |  329 ++++++++++++++
+ flagging_inline_module-1839830-7.patch |  743 ++++++++++++++++++++++++++++++++
+ jquery.xLazyLoader.js                  |  243 +++++++++++
+ 5 files changed, 1462 insertions(+)
+ create mode 100644 flagging_inline.info
+ create mode 100644 flagging_inline.js
+ create mode 100644 flagging_inline.module
+ create mode 100644 flagging_inline_module-1839830-7.patch
+ create mode 100644 jquery.xLazyLoader.js
+
+diff --git a/flagging_inline.info b/flagging_inline.info
+new file mode 100644
+index 0000000..2f6b5f8
+--- /dev/null
++++ b/flagging_inline.info
+@@ -0,0 +1,5 @@
++name = Flag inline
++description = Makes the flag form show inline via ajax.
++core = 7.x
++package = Flags
++dependencies[] = flagging_form
+diff --git a/flagging_inline.js b/flagging_inline.js
+new file mode 100644
+index 0000000..70a8bf8
+--- /dev/null
++++ b/flagging_inline.js
+@@ -0,0 +1,142 @@
++/**
++ * Javascript to handle the flagging_inline ajax requests.
++ */
++(function ($) {
++
++  Drupal.flagging_form_inline = Drupal.flagging_form_inline || {};
++
++  Drupal.behaviors.flagging_form_inline = {
++    attach: function (context, settings) {
++      // Create the jQuery UI elements to handle events.
++      $(".flagging-inline").once("flagging_form_inline", function() {
++        Drupal.flagging_form_inline = $('<div class="flagging-inline-content"></div>').hide();
++        $(this).parent().append(Drupal.flagging_form_inline);
++      });
++    }
++  };
++
++  /**
++   * Ajax command to display flagging form.
++   */
++  Drupal.ajax.prototype.commands.flagging_inline_display = function(ajax, response, status) {
++    var $flag_wrapper = $('.flag-wrapper.flag-' + response.flagName.flagNameToCSS() + '-' + response.contentId);
++    var $flag_link = $flag_wrapper.find('.flagging-inline');
++    var $flag_content = $flag_wrapper.find('.flagging-inline-content');
++    // Assign the currently active flag content to Drupal.flagging_form_inline.
++    Drupal.flagging_form_inline = $flag_content;
++    // Add class on link so we know it is active.
++    $flag_link.addClass('flagging-inline-active');
++    Drupal.flagging_form_inline.html(response.content).slideDown(200, function() {
++      // When the user presses ENTER (in textfields or selects), the browser
++      // submits the form. We want this submission to occur via ajax. So we
++      // intercept a normal form submission and instead trigger the first
++      // ajaxified action button.
++      $(this).find('form').submit(function() {
++        if ($('#autocomplete').size() == 0) { // Pressing ENTER in autocompletes shouldn't submit the form.
++          $('.form-actions input:submit:first', this).mousedown();
++        }
++        return false;
++      });
++
++      // We handle "Cancel" buttons directly through JavaScript to save
++      // a roundtrip to the server.
++      $(this).find('.form-actions input[id*=cancel]').bind("click", function() {
++        Drupal.ajax.prototype.commands.flagging_inline_dismiss(ajax, response, status);
++        return false;
++      });
++    });
++    // Apply any settings from the returned JSON if available.
++    var settings = response.settings || ajax.settings || Drupal.settings;
++    // Process any other behaviors on the content, and display the inline form.
++    Drupal.attachBehaviors(Drupal.flagging_form_inline, settings);
++  };
++
++  /**
++   * Ajax command to close flagging form.
++   */
++  Drupal.ajax.prototype.commands.flagging_inline_dismiss = function(ajax, response, status) {
++    var $flag_wrapper = $('.flag-wrapper.flag-' + response.flagName.flagNameToCSS() + '-' + response.contentId);
++    var $flag_link = $flag_wrapper.find('.flagging-inline');
++    var $flag_content = $flag_wrapper.find('.flagging-inline-content');
++    // Assign the currently active flag content to Drupal.flagging_form_inline.
++    Drupal.flagging_form_inline = $flag_content;
++    // Slide up the inline content then empty and hide it.
++    Drupal.flagging_form_inline.slideUp(200, function() {
++      $(this).empty().hide();
++      // Remove class on link so we know it is no longer active.
++      var $flag_wrapper = $(this).parent();
++      var $flag_link = $flag_wrapper.find('.flagging-inline');
++      $flag_link.removeClass('flagging-inline-active');
++    });
++    Drupal.detachBehaviors(Drupal.flagging_form_inline);
++  };
++
++  /**
++   * Ajax command to update a flag link.
++   */
++  Drupal.ajax.prototype.commands.flagging_inline_update_link = function(ajax, response, status) {
++    Drupal.flagUtils.updateContentIdLinks(response);
++    // @see flagging_inline_command_update_link()
++    $.event.trigger('flagGlobalAfterLinkUpdate', [response]);
++  };
++
++  /**
++   * Command to use the xLazyLoader to load additional JavaScript, CSS and images.
++   *
++   * http://code.google.com/p/ajaxsoft/wiki/xLazyLoader
++   */
++  Drupal.ajax.prototype.commands.xlazyloader = function(ajax, response, status) {
++    var settings = {
++      name: 'lazy',
++      success: function() {
++      // When it's complete loading the new JavaScript and CSS, make sure to run
++      // the behaviors on the object.
++      Drupal.attachBehaviors(Drupal.flagging_form_inline);
++      }
++    };
++    // Merge in the settings, allowing the loading of CSS and JavaScript.
++    jQuery.extend(settings, response.options);
++    // Load the scripts.
++    $.xLazyLoader(settings);
++  };
++
++  Drupal.flagUtils = Drupal.flagUtils || {};
++
++/**
++ * Updates all links of a certain content ID.
++ *
++ * @param data
++ *   A parcel of info usually returned from the server; at a minimum it should
++ *   contain:
++ *   - flagName
++ *   - contentId
++ *   - newLink
++ *
++ * @todo: The masses are clamoring for this utility function (see
++ * http://drupal.org/node/843308#comment-3308744), so move it to Flag's core.
++ */
++Drupal.flagUtils.updateContentIdLinks = function(data) {
++  var $wrappers = $('.flag-wrapper.flag-' + data.flagName.flagNameToCSS() + '-' + data.contentId);
++  var $newLink = $(data.newLink);
++  // Initially hide the message so we can fade it in.
++  $('.flag-message', $newLink).css('display', 'none');
++  $wrappers = $newLink.replaceAll($wrappers);
++  $('.flag-message', $wrappers).fadeIn();
++  Drupal.attachBehaviors($wrappers.parent());
++  setTimeout(function() { $('.flag-message', $wrappers).fadeOut() }, 3000);
++  // A short treatise on Replacing Things.
++  //
++  //   $olds.replaceWith($new)
++  //
++  // This replaces all $olds with a single $new. The $olds variable now contains
++  // a collection of elements that are no longer in the document.
++  //
++  //   $new.replaceAll($olds)
++  //
++  // This replaces all $olds with clones of $new. The value of this expression is
++  // a collection of all new $new's.
++  //
++  // @todo: Remove this explanation?
++}
++
++})(jQuery);
+diff --git a/flagging_inline.module b/flagging_inline.module
+new file mode 100644
+index 0000000..a649f95
+--- /dev/null
++++ b/flagging_inline.module
+@@ -0,0 +1,329 @@
++<?php
++
++/**
++ * @file
++ * Provides menu callbacks for displaying the flagging forms inline.
++ */
++
++/**
++ * Implements hook_menu().
++ */
++function flagging_inline_menu() {
++  // Editing a flagging.
++  $items['flag/flagging/%flag/%content_id/edit/inline'] = array(
++    'page callback' => 'flagging_inline_edit_flagging',
++    'page arguments' => array(2, 3),
++    'title callback' => '_flag_menu_title',
++    'title arguments' => array(2),
++    'access callback' => '_flagging_form_flagging_access',
++    'access arguments' => array('update', 2, 3),
++    'delivery callback' => 'ajax_deliver',
++  );
++
++  // Creating a flagging.
++  $items['flag/flagging/%flag/%content_id/create/inline'] = array(
++    'page callback' => 'flagging_inline_edit_flagging',
++    'page arguments' => array(2, 3),
++    'title callback' => '_flag_menu_title',
++    'title arguments' => array(2),
++    'access callback' => '_flagging_form_flagging_access',
++    'access arguments' => array('create', 2, 3),
++    'delivery callback' => 'ajax_deliver',
++  );
++
++  // Deleting a flagging.
++  $items['flag/flagging/%flag/%content_id/delete/inline'] = array(
++    'page callback' => 'flagging_inline_delete_flagging',
++    'page arguments' => array(2, 3),
++    'title callback' => '_flag_menu_title',
++    'title arguments' => array(2),
++    'access callback' => '_flagging_form_flagging_access',
++    'access arguments' => array('delete', 2, 3),
++    'delivery callback' => 'ajax_deliver',
++  );
++
++  return $items;
++}
++
++/**
++ * Implements hook_flagging_form_interactions().
++ */
++function flagging_inline_flagging_form_interactions() {
++  return array(
++    'flagging_inline' => array(
++      'title' => t('Inline'),
++      'description' => t('Forms are displayed inline, if JavaScript is available.'),
++      'weight' => 0,
++    ),
++  );
++}
++
++/**
++ * Implements hook_flagging_form_link_alter().
++ *
++ * Alters the links flagging_form.module generates.
++ */
++function flagging_inline_flagging_form_link_alter(&$link, $flag) {
++  if ($flag->form_interaction == 'flagging_inline') {
++    // Bug in Drupal's ajax.js: we must have a trailing '/'.
++    $link['href'] .= '/inline/';
++    $link['attributes']['class'] = 'flagging-inline use-ajax';
++
++    // @todo: See Amitai's http://drupal.org/node/858764, which tries to
++    // standardize js/css inclusion.
++    // We need the CSS for .flag-message:
++    drupal_add_css(drupal_get_path('module', 'flag') . '/theme/flag.css');
++    // We need the anonyous-user handling (but nothing else):
++    // @todo: split flag.js into flag-common.js and flag-toggle.js?
++    drupal_add_js(drupal_get_path('module', 'flag') . '/theme/flag.js');
++
++    // Finally, our own code:
++    drupal_add_library('flagging_inline', 'flagging_inline');
++  }
++}
++
++/**
++ * Implements hook_library().
++ */
++function flagging_inline_library() {
++  $libraries['flagging_inline'] = array(
++    'title' => 'Flag Inline',
++    'version' => '1.0',
++    'js' => array(
++      // Omitting the 'group' bellow will use a default group of JS_LIBRARY,
++      // which, since lighter than ajax.js's, won't enable us to add our
++      // command(s) to the non-yet-existing Drupal.ajax.prototype.commands.
++      drupal_get_path('module', 'flagging_inline') . '/flagging_inline.js' => array('group' => JS_DEFAULT),
++      drupal_get_path('module', 'flagging_inline') . '/jquery.xLazyLoader.js' => array('group' => JS_LIBRARY),
++    ),
++    'dependencies' => array(
++      array('system', 'drupal.ajax'),
++      array('system', 'jquery.form'),
++    ),
++  );
++  return $libraries;
++}
++
++/**
++ * Implements hook_form_alter().
++ */
++function flagging_inline_form_alter(&$form, &$form_state, $form_id) {
++  if (!empty($form_state['flag_is_using_inline'])) {
++    // Make the buttons submit via ajax. (This could also be done by adding
++    // class="use-ajax-submit" to buttons, but bugs in Drupal's misc/ajax.js
++    // prevent this from working.)
++    if (isset($form['actions'])) {
++      foreach (element_children($form['actions']) as $button) {
++        // For performance, we handle cancel buttons in our JavaScript.
++        if ($button != 'cancel') {
++          $form['actions'][$button]['#ajax']['path'] = $_GET['q'];
++        }
++      }
++    }
++  }
++}
++
++/**
++ * Menu callback.
++ */
++function flagging_inline_edit_flagging($flag, $content_id) {
++  $flagging = $flag->get_flagging($content_id);
++  if (!$flagging) {
++    // New flagging.
++    $flagging = $flag->new_flagging($content_id);
++  }
++  $form_state = array(
++    'no_redirect' => TRUE,
++    // Tell our hook_form_alter() to kick in.
++    'flag_is_using_inline' => TRUE,
++    'flag_suppress_messages' => TRUE,
++    'build_info' => array(
++      'args' => array($flagging),
++    ),
++  );
++  $form = drupal_build_form('flagging_form_flagging_form', $form_state);
++  return flagging_inline_process_form_result($form, $form_state, $flag, $content_id);
++}
++
++/**
++ * Menu callback.
++ */
++function flagging_inline_delete_flagging($flag, $content_id) {
++  $flagging = $flag->get_flagging($content_id);
++  if (!$flagging) {
++    // The item isn't flagged. The form function will deal with this error.
++    $flagging = $flag->new_flagging($content_id);
++  }
++  $form_state = array(
++    'no_redirect' => TRUE,
++    // Tell our hook_form_alter() to kick in.
++    'flag_is_using_inline' => TRUE,
++    'flag_suppress_messages' => TRUE,
++    'build_info' => array(
++      'args' => array($flagging),
++    ),
++  );
++  $form = drupal_build_form('flagging_form_flagging_delete_form', $form_state);
++  return flagging_inline_process_form_result($form, $form_state, $flag, $content_id);
++}
++
++/**
++ * Handles submission of the form.
++ */
++function flagging_inline_process_form_result($form, $form_state, $flag, $content_id) {
++  $commands = array();
++
++  if (!empty($form_state['executed'])) {
++    // The form has been submitted. Either redirect to a new url or close the inline form.
++    if (is_array($form_state['redirect'])) {
++      $target = $form_state['redirect'][0];
++    }
++    else {
++      $target = $form_state['redirect'];
++    }
++    // If there's an ajax version for the target path, use it.
++    $try = menu_get_item($target . '/inline');
++    if ($try && strpos($try['path'], '/inline') !== FALSE) {
++      // Yes, there is. Do an "internal" redirect.
++      $target = $target . '/inline';
++      _flagging_inline_set_drupal_path($target);
++      menu_execute_active_handler($target);
++      drupal_exit();
++    }
++    else {
++      // No, there's no ajax page to go to. Close the inline form, and
++      // update the flag link.
++      $commands[] = flagging_inline_command_dismiss($flag, $content_id, array());
++      $commands[] = flagging_inline_command_update_link($flag, $content_id, !empty($form_state['flag_status_has_changed']));
++    }
++  }
++  else {
++    // The form hasn't been submitted. So we just need to display it.
++    flagging_inline_display(TRUE);
++    $commands[] = flagging_inline_command_display($form, $flag, $content_id, array('title' => drupal_get_title()));
++  }
++
++  $output = array(
++    '#type' => 'ajax',
++    '#commands' => $commands,
++  );
++  return $output;
++}
++
++/**
++ * Fool the system to think the current URL is $path.
++ *
++ * Used for "internal" redirections. This doesn't need to be foolproof: just
++ * enough to handle our own code.
++ */
++function _flagging_inline_set_drupal_path($path) {
++  // Used by our form_alter():
++  $_GET['q'] = $path;
++  // Used as the action='...' for <form> tags:
++  $_SERVER['REQUEST_URI'] = url($path);
++  drupal_static_reset('element_info');
++}
++
++/**
++ * Creates a Drupal AJAX command to display the form.
++ */
++function flagging_inline_command_display($content, $flag, $content_id, $options) {
++  return array(
++    'command' => 'flagging_inline_display',
++    'content' => render($content),
++    'flagName' => $flag->name,
++    'contentId' => $content_id,
++    'options' => $options,
++  );
++}
++
++/**
++ * Creates a Drupal AJAX command to hide the form.
++ */
++function flagging_inline_command_dismiss($flag, $content_id, $options) {
++  return array(
++    'command' => 'flagging_inline_dismiss',
++    'flagName' => $flag->name,
++    'contentId' => $content_id,
++    'options' => $options,
++  );
++}
++
++/**
++ * Creates a Drupal AJAX command to update a flag link.
++ */
++function flagging_inline_command_update_link($flag, $content_id, $status_has_changed) {
++  // @todo: We're mimicing here the JavsScript structure flag_page() builds.
++  // Let's factor out the flag_page() code and use it instead.
++  return array(
++    'command' => 'flagging_inline_update_link',
++    'flagName' => $flag->name,
++    'contentId' => $content_id,
++    // @todo: it was pointed out already, in a comment in flagging_form.module,
++    // that we don't have a special message to print when a flagging is updated
++    // (as opposed to created or deleted). When we factor flag_page() we should
++    // make things future-proof to also work when we do have such a message.
++    'newLink' => $flag->theme($flag->is_flagged($content_id) ? 'unflag' : 'flag', $content_id, array('after_flagging' => $status_has_changed)),
++  );
++}
++
++/**
++ * Creates a Drupal AJAX 'xLazyLoader' command.
++ */
++function flagging_inline_command_xlazyloader($options = array()) {
++  return array(
++    'command' => 'xlazyloader',
++    'options' => $options,
++  );
++}
++
++/**
++ * Provides an easy way of representing the status of inline form.
++ */
++function flagging_inline_display($options = NULL) {
++  $status = &drupal_static(__FUNCTION__, FALSE);
++  if (isset($options)) {
++    // Make sure that an array is passed in as the options.
++    $status = $options;
++  }
++  return $status;
++}
++
++/**
++ * Implement hook_ajax_render_alter().
++ *
++ * Using the xLazyLoader library and command, load additional css and
++ * javascript into the page.
++ *
++ */
++function flagging_inline_ajax_render_alter(&$commands) {
++  if (flagging_inline_display()) {
++    $loader = array();
++    $allowed_media = array('all', 'screen');
++
++    // Ensure that the page doesn't reload what it already has.
++    $current_assets = $_POST['ajax_page_state'];
++
++    // Inject additional JavaScript and CSS to the browser's client.
++    $css = drupal_add_css();
++    drupal_alter('css', $css);
++    foreach ($css as $data => $options) {
++      if ($options['type'] == 'file' && in_array($options['media'], $allowed_media) && !isset($current_assets['css'][$data])) {
++        $loader['css'][] = base_path() . $options['data'];
++      }
++    }
++    $scripts = drupal_add_js();
++    drupal_alter('js', $scripts);
++    foreach ($scripts as $data => $options) {
++      if ($options['type'] == 'file' && !isset($current_assets['js'][$data])) {
++        $loader['js'][] = base_path() . $options['data'];
++      }
++    }
++    if (!empty($loader)) {
++      array_unshift($commands, flagging_inline_command_xlazyloader($loader));
++    }
++
++    // Prepend status messages to the ??? content.
++    $commands[] = ajax_command_prepend('.flagging-inline', theme('status_messages'));
++  }
++}
+diff --git a/flagging_inline_module-1839830-7.patch b/flagging_inline_module-1839830-7.patch
+new file mode 100644
+index 0000000..bc13819
+--- /dev/null
++++ b/flagging_inline_module-1839830-7.patch
+@@ -0,0 +1,743 @@
++diff --git a/flagging_inline.info b/flagging_inline.info
++new file mode 100644
++index 0000000..2f6b5f8
++--- /dev/null
+++++ b/flagging_inline.info
++@@ -0,0 +1,5 @@
+++name = Flag inline
+++description = Makes the flag form show inline via ajax.
+++core = 7.x
+++package = Flags
+++dependencies[] = flagging_form
++diff --git a/flagging_inline.js b/flagging_inline.js
++new file mode 100644
++index 0000000..5bd8535
++--- /dev/null
+++++ b/flagging_inline.js
++@@ -0,0 +1,142 @@
+++/**
+++ * Javascript to handle the flagging_inline ajax requests.
+++ */
+++(function ($) {
+++
+++  Drupal.flagging_form_inline = Drupal.flagging_form_inline || {};
+++
+++  Drupal.behaviors.flagging_form_inline = {
+++    attach: function (context, settings) {
+++      // Create the jQuery UI elements to handle events.
+++      $(".flagging-inline").once("flagging_form_inline", function() {
+++        Drupal.flagging_form_inline = $('<div class="flagging-inline-content"></div>').hide();
+++        $(this).parent().append(Drupal.flagging_form_inline);
+++      });
+++    }
+++  };
+++
+++  /**
+++   * Ajax command to display flagging form.
+++   */
+++  Drupal.ajax.prototype.commands.flagging_inline_display = function(ajax, response, status) {
+++    var $flag_wrapper = $('.flag-wrapper.flag-' + response.flagName.flagNameToCSS() + '-' + response.contentId);
+++    var $flag_link = $flag_wrapper.find('.flagging-inline');
+++    var $flag_content = $flag_wrapper.find('.flagging-inline-content');
+++    // Assign the currently active flag content to Drupal.flagging_form_inline.
+++    Drupal.flagging_form_inline = $flag_content;
+++    // Add class on link so we know it is active.
+++    $flag_link.addClass('flagging-inline-active');
+++    Drupal.flagging_form_inline.html(response.content).slideDown(200, function() {
+++      // When the user presses ENTER (in textfields or selects), the browser
+++      // submits the form. We want this submission to occur via ajax. So we
+++      // intercept a normal form submission and instead trigger the first
+++      // ajaxified action button.
+++      $(this).find('form').submit(function() {
+++        if ($('#autocomplete').size() == 0) { // Pressing ENTER in autocompletes shouldn't submit the form.
+++          $('.form-actions input:submit:first', this).mousedown();
+++        }
+++        return false;
+++      });
+++
+++      // We handle "Cancel" buttons directly through JavaScript to save
+++      // a roundtrip to the server.
+++      $(this).find('.form-actions input[id*=cancel]').bind("click", function() {
+++        Drupal.ajax.prototype.commands.flagging_inline_dismiss(ajax, response, status);
+++        return false;
+++      });
+++    });
+++    // Apply any settings from the returned JSON if available.
+++    var settings = response.settings || ajax.settings || Drupal.settings;
+++    // Process any other behaviors on the content, and display the inline form.
+++    Drupal.attachBehaviors(Drupal.flagging_form_inline, settings);
+++  };
+++
+++  /**
+++   * Ajax command to close flagging form.
+++   */
+++  Drupal.ajax.prototype.commands.flagging_inline_dismiss = function(ajax, response, status) {
+++    var $flag_wrapper = $('.flag-wrapper.flag-' + response.flagName.flagNameToCSS() + '-' + response.contentId);
+++    var $flag_link = $flag_wrapper.find('.flagging-inline');
+++    var $flag_content = $flag_wrapper.find('.flagging-inline-content');
+++    // Assign the currently active flag content to Drupal.flagging_form_inline.
+++    Drupal.flagging_form_inline = $flag_content;
+++    // Slide up the inline content then empty and hide it.
+++    Drupal.flagging_form_inline.slideUp(200, function() {
+++      $(this).empty().hide();
+++      // Remove class on link so we know it is no longer active.
+++      var $flag_wrapper = $(this).parent();
+++      var $flag_link = $flag_wrapper.find('.flagging-inline');
+++      $flag_link.removeClass('flagging-inline-active');
+++    });
+++    Drupal.detachBehaviors(Drupal.flagging_form_inline);
+++  };
+++
+++  /**
+++   * Ajax command to update a flag link.
+++   */
+++  Drupal.ajax.prototype.commands.flagging_inline_update_link = function(ajax, response, status) {
+++    Drupal.flagUtils.updateContentIdLinks(response);
+++    // @todo: Trigger a flagGlobal{Before,After}LinkUpdate event. But first we'd
+++    // better have a fully populated 'response' parcel; see comment in flagging_inline_command_update_link().
+++  };
+++
+++  /**
+++   * Command to use the xLazyLoader to load additional JavaScript, CSS and images.
+++   *
+++   * http://code.google.com/p/ajaxsoft/wiki/xLazyLoader
+++   */
+++  Drupal.ajax.prototype.commands.xlazyloader = function(ajax, response, status) {
+++    var settings = {
+++      name: 'lazy',
+++      success: function() {
+++      // When it's complete loading the new JavaScript and CSS, make sure to run
+++      // the behaviors on the object.
+++      Drupal.attachBehaviors(Drupal.flagging_form_inline);
+++      }
+++    };
+++    // Merge in the settings, allowing the loading of CSS and JavaScript.
+++    jQuery.extend(settings, response.options);
+++    // Load the scripts.
+++    $.xLazyLoader(settings);
+++  };
+++
+++  Drupal.flagUtils = Drupal.flagUtils || {};
+++
+++/**
+++ * Updates all links of a certain content ID.
+++ *
+++ * @param data
+++ *   A parcel of info usually returned from the server; at a minimum it should
+++ *   contain:
+++ *   - flagName
+++ *   - contentId
+++ *   - newLink
+++ *
+++ * @todo: The masses are clamoring for this utility function (see
+++ * http://drupal.org/node/843308#comment-3308744), so move it to Flag's core.
+++ */
+++Drupal.flagUtils.updateContentIdLinks = function(data) {
+++  var $wrappers = $('.flag-wrapper.flag-' + data.flagName.flagNameToCSS() + '-' + data.contentId);
+++  var $newLink = $(data.newLink);
+++  // Initially hide the message so we can fade it in.
+++  $('.flag-message', $newLink).css('display', 'none');
+++  $wrappers = $newLink.replaceAll($wrappers);
+++  $('.flag-message', $wrappers).fadeIn();
+++  Drupal.attachBehaviors($wrappers.parent());
+++  setTimeout(function() { $('.flag-message', $wrappers).fadeOut() }, 3000);
+++  // A short treatise on Replacing Things.
+++  //
+++  //   $olds.replaceWith($new)
+++  //
+++  // This replaces all $olds with a single $new. The $olds variable now contains
+++  // a collection of elements that are no longer in the document.
+++  //
+++  //   $new.replaceAll($olds)
+++  //
+++  // This replaces all $olds with clones of $new. The value of this expression is
+++  // a collection of all new $new's.
+++  //
+++  // @todo: Remove this explanation?
+++}
+++
+++})(jQuery);
++diff --git a/flagging_inline.module b/flagging_inline.module
++new file mode 100644
++index 0000000..a649f95
++--- /dev/null
+++++ b/flagging_inline.module
++@@ -0,0 +1,329 @@
+++<?php
+++
+++/**
+++ * @file
+++ * Provides menu callbacks for displaying the flagging forms inline.
+++ */
+++
+++/**
+++ * Implements hook_menu().
+++ */
+++function flagging_inline_menu() {
+++  // Editing a flagging.
+++  $items['flag/flagging/%flag/%content_id/edit/inline'] = array(
+++    'page callback' => 'flagging_inline_edit_flagging',
+++    'page arguments' => array(2, 3),
+++    'title callback' => '_flag_menu_title',
+++    'title arguments' => array(2),
+++    'access callback' => '_flagging_form_flagging_access',
+++    'access arguments' => array('update', 2, 3),
+++    'delivery callback' => 'ajax_deliver',
+++  );
+++
+++  // Creating a flagging.
+++  $items['flag/flagging/%flag/%content_id/create/inline'] = array(
+++    'page callback' => 'flagging_inline_edit_flagging',
+++    'page arguments' => array(2, 3),
+++    'title callback' => '_flag_menu_title',
+++    'title arguments' => array(2),
+++    'access callback' => '_flagging_form_flagging_access',
+++    'access arguments' => array('create', 2, 3),
+++    'delivery callback' => 'ajax_deliver',
+++  );
+++
+++  // Deleting a flagging.
+++  $items['flag/flagging/%flag/%content_id/delete/inline'] = array(
+++    'page callback' => 'flagging_inline_delete_flagging',
+++    'page arguments' => array(2, 3),
+++    'title callback' => '_flag_menu_title',
+++    'title arguments' => array(2),
+++    'access callback' => '_flagging_form_flagging_access',
+++    'access arguments' => array('delete', 2, 3),
+++    'delivery callback' => 'ajax_deliver',
+++  );
+++
+++  return $items;
+++}
+++
+++/**
+++ * Implements hook_flagging_form_interactions().
+++ */
+++function flagging_inline_flagging_form_interactions() {
+++  return array(
+++    'flagging_inline' => array(
+++      'title' => t('Inline'),
+++      'description' => t('Forms are displayed inline, if JavaScript is available.'),
+++      'weight' => 0,
+++    ),
+++  );
+++}
+++
+++/**
+++ * Implements hook_flagging_form_link_alter().
+++ *
+++ * Alters the links flagging_form.module generates.
+++ */
+++function flagging_inline_flagging_form_link_alter(&$link, $flag) {
+++  if ($flag->form_interaction == 'flagging_inline') {
+++    // Bug in Drupal's ajax.js: we must have a trailing '/'.
+++    $link['href'] .= '/inline/';
+++    $link['attributes']['class'] = 'flagging-inline use-ajax';
+++
+++    // @todo: See Amitai's http://drupal.org/node/858764, which tries to
+++    // standardize js/css inclusion.
+++    // We need the CSS for .flag-message:
+++    drupal_add_css(drupal_get_path('module', 'flag') . '/theme/flag.css');
+++    // We need the anonyous-user handling (but nothing else):
+++    // @todo: split flag.js into flag-common.js and flag-toggle.js?
+++    drupal_add_js(drupal_get_path('module', 'flag') . '/theme/flag.js');
+++
+++    // Finally, our own code:
+++    drupal_add_library('flagging_inline', 'flagging_inline');
+++  }
+++}
+++
+++/**
+++ * Implements hook_library().
+++ */
+++function flagging_inline_library() {
+++  $libraries['flagging_inline'] = array(
+++    'title' => 'Flag Inline',
+++    'version' => '1.0',
+++    'js' => array(
+++      // Omitting the 'group' bellow will use a default group of JS_LIBRARY,
+++      // which, since lighter than ajax.js's, won't enable us to add our
+++      // command(s) to the non-yet-existing Drupal.ajax.prototype.commands.
+++      drupal_get_path('module', 'flagging_inline') . '/flagging_inline.js' => array('group' => JS_DEFAULT),
+++      drupal_get_path('module', 'flagging_inline') . '/jquery.xLazyLoader.js' => array('group' => JS_LIBRARY),
+++    ),
+++    'dependencies' => array(
+++      array('system', 'drupal.ajax'),
+++      array('system', 'jquery.form'),
+++    ),
+++  );
+++  return $libraries;
+++}
+++
+++/**
+++ * Implements hook_form_alter().
+++ */
+++function flagging_inline_form_alter(&$form, &$form_state, $form_id) {
+++  if (!empty($form_state['flag_is_using_inline'])) {
+++    // Make the buttons submit via ajax. (This could also be done by adding
+++    // class="use-ajax-submit" to buttons, but bugs in Drupal's misc/ajax.js
+++    // prevent this from working.)
+++    if (isset($form['actions'])) {
+++      foreach (element_children($form['actions']) as $button) {
+++        // For performance, we handle cancel buttons in our JavaScript.
+++        if ($button != 'cancel') {
+++          $form['actions'][$button]['#ajax']['path'] = $_GET['q'];
+++        }
+++      }
+++    }
+++  }
+++}
+++
+++/**
+++ * Menu callback.
+++ */
+++function flagging_inline_edit_flagging($flag, $content_id) {
+++  $flagging = $flag->get_flagging($content_id);
+++  if (!$flagging) {
+++    // New flagging.
+++    $flagging = $flag->new_flagging($content_id);
+++  }
+++  $form_state = array(
+++    'no_redirect' => TRUE,
+++    // Tell our hook_form_alter() to kick in.
+++    'flag_is_using_inline' => TRUE,
+++    'flag_suppress_messages' => TRUE,
+++    'build_info' => array(
+++      'args' => array($flagging),
+++    ),
+++  );
+++  $form = drupal_build_form('flagging_form_flagging_form', $form_state);
+++  return flagging_inline_process_form_result($form, $form_state, $flag, $content_id);
+++}
+++
+++/**
+++ * Menu callback.
+++ */
+++function flagging_inline_delete_flagging($flag, $content_id) {
+++  $flagging = $flag->get_flagging($content_id);
+++  if (!$flagging) {
+++    // The item isn't flagged. The form function will deal with this error.
+++    $flagging = $flag->new_flagging($content_id);
+++  }
+++  $form_state = array(
+++    'no_redirect' => TRUE,
+++    // Tell our hook_form_alter() to kick in.
+++    'flag_is_using_inline' => TRUE,
+++    'flag_suppress_messages' => TRUE,
+++    'build_info' => array(
+++      'args' => array($flagging),
+++    ),
+++  );
+++  $form = drupal_build_form('flagging_form_flagging_delete_form', $form_state);
+++  return flagging_inline_process_form_result($form, $form_state, $flag, $content_id);
+++}
+++
+++/**
+++ * Handles submission of the form.
+++ */
+++function flagging_inline_process_form_result($form, $form_state, $flag, $content_id) {
+++  $commands = array();
+++
+++  if (!empty($form_state['executed'])) {
+++    // The form has been submitted. Either redirect to a new url or close the inline form.
+++    if (is_array($form_state['redirect'])) {
+++      $target = $form_state['redirect'][0];
+++    }
+++    else {
+++      $target = $form_state['redirect'];
+++    }
+++    // If there's an ajax version for the target path, use it.
+++    $try = menu_get_item($target . '/inline');
+++    if ($try && strpos($try['path'], '/inline') !== FALSE) {
+++      // Yes, there is. Do an "internal" redirect.
+++      $target = $target . '/inline';
+++      _flagging_inline_set_drupal_path($target);
+++      menu_execute_active_handler($target);
+++      drupal_exit();
+++    }
+++    else {
+++      // No, there's no ajax page to go to. Close the inline form, and
+++      // update the flag link.
+++      $commands[] = flagging_inline_command_dismiss($flag, $content_id, array());
+++      $commands[] = flagging_inline_command_update_link($flag, $content_id, !empty($form_state['flag_status_has_changed']));
+++    }
+++  }
+++  else {
+++    // The form hasn't been submitted. So we just need to display it.
+++    flagging_inline_display(TRUE);
+++    $commands[] = flagging_inline_command_display($form, $flag, $content_id, array('title' => drupal_get_title()));
+++  }
+++
+++  $output = array(
+++    '#type' => 'ajax',
+++    '#commands' => $commands,
+++  );
+++  return $output;
+++}
+++
+++/**
+++ * Fool the system to think the current URL is $path.
+++ *
+++ * Used for "internal" redirections. This doesn't need to be foolproof: just
+++ * enough to handle our own code.
+++ */
+++function _flagging_inline_set_drupal_path($path) {
+++  // Used by our form_alter():
+++  $_GET['q'] = $path;
+++  // Used as the action='...' for <form> tags:
+++  $_SERVER['REQUEST_URI'] = url($path);
+++  drupal_static_reset('element_info');
+++}
+++
+++/**
+++ * Creates a Drupal AJAX command to display the form.
+++ */
+++function flagging_inline_command_display($content, $flag, $content_id, $options) {
+++  return array(
+++    'command' => 'flagging_inline_display',
+++    'content' => render($content),
+++    'flagName' => $flag->name,
+++    'contentId' => $content_id,
+++    'options' => $options,
+++  );
+++}
+++
+++/**
+++ * Creates a Drupal AJAX command to hide the form.
+++ */
+++function flagging_inline_command_dismiss($flag, $content_id, $options) {
+++  return array(
+++    'command' => 'flagging_inline_dismiss',
+++    'flagName' => $flag->name,
+++    'contentId' => $content_id,
+++    'options' => $options,
+++  );
+++}
+++
+++/**
+++ * Creates a Drupal AJAX command to update a flag link.
+++ */
+++function flagging_inline_command_update_link($flag, $content_id, $status_has_changed) {
+++  // @todo: We're mimicing here the JavsScript structure flag_page() builds.
+++  // Let's factor out the flag_page() code and use it instead.
+++  return array(
+++    'command' => 'flagging_inline_update_link',
+++    'flagName' => $flag->name,
+++    'contentId' => $content_id,
+++    // @todo: it was pointed out already, in a comment in flagging_form.module,
+++    // that we don't have a special message to print when a flagging is updated
+++    // (as opposed to created or deleted). When we factor flag_page() we should
+++    // make things future-proof to also work when we do have such a message.
+++    'newLink' => $flag->theme($flag->is_flagged($content_id) ? 'unflag' : 'flag', $content_id, array('after_flagging' => $status_has_changed)),
+++  );
+++}
+++
+++/**
+++ * Creates a Drupal AJAX 'xLazyLoader' command.
+++ */
+++function flagging_inline_command_xlazyloader($options = array()) {
+++  return array(
+++    'command' => 'xlazyloader',
+++    'options' => $options,
+++  );
+++}
+++
+++/**
+++ * Provides an easy way of representing the status of inline form.
+++ */
+++function flagging_inline_display($options = NULL) {
+++  $status = &drupal_static(__FUNCTION__, FALSE);
+++  if (isset($options)) {
+++    // Make sure that an array is passed in as the options.
+++    $status = $options;
+++  }
+++  return $status;
+++}
+++
+++/**
+++ * Implement hook_ajax_render_alter().
+++ *
+++ * Using the xLazyLoader library and command, load additional css and
+++ * javascript into the page.
+++ *
+++ */
+++function flagging_inline_ajax_render_alter(&$commands) {
+++  if (flagging_inline_display()) {
+++    $loader = array();
+++    $allowed_media = array('all', 'screen');
+++
+++    // Ensure that the page doesn't reload what it already has.
+++    $current_assets = $_POST['ajax_page_state'];
+++
+++    // Inject additional JavaScript and CSS to the browser's client.
+++    $css = drupal_add_css();
+++    drupal_alter('css', $css);
+++    foreach ($css as $data => $options) {
+++      if ($options['type'] == 'file' && in_array($options['media'], $allowed_media) && !isset($current_assets['css'][$data])) {
+++        $loader['css'][] = base_path() . $options['data'];
+++      }
+++    }
+++    $scripts = drupal_add_js();
+++    drupal_alter('js', $scripts);
+++    foreach ($scripts as $data => $options) {
+++      if ($options['type'] == 'file' && !isset($current_assets['js'][$data])) {
+++        $loader['js'][] = base_path() . $options['data'];
+++      }
+++    }
+++    if (!empty($loader)) {
+++      array_unshift($commands, flagging_inline_command_xlazyloader($loader));
+++    }
+++
+++    // Prepend status messages to the ??? content.
+++    $commands[] = ajax_command_prepend('.flagging-inline', theme('status_messages'));
+++  }
+++}
++diff --git a/jquery.xLazyLoader.js b/jquery.xLazyLoader.js
++new file mode 100644
++index 0000000..f9b888f
++--- /dev/null
+++++ b/jquery.xLazyLoader.js
++@@ -0,0 +1,243 @@
+++/*
+++ * xLazyLoader 1.3 - Plugin for jQuery
+++ *
+++ * Load js, css and images asynchron and get different callbacks
+++ *
+++ * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
+++ * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
+++ *
+++ * Depends:
+++ *   jquery.js
+++ *
+++ *  Copyright (c) 2008 Oleg Slobodskoi (ajaxsoft.de)
+++ */
+++
+++;(function($){
+++
+++    $.xLazyLoader =  function ( method, options ) {
+++        if ( typeof method == 'object' ) {
+++            options = method;
+++            method = 'init';
+++        };
+++        new xLazyLoader()[method](options);
+++    };
+++
+++    $.xLazyLoader.defaults = {
+++        js: [], css: [], img: [],
+++        name: null,
+++        timeout: 20000,
+++        //success callback for all files
+++        success: function(){},
+++        //error callback - by load errors / timeout
+++        error: function(){},
+++        //complete callbck - by success or errors
+++        complete: function(){},
+++        //success callback for each file
+++        each: function(){}
+++    };
+++
+++    var head = document.getElementsByTagName("head")[0];
+++
+++    function xLazyLoader ()
+++    {
+++
+++        var self = this,
+++            s,
+++            loaded = [],
+++            errors = [],
+++            tTimeout,
+++            cssTimeout,
+++            toLoad,
+++            files = []
+++        ;
+++
+++        this.init = function ( options )
+++        {
+++          if ( !options ) return;
+++
+++          s = $.extend({}, $.xLazyLoader.defaults, options);
+++          toLoad = {js: s.js, css: s.css, img: s.img};
+++
+++            $.each(toLoad, function( type, f ){
+++                if ( typeof f == 'string' )
+++                    f = f.split(',');
+++                files = files.concat(f);
+++            });
+++
+++            if ( !files.length ) {
+++                dispatchCallbacks('error');
+++                return;
+++            };
+++
+++            if (s.timeout) {
+++                tTimeout = setTimeout(function(){
+++                    var handled = loaded.concat(errors);
+++                    /* search for unhandled files */
+++                    $.each(files, function(i, file){
+++                        $.inArray(file, handled) == -1 && errors.push(file);
+++                    });
+++                    dispatchCallbacks('error');
+++                }, s.timeout);
+++            };
+++
+++
+++            $.each(toLoad, function(type, urls){
+++                if ( $.isArray(urls) )
+++                    $.each( urls, function(i, url){
+++                        load(type, url);
+++                    });
+++                else if (typeof urls == 'string')
+++                    load(type, urls);
+++            });
+++
+++
+++
+++        };
+++
+++        this.js = function ( src, callback, name )
+++        {
+++            var $script = $('script[src*="'+src+'"]');
+++            if ( $script.length ) {
+++                $script.attr('pending') ? $script.bind('scriptload',callback) : callback();
+++                return;
+++            };
+++
+++            var s = document.createElement('script');
+++            s.setAttribute("type","text/javascript");
+++            s.setAttribute("src", src);
+++            s.setAttribute('id', name);
+++            s.setAttribute('pending', 1);
+++            // Mozilla only
+++            s.onerror = addError;
+++
+++
+++            $(s).bind('scriptload',function(){
+++                $(this).removeAttr('pending');
+++                callback();
+++                 //unbind load event
+++                 //timeout because of pending callbacks
+++                setTimeout(function(){
+++                    $(s).unbind('scriptload');
+++                },10);
+++            });
+++
+++            // jQuery doesn't handling onload event special for script tag,
+++      var done = false;
+++      s.onload = s.onreadystatechange = function() {
+++        if ( !done && ( !this.readyState || /loaded|complete/.test(this.readyState) ) ) {
+++          done = true;
+++          // Handle memory leak in IE
+++          s.onload = s.onreadystatechange = null;
+++                    $(s).trigger('scriptload');
+++        };
+++      };
+++            head.appendChild(s);
+++
+++        };
+++
+++        this.css = function ( href, callback, name )
+++        {
+++
+++            if ( $('link[href*="'+href+'"]').length ) {
+++                callback();
+++                return;
+++            };
+++
+++
+++            var link = $('<link rel="stylesheet" type="text/css" media="all" href="'+href+'" id="'+name+'"></link>')[0];
+++            if ( $.browser.msie ) {
+++                link.onreadystatechange = function () {
+++                    /loaded|complete/.test(link.readyState) && callback();
+++                };
+++            } else if ( $.browser.opera ) {
+++                link.onload = callback;
+++            } else {
+++                /*
+++                 * Mozilla, Safari, Chrome
+++                 * unfortunately it is inpossible to check if the stylesheet is really loaded or it is "HTTP/1.0 400 Bad Request"
+++                 * the only way to do this is to check if some special properties  were set, so there is no error callback for stylesheets -
+++                 * it fires alway success
+++                 *
+++                 * There is also no access to sheet properties by crossdomain stylesheets,
+++                 * so we fire callback immediately
+++                 */
+++
+++                var hostname = location.hostname.replace('www.',''),
+++                    hrefHostname = /http:/.test(href) ? /^(\w+:)?\/\/([^\/?#]+)/.exec( href )[2] : hostname;
+++                hostname != hrefHostname && $.browser.mozilla ?
+++                    callback()
+++                    :
+++                    //stylesheet is from the same domain or it is not firefox
+++                    (function(){
+++                        try {
+++                            link.sheet.cssRules;
+++                        } catch (e) {
+++                            cssTimeout = setTimeout(arguments.callee, 20);
+++                            return;
+++                        };
+++                        callback();
+++                    })();
+++            };
+++
+++
+++            head.appendChild(link);
+++        };
+++
+++        this.img = function ( src, callback )
+++        {
+++            var img = new Image();
+++            img.onload = callback;
+++            img.onerror = addError;
+++            img.src = src;
+++        };
+++
+++        /* It works only for css */
+++        this.disable = function ( name )
+++        {
+++            $('#lazy-loaded-'+name, head).attr('disabled', 'disabled');
+++        };
+++
+++        /* It works only for css */
+++        this.enable = function ( name )
+++        {
+++            $('#lazy-loaded-'+name, head).removeAttr('disabled');
+++        };
+++
+++        /*
+++         * By removing js tag, script ist still living in browser memory,
+++         * css will be really destroyed
+++         */
+++        this.destroy = function ( name )
+++        {
+++            $('#lazy-loaded-'+name, head).remove();
+++        };
+++
+++        function load ( type, url ) {
+++            self[type](url, function(status) {
+++                status == 'error' ? errors.push(url) : loaded.push(url) && s.each(url);
+++                checkProgress();
+++            }, 'lazy-loaded-'+ (s.name ? s.name : new Date().getTime()) );
+++        };
+++
+++        function dispatchCallbacks ( status ) {
+++            s.complete(status, loaded, errors);
+++            s[status]( status=='error' ? errors : loaded);
+++            clearTimeout(tTimeout);
+++            clearTimeout(cssTimeout);
+++        };
+++
+++        function checkProgress () {
+++            if (loaded.length == files.length) dispatchCallbacks('success')
+++            else if (loaded.length+errors.length == files.length) dispatchCallbacks('error');
+++        };
+++
+++        function addError () {
+++            errors.push(this.src);
+++            checkProgress();
+++        };
+++
+++    };
+++
+++
+++
+++})(jQuery);
+diff --git a/jquery.xLazyLoader.js b/jquery.xLazyLoader.js
+new file mode 100644
+index 0000000..f9b888f
+--- /dev/null
++++ b/jquery.xLazyLoader.js
+@@ -0,0 +1,243 @@
++/*
++ * xLazyLoader 1.3 - Plugin for jQuery
++ *
++ * Load js, css and images asynchron and get different callbacks
++ *
++ * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
++ * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
++ *
++ * Depends:
++ *   jquery.js
++ *
++ *  Copyright (c) 2008 Oleg Slobodskoi (ajaxsoft.de)
++ */
++
++;(function($){
++
++    $.xLazyLoader =  function ( method, options ) {
++        if ( typeof method == 'object' ) {
++            options = method;
++            method = 'init';
++        };
++        new xLazyLoader()[method](options);
++    };
++
++    $.xLazyLoader.defaults = {
++        js: [], css: [], img: [],
++        name: null,
++        timeout: 20000,
++        //success callback for all files
++        success: function(){},
++        //error callback - by load errors / timeout
++        error: function(){},
++        //complete callbck - by success or errors
++        complete: function(){},
++        //success callback for each file
++        each: function(){}
++    };
++
++    var head = document.getElementsByTagName("head")[0];
++
++    function xLazyLoader ()
++    {
++
++        var self = this,
++            s,
++            loaded = [],
++            errors = [],
++            tTimeout,
++            cssTimeout,
++            toLoad,
++            files = []
++        ;
++
++        this.init = function ( options )
++        {
++          if ( !options ) return;
++
++          s = $.extend({}, $.xLazyLoader.defaults, options);
++          toLoad = {js: s.js, css: s.css, img: s.img};
++
++            $.each(toLoad, function( type, f ){
++                if ( typeof f == 'string' )
++                    f = f.split(',');
++                files = files.concat(f);
++            });
++
++            if ( !files.length ) {
++                dispatchCallbacks('error');
++                return;
++            };
++
++            if (s.timeout) {
++                tTimeout = setTimeout(function(){
++                    var handled = loaded.concat(errors);
++                    /* search for unhandled files */
++                    $.each(files, function(i, file){
++                        $.inArray(file, handled) == -1 && errors.push(file);
++                    });
++                    dispatchCallbacks('error');
++                }, s.timeout);
++            };
++
++
++            $.each(toLoad, function(type, urls){
++                if ( $.isArray(urls) )
++                    $.each( urls, function(i, url){
++                        load(type, url);
++                    });
++                else if (typeof urls == 'string')
++                    load(type, urls);
++            });
++
++
++
++        };
++
++        this.js = function ( src, callback, name )
++        {
++            var $script = $('script[src*="'+src+'"]');
++            if ( $script.length ) {
++                $script.attr('pending') ? $script.bind('scriptload',callback) : callback();
++                return;
++            };
++
++            var s = document.createElement('script');
++            s.setAttribute("type","text/javascript");
++            s.setAttribute("src", src);
++            s.setAttribute('id', name);
++            s.setAttribute('pending', 1);
++            // Mozilla only
++            s.onerror = addError;
++
++
++            $(s).bind('scriptload',function(){
++                $(this).removeAttr('pending');
++                callback();
++                 //unbind load event
++                 //timeout because of pending callbacks
++                setTimeout(function(){
++                    $(s).unbind('scriptload');
++                },10);
++            });
++
++            // jQuery doesn't handling onload event special for script tag,
++      var done = false;
++      s.onload = s.onreadystatechange = function() {
++        if ( !done && ( !this.readyState || /loaded|complete/.test(this.readyState) ) ) {
++          done = true;
++          // Handle memory leak in IE
++          s.onload = s.onreadystatechange = null;
++                    $(s).trigger('scriptload');
++        };
++      };
++            head.appendChild(s);
++
++        };
++
++        this.css = function ( href, callback, name )
++        {
++
++            if ( $('link[href*="'+href+'"]').length ) {
++                callback();
++                return;
++            };
++
++
++            var link = $('<link rel="stylesheet" type="text/css" media="all" href="'+href+'" id="'+name+'"></link>')[0];
++            if ( $.browser.msie ) {
++                link.onreadystatechange = function () {
++                    /loaded|complete/.test(link.readyState) && callback();
++                };
++            } else if ( $.browser.opera ) {
++                link.onload = callback;
++            } else {
++                /*
++                 * Mozilla, Safari, Chrome
++                 * unfortunately it is inpossible to check if the stylesheet is really loaded or it is "HTTP/1.0 400 Bad Request"
++                 * the only way to do this is to check if some special properties  were set, so there is no error callback for stylesheets -
++                 * it fires alway success
++                 *
++                 * There is also no access to sheet properties by crossdomain stylesheets,
++                 * so we fire callback immediately
++                 */
++
++                var hostname = location.hostname.replace('www.',''),
++                    hrefHostname = /http:/.test(href) ? /^(\w+:)?\/\/([^\/?#]+)/.exec( href )[2] : hostname;
++                hostname != hrefHostname && $.browser.mozilla ?
++                    callback()
++                    :
++                    //stylesheet is from the same domain or it is not firefox
++                    (function(){
++                        try {
++                            link.sheet.cssRules;
++                        } catch (e) {
++                            cssTimeout = setTimeout(arguments.callee, 20);
++                            return;
++                        };
++                        callback();
++                    })();
++            };
++
++
++            head.appendChild(link);
++        };
++
++        this.img = function ( src, callback )
++        {
++            var img = new Image();
++            img.onload = callback;
++            img.onerror = addError;
++            img.src = src;
++        };
++
++        /* It works only for css */
++        this.disable = function ( name )
++        {
++            $('#lazy-loaded-'+name, head).attr('disabled', 'disabled');
++        };
++
++        /* It works only for css */
++        this.enable = function ( name )
++        {
++            $('#lazy-loaded-'+name, head).removeAttr('disabled');
++        };
++
++        /*
++         * By removing js tag, script ist still living in browser memory,
++         * css will be really destroyed
++         */
++        this.destroy = function ( name )
++        {
++            $('#lazy-loaded-'+name, head).remove();
++        };
++
++        function load ( type, url ) {
++            self[type](url, function(status) {
++                status == 'error' ? errors.push(url) : loaded.push(url) && s.each(url);
++                checkProgress();
++            }, 'lazy-loaded-'+ (s.name ? s.name : new Date().getTime()) );
++        };
++
++        function dispatchCallbacks ( status ) {
++            s.complete(status, loaded, errors);
++            s[status]( status=='error' ? errors : loaded);
++            clearTimeout(tTimeout);
++            clearTimeout(cssTimeout);
++        };
++
++        function checkProgress () {
++            if (loaded.length == files.length) dispatchCallbacks('success')
++            else if (loaded.length+errors.length == files.length) dispatchCallbacks('error');
++        };
++
++        function addError () {
++            errors.push(this.src);
++            checkProgress();
++        };
++
++    };
++
++
++
++})(jQuery);
+-- 
+1.7.9.5
+
