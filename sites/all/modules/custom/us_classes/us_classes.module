@@ -267,7 +267,28 @@ function us_classes_involvement_render($node) {
       $list[$uid][] = t('Facilitating');
     }
 
-    // @todo, Find the users who are interested in the class, and add them too.
+    // Find the users who are interested in the class, and add them too.
+    $flag_options = array(
+      'facilitate' => t('Offered to help facilitate'),
+      'organize' => t('Offered to help oragnize'),
+      'follow' => t('Following'),
+    );
+    $flag_name = 'subscribe_class';
+    $flags = flag_get_entity_flags('node', $node->nid, $flag_name);
+    foreach ($flags as $data) {
+      $flag = flag_get_flag(NULL, $data->fid);
+      $flagging = $flag->get_flagging($node->nid);
+      if (!$flagging) {
+        // The item isn't flagged. The form function will deal with this error.
+        $flagging = $flag->new_flagging($node->nid);
+      }
+      if ($items = field_get_items('flagging', $flagging, 'field_interest')) {
+        foreach ($items as $item) {
+          // Map to strings.
+          $list[$flagging->uid][] = $flag_options[$item['value']];
+        }
+      }
+    }
 
     // Pass to a theme function, to wrap the user class involvement info in
     // markup that we can style.
