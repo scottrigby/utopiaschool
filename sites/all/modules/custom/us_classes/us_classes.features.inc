@@ -14,6 +14,57 @@ function us_classes_ctools_plugin_api($module = NULL, $api = NULL) {
 }
 
 /**
+ * Implements hook_flag_default_flags().
+ */
+function us_classes_flag_default_flags() {
+  $flags = array();
+  // Exported flag: "Subscribe Class".
+  $flags['subscribe_class'] = array(
+    'entity_type' => 'node',
+    'title' => 'Subscribe Class',
+    'global' => 0,
+    'types' => array(
+      0 => 'class',
+    ),
+    'flag_short' => '+ Get involved',
+    'flag_long' => '',
+    'flag_message' => 'You are now involved in the class: [node:title]',
+    'unflag_short' => '+ Change my involvement',
+    'unflag_long' => 'Change your involvement in the class: [node:title]',
+    'unflag_message' => '',
+    'unflag_denied_text' => '',
+    'link_type' => 'form',
+    'weight' => 0,
+    'show_in_links' => array(
+      'teaser' => 'teaser',
+      'full' => 0,
+      'rss' => 0,
+      'search_index' => 0,
+      'search_result' => 0,
+      'token' => 0,
+    ),
+    'show_as_field' => 1,
+    'show_on_form' => 0,
+    'access_author' => '',
+    'show_contextual_link' => 0,
+    'i18n' => 0,
+    'form_flagging_help' => '',
+    'form_flagging_button' => 'Confirm',
+    'form_flagging_delete_button' => '- Remove me',
+    'form_unflagging_help' => 'Are you sure you want to be removed from this class?',
+    'form_unflagging_button' => 'Confirm',
+    'form_unflag_link_leads_to_edit' => 1,
+    'form_interaction' => 'flagging_inline',
+    'module' => 'tps_discussion',
+    'locked' => array(
+      'name' => 'name',
+    ),
+    'api_version' => 3,
+  );
+  return $flags;
+}
+
+/**
  * Implements hook_views_api().
  */
 function us_classes_views_api($module = NULL, $api = NULL) {

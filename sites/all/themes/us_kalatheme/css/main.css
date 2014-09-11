@@ -182,6 +182,14 @@ div.vertical-tabs {
     clear: both;
 }
 
+/* Flag */
+.flag-outer-subscribe-class {
+    padding-bottom: 1em;
+}
+.flag-outer-subscribe-class a.flag {
+    font-size: 25px;
+}
+
 /* Class involvement */
 .user-involved {
     color: #666666;

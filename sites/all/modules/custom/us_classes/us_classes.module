@@ -280,7 +280,6 @@ function us_classes_involvement_render($node) {
 
     // Loop over the list of users, and get the themed render array.
     foreach ($list as $uid => $involvement) {
-      $user = user_load($uid);
       $variables = array(
         'user' => user_load($uid),
         'involvement' => $involvement,
@@ -337,3 +336,56 @@ function theme_us_classes_involvement_user($variables) {
 
   return $build;
 }
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function us_classes_field_widget_options_buttons_form_alter(&$element, &$form_state, $context) {
+  if ($context['instance']['entity_type'] == 'flagging' && $context['instance']['field_name'] == 'field_interest') {
+    if (isset($element['#title'])) {
+      // The title is redundant on the interest field, since flag_inline unflag
+      // provides us with an option more consistent with the 'Add me' toggle.
+      $element['#title'] = '';
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_view_alter().
+ *
+ * @see flag_entity_view()
+ *
+ * @todo Implement something like views_flag_refresh.module, but for this custom
+ *   query/render.
+ */
+function us_classes_entity_view_alter(&$build, $type) {
+  // Modify the class subscribe flag markup, if users can access it.
+  if ($type == 'node' && $build['#view_mode'] == 'full' && ($flag_name = 'subscribe_class') && $flag = flag_get_flag($flag_name)) {
+    $entity = $build['#node'];
+    // Short circuits some of the checks below - if this is not in the render
+    // array, we don't need to do any of the checks (performance increase).
+    if (isset($build['flag_' . $flag_name])) {
+      // @see flag_entity_view()
+      if (!($flag->show_as_field)) {
+        return;
+      }
+      $entity_id = $flag->get_entity_id($entity);
+      if (is_null($entity_id)) {
+        $entity_id = 'new';
+      }
+      // Do this access check anyway, to be on the safe side.
+      $flag->remember_entity($entity_id, $entity);
+      if (!$flag->access($entity_id) && (!$flag->is_flagged($entity_id) || !$flag->access($entity_id, 'flag'))) {
+        return;
+      }
+      if ($flag->show_as_field) {
+        // The flag is shown. Do our magic here.
+        // Swap labels with the class involvement field, so this flag will
+        // display below the header.
+        $build['flag_' . $flag_name]['#prefix'] = '<h2>Class involvement</h2>';
+        $build['us_classes_involvement']['title']['#markup'] = '';
+      }
+    }
+  }
+}
+
