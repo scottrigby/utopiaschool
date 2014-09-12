@@ -388,8 +388,9 @@ function us_classes_flagging_inline_edit_flagging($flag, $content_id, $op) {
     // because it's an ajax callback. Let's try for the referrer.
     $view_mode = 'teaser';
     if (isset($_SERVER['HTTP_REFERER'])) {
-      $url = drupal_parse_url($_SERVER['HTTP_REFERER']);
-      $path = drupal_get_normal_path($url['path']);
+      $url = parse_url($_SERVER['HTTP_REFERER']);
+      // parse_url() path includes a preceeding slash.
+      $path = drupal_get_normal_path(trim($url['path'], '/'));
       if (arg(0, $path) == 'node' && is_numeric(arg(1, $path))) {
         $view_mode = 'full';
       }
