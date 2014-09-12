@@ -27,12 +27,6 @@ function us_classes_default_fe_block_settings() {
         'theme' => 'bartik',
         'weight' => 0,
       ),
-      'rainbow' => array(
-        'region' => '',
-        'status' => 0,
-        'theme' => 'rainbow',
-        'weight' => 0,
-      ),
       'responsive_bartik' => array(
         'region' => '',
         'status' => 0,

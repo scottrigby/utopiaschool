@@ -10,6 +10,42 @@
 function us_classes_field_default_field_instances() {
   $field_instances = array();
 
+  // Exported field_instance: 'flagging-subscribe_class-field_interest'
+  $field_instances['flagging-subscribe_class-field_interest'] = array(
+    'bundle' => 'subscribe_class',
+    'default_value' => array(
+      0 => array(
+        'value' => 'follow',
+      ),
+    ),
+    'default_value_label_token' => 0,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'flagging',
+    'field_name' => 'field_interest',
+    'label' => 'Interest',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
+      'weight' => 1,
+    ),
+  );
+
   // Exported field_instance: 'node-class-body'
   $field_instances['node-class-body'] = array(
     'bundle' => 'class',
@@ -364,6 +400,7 @@ function us_classes_field_default_field_instances() {
   t('Description');
   t('Facilitators');
   t('Images');
+  t('Interest');
   t('Optional link to TPS class or proposal (example: <em>http://ThePublicSchool.org/node/1</em>).');
   t('Status');
   t('TPS class');
