@@ -190,6 +190,11 @@ div.vertical-tabs {
     font-size: 25px;
 }
 
+/* Honey pot on flagging form */
+.url-textfield {
+    display: none !important;
+}
+
 /* Class involvement */
 .user-involved {
     color: #666666;
