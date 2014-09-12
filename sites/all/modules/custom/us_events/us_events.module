@@ -5,3 +5,17 @@
  */
 
 include_once 'us_events.features.inc';
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function us_events_form_views_exposed_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_state['view']->name == 'fullcalendar' && $form_state['view']->current_display == 'page') {
+    // Set default values.
+    // When the form is submitted with no options, this default kicks in again.
+    // This is because Views displays all values when none are selected. Let's
+    // Just leave it this way to avoid confusion - after all, what is the value
+    // of showing a completely empty calendar?
+    $form['type']['#default_value'] = array_keys($form['type']['#options']);
+  }
+}

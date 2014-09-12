@@ -1,10 +1,12 @@
 name = us_events
 core = 7.x
 package = Features
+dependencies[] = better_exposed_filters
 dependencies[] = ctools
 dependencies[] = date
 dependencies[] = features
 dependencies[] = fullcalendar
+dependencies[] = fullcalendar_colors
 dependencies[] = image
 dependencies[] = node
 dependencies[] = strongarm
