@@ -300,7 +300,7 @@ html.js input.form-autocomplete {
 }
 
 /* Exposed BEF checkboxes - yuck */
-.views-exposed-form .form-control {
+.view-fullcalendar .views-exposed-form .form-control {
     display: inline-block;
     width: inherit;
     height: inherit;
