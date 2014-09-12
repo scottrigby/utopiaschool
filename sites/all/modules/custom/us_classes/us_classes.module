@@ -296,6 +296,7 @@ function us_classes_involvement_render($node) {
       '#type' => 'container',
       '#attributes' => array(
         'class' => array('class-involvement'),
+        'id' => 'class-involvement-' . $node->nid,
       ),
     );
 
@@ -312,6 +313,69 @@ function us_classes_involvement_render($node) {
   catch(\EntityMetadataWrapperException $e) {
     // Do nothing. If this fails we have done something wrong.
   }
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function us_classes_menu_alter(&$items) {
+  $paths = array(
+    'create' => 'flag/flagging/%flag/%content_id/create/inline',
+    'edit' => 'flag/flagging/%flag/%content_id/edit/inline',
+    'delete' => 'flag/flagging/%flag/%content_id/delete/inline',
+  );
+  foreach ($paths as $op => $path) {
+    $items[$path]['page callback'] = 'us_classes_flagging_inline_edit_flagging';
+    $items[$path]['page arguments'][] = $op;
+  }
+}
+
+/**
+ * Menu callback.
+ *
+ * Wrapper around flagging_inline_edit_flagging(), allowing us to including
+ * additional ajax framework commands. Specifically, we refresh the
+ * 'Class involvement' element after submitting a class subscription flag.
+ */
+function us_classes_flagging_inline_edit_flagging($flag, $content_id, $op) {
+  // Keep initial functionality, but add to the ajax commands returned by
+  // flagging_inline_edit_flagging(). Note we don't just call that function
+  // because we need the form state to see whether it has been executed (before
+  // adding our custom commands), so we should not do all that logic twice.
+  $flagging = $flag->get_flagging($content_id);
+  if (!$flagging) {
+    // New flagging.
+    $flagging = $flag->new_flagging($content_id);
+  }
+  $form_state = array(
+    'no_redirect' => TRUE,
+    // Tell our hook_form_alter() to kick in.
+    'flag_is_using_inline' => TRUE,
+    'flag_suppress_messages' => TRUE,
+    'build_info' => array(
+      'args' => array($flagging),
+    ),
+  );
+  // Do this to keep a single function (DRY).
+  $form_id = $op == 'delete' ? 'flagging_form_flagging_delete_form' : 'flagging_form_flagging_form';
+  $form = drupal_build_form($form_id, $form_state);
+  $result = flagging_inline_process_form_result($form, $form_state, $flag, $content_id);
+
+  if (!empty($form_state['executed'])) {
+    // Piggyback on us_classes_node_view(), getting the render array by reference.
+    $node = node_load($content_id);
+    $build = us_classes_involvement_render($node);
+    $html = drupal_render($build);
+
+    // Note we set this element ID pattern in us_classes_involvement_render().
+    $selector = 'class-involvement-' . $content_id;
+
+    // Add to the existing commands.
+    $result['#commands'][] = ajax_command_replace("#{$selector}", $html);
+    $result['#commands'][] = ajax_command_changed("#{$selector}");
+  }
+
+  return $result;
 }
 
 /**
@@ -375,9 +439,6 @@ function us_classes_field_widget_options_buttons_form_alter(&$element, &$form_st
  * Implements hook_entity_view_alter().
  *
  * @see flag_entity_view()
- *
- * @todo Implement something like views_flag_refresh.module, but for this custom
- *   query/render.
  */
 function us_classes_entity_view_alter(&$build, $type) {
   // Modify the class subscribe flag markup, if users can access it.
