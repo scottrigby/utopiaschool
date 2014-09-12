@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the colors module.
+ */
+
+/**
+ * Export events fullcalendar colors. Note this is not features exportable yet.
+ *
+ * @todo Replace if @link http://drupal.org/node/1933296 This issue @endlink
+ *   ever makes it in.
+ */
+function us_events_update_7000() {
+  module_enable(array('colors'));
+  $color_options = array(
+    'background' => '#3fb618',
+    'border' => '#3fb618',
+    'text' => '#ffffff',
+  );
+  colors_set_colors('colors_node_type_class', $color_options, 'node_type');
+}

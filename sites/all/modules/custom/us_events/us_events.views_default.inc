@@ -48,7 +48,8 @@ function us_events_views_default_views() {
           ),
         ),
         'rewrite' => array(
-          'filter_rewrite_values' => 'Events|Other events',
+          'filter_rewrite_values' => 'Class|Classes
+Event|Other events',
         ),
       ),
     ),
