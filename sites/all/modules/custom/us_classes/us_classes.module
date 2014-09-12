@@ -179,6 +179,13 @@ function us_classes_user_classes_involvement_render($account) {
     $ids = array_merge($ids, array_keys($result[$entity_type]));
   }
 
+  // Find classes this user has flagged.
+  $flags = flag_get_user_flags('node', NULL, $account->uid);
+  $flag_name = 'subscribe_class';
+  if (isset($flags[$flag_name])) {
+    $ids = array_merge($ids, array_keys($flags[$flag_name]));
+  }
+
   // Remove duplicates.
   $ids = array_unique($ids);
 
@@ -279,24 +286,31 @@ function us_classes_involvement_render($node, $view_mode = 'teaser') {
     $flags = flag_get_entity_flags('node', $node->nid, $flag_name);
     $flag_count = 0;
     foreach ($flags as $data) {
-      // Truncate the output on teasers.
-      if ($view_mode == 'teaser') {
-        // Increment for a count display far below.
-        $flag_count ++;
-        // Don't load the user-specific flag logic if we don't need it.
-        break;
+      // Truncate the output on teasers, but show the user's own involvement.
+      // Defer to the user account on account pages, otherwise the logged-in
+      // user.
+      global $user;
+      if (!$account = menu_get_object('user')) {
+        $account = $user;
       }
 
-      $flag = flag_get_flag(NULL, $data->fid);
-      $flagging = $flag->get_flagging($node->nid);
-      if (!$flagging) {
-        // The item isn't flagged. The form function will deal with this error.
-        $flagging = $flag->new_flagging($node->nid);
+      if ($view_mode == 'teaser' && $data->uid != $account->uid) {
+        // Increment for a count display far below.
+        $flag_count ++;
       }
-      if ($items = field_get_items('flagging', $flagging, 'field_interest')) {
-        foreach ($items as $item) {
-          // Map to strings.
-          $list[$flagging->uid][] = $flag_options[$item['value']];
+      // Don't load the user-specific flag logic if we don't need it.
+      else {
+        $flag = flag_get_flag(NULL, $data->fid);
+        $flagging = $flag->get_flagging($node->nid);
+        if (!$flagging) {
+          // The item isn't flagged. The form function will deal with this error.
+          $flagging = $flag->new_flagging($node->nid);
+        }
+        if ($items = field_get_items('flagging', $flagging, 'field_interest')) {
+          foreach ($items as $item) {
+            // Map to strings.
+            $list[$flagging->uid][] = $flag_options[$item['value']];
+          }
         }
       }
     }
@@ -315,7 +329,7 @@ function us_classes_involvement_render($node, $view_mode = 'teaser') {
     foreach ($list as $uid => $involvement) {
       $variables = array(
         'user' => user_load($uid),
-        'involvement' => $involvement,
+        'involvement' => array_unique($involvement),
       );
       $build[$uid] = theme('us_classes_involvement_user', $variables);
     }
