@@ -97,7 +97,7 @@ function us_classes_strongarm() {
             'visible' => TRUE,
           ),
           'teaser' => array(
-            'weight' => '0',
+            'weight' => '1',
             'visible' => TRUE,
           ),
         ),
@@ -107,8 +107,8 @@ function us_classes_strongarm() {
             'visible' => TRUE,
           ),
           'teaser' => array(
-            'weight' => '10',
-            'visible' => FALSE,
+            'weight' => '0',
+            'visible' => TRUE,
           ),
         ),
       ),
