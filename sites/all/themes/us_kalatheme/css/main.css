@@ -157,6 +157,10 @@ a.button:focus {
     background-color: rgba(255, 255, 255, .5);
 }
 
+.view-classes #edit-topic-wrapper {
+    width: 260px;
+}
+
 /* Weird ghost outlines */
 .panel {
     -moz-box-shadow: none;

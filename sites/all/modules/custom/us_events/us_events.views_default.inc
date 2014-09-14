@@ -65,6 +65,13 @@ Event|Other events',
     'field_dates' => 'field_dates',
   );
   $handler->display->display_options['style_options']['fields']['date'] = TRUE;
+  /* Header: Global: Text area */
+  $handler->display->display_options['header']['area']['id'] = 'area';
+  $handler->display->display_options['header']['area']['table'] = 'views';
+  $handler->display->display_options['header']['area']['field'] = 'area';
+  $handler->display->display_options['header']['area']['label'] = 'Currently updating';
+  $handler->display->display_options['header']['area']['content'] = '<div class="alert alert-block alert-info">We\'re currently in the process of adding classes to the calendar. Stay tuned for updates! Sign up for the <a href="/lists">Announcements list</a> to be notified by email.</div>';
+  $handler->display->display_options['header']['area']['format'] = 'full_html';
   /* Field: Content: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
