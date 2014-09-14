@@ -335,6 +335,13 @@ function us_classes_involvement_render($node, $view_mode = 'teaser') {
       ),
     );
 
+    // Anonymous user 'get involved' link. Note we don't deal with the normal
+    // flag here, because we output it as a field instead, and modify it's
+    // placement in us_classes_entity_view_alter().
+    if (user_is_anonymous()) {
+      $build['flag_' . $flag_name] = us_classes_anonymous_get_involved_link();
+    }
+
     // Loop over the list of users, and get the themed render array.
     foreach ($list as $uid => $involvement) {
       $variables = array(
@@ -525,5 +532,31 @@ function us_classes_entity_view_alter(&$build, $type) {
       }
     }
   }
+}
+
+/**
+ * Outputs get involved link for anonymous users.
+ *
+ * @return array
+ *   Render array anonymous get involved link.
+ */
+function us_classes_anonymous_get_involved_link() {
+  return array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array('flag-outer-subscribe-class'),
+    ),
+    'link' => array(
+      '#theme' => 'link',
+      '#text' => '+ Get involved',
+      '#path' => 'user/login',
+      '#options' => array(
+        'attributes' => array('class' => array('flag'), 'id' => 'flag-anonymous-involvement'),
+        // Required.
+        'html' => FALSE,
+        'query' => drupal_get_destination(),
+      ),
+    ),
+  );
 }
 
