@@ -279,39 +279,49 @@ function us_classes_involvement_render($node, $view_mode = 'teaser') {
     // Find the users who are interested in the class, and add them too.
     $flag_options = array(
       'facilitate' => t('Offered to help facilitate'),
-      'organize' => t('Offered to help oragnize'),
+      'organize' => t('Offered to help organize'),
       'follow' => t('Following'),
     );
     $flag_name = 'subscribe_class';
     $flags = flag_get_entity_flags('node', $node->nid, $flag_name);
     $flag_count = 0;
     foreach ($flags as $data) {
-      // Truncate the output on teasers, but show the user's own involvement.
-      // Defer to the user account on account pages, otherwise the logged-in
-      // user.
+      // Decide whether to show details of this flag, or add to a 'more' count.
+      $details = FALSE;
+      // Users should always see their own flag details.
       global $user;
-      if (!$account = menu_get_object('user')) {
-        $account = $user;
+      if ($data->uid == $user->uid) {
+        $details = TRUE;
+      }
+      // Display account flag details when viewing that user's account.
+      if (($account = menu_get_object('user')) && $data->uid == $account->uid) {
+        $details = TRUE;
+      }
+      if ($view_mode == 'full') {
+        $details = TRUE;
       }
 
-      if ($view_mode == 'teaser' && $data->uid != $account->uid) {
-        // Increment for a count display far below.
-        $flag_count ++;
-      }
-      // Don't load the user-specific flag logic if we don't need it.
-      else {
+      // Load user-specific flag logic only when we need to.
+      if ($details) {
+        // The user may have forgotten to click 'following', but still has the
+        // involved flag. Consider making 'following' mandatory for this flag,
+        // but for now make sure to display that option.
+        $list[$data->uid][] = $flag_options['follow'];
+
+        // Overwrite the default if there are flagging form items on this flag.
         $flag = flag_get_flag(NULL, $data->fid);
-        $flagging = $flag->get_flagging($node->nid);
-        if (!$flagging) {
-          // The item isn't flagged. The form function will deal with this error.
-          $flagging = $flag->new_flagging($node->nid);
-        }
-        if ($items = field_get_items('flagging', $flagging, 'field_interest')) {
+        $flagging = $flag->get_flagging($node->nid, $data->uid);
+        if ($flagging && $items = field_get_items('flagging', $flagging, 'field_interest')) {
           foreach ($items as $item) {
             // Map to strings.
             $list[$flagging->uid][] = $flag_options[$item['value']];
           }
         }
+      }
+      // Don't load user-specific flag logic if we don't need it.
+      else {
+        // Increment for a 'more' count instead.
+        $flag_count ++;
       }
     }
 
