@@ -7,6 +7,31 @@
 include_once 'us_classes.features.inc';
 
 /**
+ * Implements hook_menu().
+ */
+function us_classes_menu() {
+  $items['classes/add'] = array(
+    'title' => '+ Submit a new proposal',
+    'page callback' => 'us_classes_add',
+    'access callback' => TRUE,
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 10,
+  );
+
+  return $items;
+}
+
+/**
+ * Menu callback: redirect to add page.
+ */
+function us_classes_add() {
+  if (php_sapi_name() == 'cli' || preg_match('/\/cron.php$/', $_SERVER['SCRIPT_NAME']) || current_path() == 'admin/reports/status/run-cron') {
+    drupal_access_denied();
+  }
+  drupal_goto('node/add/class');
+}
+
+/**
  * Implements hook_theme().
  */
 function us_classes_theme($existing, $type, $theme, $path) {

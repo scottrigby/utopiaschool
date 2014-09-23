@@ -117,7 +117,8 @@ header .container {
 }
 
 /* Link styles */
-a.button {
+a.button,
+body .nav>li>a {
     color: #ffffff;
     background-color: #007fff;
     border-color: #007fff;
@@ -127,7 +128,12 @@ a.button {
 }
 a.button:hover,
 a.button:active,
-a.button:focus {
+a.button:focus,
+.nav-pills>li.active>a,
+.nav-pills>li.active>a:hover,
+.nav-pills>li.active>a:focus,
+.nav>li>a:hover,
+.nav>li>a:focus {
     background-color: #0066cc;
     border-color: #0061c2;
     text-decoration: none;
