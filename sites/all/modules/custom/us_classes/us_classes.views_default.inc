@@ -22,7 +22,7 @@ function us_classes_views_default_views() {
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Class proposals';
+  $handler->display->display_options['title'] = 'Classes';
   $handler->display->display_options['use_more_always'] = FALSE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['cache']['type'] = 'none';
@@ -141,7 +141,6 @@ function us_classes_views_default_views() {
     'Accepted' => 'Accepted',
   );
   $handler->display->display_options['filters']['field_status_value']['group'] = 1;
-  $handler->display->display_options['filters']['field_status_value']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_status_value']['expose']['operator_id'] = 'field_status_value_op';
   $handler->display->display_options['filters']['field_status_value']['expose']['label'] = 'Status';
   $handler->display->display_options['filters']['field_status_value']['expose']['operator'] = 'field_status_value_op';

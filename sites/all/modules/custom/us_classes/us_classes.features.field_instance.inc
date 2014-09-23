@@ -120,8 +120,8 @@ function us_classes_field_default_field_instances() {
     'label' => 'Dates',
     'required' => 0,
     'settings' => array(
-      'default_value' => 'now',
-      'default_value2' => 'same',
+      'default_value' => 'blank',
+      'default_value2' => 'blank',
       'default_value_code' => '',
       'default_value_code2' => '',
       'user_register_form' => FALSE,
