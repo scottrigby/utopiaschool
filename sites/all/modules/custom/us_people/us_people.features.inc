@@ -61,9 +61,9 @@ function us_people_default_profile2_type() {
     "userCategory" : true,
     "userView" : true,
     "type" : "main",
-    "label" : "Main profile",
+    "label" : "Public profile",
     "weight" : "0",
-    "data" : { "registration" : true, "use_page" : true },
+    "data" : { "registration" : 1 },
     "rdf_mapping" : []
   }');
   return $items;
