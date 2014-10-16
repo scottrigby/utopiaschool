@@ -282,6 +282,17 @@ html.js input.form-autocomplete {
 }
 
 /* Override bootstrap styles */
+
+/* Alerts */
+.alert a {
+    color: white;
+    text-decoration: underline;
+}
+.alert a:hover,
+.alert a:active {
+    text-decoration: none;
+}
+
 #main .container .row {
     margin: inherit;
 }
