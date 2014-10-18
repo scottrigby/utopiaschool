@@ -24,7 +24,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-<?php print kalatheme_grid_size(KALATHEME_GRID_THIRD * 2); ?> brenham-flipped-main-content">
-          <?php print $content['contentmain']; ?>
+          <?php print $content['content_main']; ?>
         </div>
         <div class="col-md-<?php print kalatheme_grid_size(KALATHEME_GRID_THIRD); ?> brenham-flipped-main-side">
           <?php print $content['sidebar']; ?>
