@@ -1,0 +1,14 @@
+name = us_home
+core = 7.x
+package = Features
+dependencies[] = flexslider_views
+dependencies[] = page_manager
+dependencies[] = panels_extra_layouts
+dependencies[] = strongarm
+features[ctools][] = page_manager:pages_default:1
+features[ctools][] = strongarm:strongarm:1
+features[ctools][] = views:views_default:3.0
+features[features_api][] = api:2
+features[page_manager_pages][] = home
+features[variable][] = site_frontpage
+features[views_view][] = slideshow
