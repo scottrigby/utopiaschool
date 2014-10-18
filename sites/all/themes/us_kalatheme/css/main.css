@@ -281,6 +281,17 @@ html.js input.form-autocomplete {
     background-color: #ffffff;
 }
 
+/* Fix extra panels padding from panopoly brehnam layout on homepage */
+.front .col-md-12 {
+    padding: 0;
+}
+.front h4.pane-title {
+    font-size: 40px;
+}
+.front .view-classes h4 {
+    font-size: 30px;
+}
+
 /* Override bootstrap styles */
 
 /* Alerts */
