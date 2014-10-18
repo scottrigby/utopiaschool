@@ -1,0 +1,18 @@
+diff --git a/docroot/sites/all/modules/contrib/flexslider_entityreference/flexslider_entityreference.module b/docroot/sites/all/modules/contrib/flexslider_entityreference/flexslider_entityreference.module
+index 78bb777..e780f82 100644
+--- a/docroot/sites/all/modules/contrib/flexslider_entityreference/flexslider_entityreference.module
++++ b/docroot/sites/all/modules/contrib/flexslider_entityreference/flexslider_entityreference.module
+@@ -265,8 +265,11 @@ function flexslider_entityreference_process_flexslider(&$vars) {
+  * Implements hook_preprocess_HOOK().
+  */
+ function flexslider_entityreference_preprocess_flexslider_list(&$vars) {
+-  $vars['theme_hook_suggestions'][] = 'flexslider_list';
+-  $vars['theme_hook_suggestions'][] = 'flexslider_entitylist';
++  // Add suggestions for flexslider lists that use entities.
++  if (isset($vars['settings']['view_mode'])) {
++    $vars['theme_hook_suggestions'][] = 'flexslider_list';
++    $vars['theme_hook_suggestions'][] = 'flexslider_entitylist';
++  }
+ }
+ 
+ /**
