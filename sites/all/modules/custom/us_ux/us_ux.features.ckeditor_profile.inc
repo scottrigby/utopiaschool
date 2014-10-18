@@ -14,7 +14,7 @@ function us_ux_ckeditor_profile_defaults() {
       'settings' => array(
         'ss' => 2,
         'toolbar' => '[
-    [\'Bold\',\'Italic\',\'-\',\'NumberedList\',\'BulletedList\',\'-\',\'Link\',\'Unlink\']
+    [\'Bold\',\'Italic\',\'-\',\'NumberedList\',\'BulletedList\',\'-\',\'Link\',\'Unlink\',\'-\',\'HorizontalRule\',\'Blockquote\',\'-\',\'RemoveFormat\',\'Source\']
 ]',
         'expand' => 't',
         'default' => 't',
@@ -79,7 +79,7 @@ function us_ux_ckeditor_profile_defaults() {
       'settings' => array(
         'ss' => 2,
         'toolbar' => '[
-    [\'Format\',\'Bold\',\'Italic\',\'-\',\'NumberedList\',\'BulletedList\',\'-\',\'Link\',\'Unlink\',\'-\',\'Table\',\'Image\',\'-\',\'RemoveFormat\',\'Source\']
+    [\'Format\',\'Bold\',\'Italic\',\'-\',\'NumberedList\',\'BulletedList\',\'-\',\'Link\',\'Unlink\',\'-\',\'HorizontalRule\',\'Table\',\'Image\',\'-\',\'RemoveFormat\',\'Source\']
 ]',
         'expand' => 't',
         'default' => 't',
