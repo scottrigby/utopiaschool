@@ -63,8 +63,7 @@ function us_people_default_profile2_type() {
     "type" : "main",
     "label" : "Public profile",
     "weight" : "0",
-    "data" : { "registration" : 1 },
-    "rdf_mapping" : []
+    "data" : { "registration" : 1 }
   }');
   return $items;
 }
