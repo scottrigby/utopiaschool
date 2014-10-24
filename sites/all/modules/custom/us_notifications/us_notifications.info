@@ -1,0 +1,3 @@
+name = us_notifications
+core = 7.x
+dependencies[] = token

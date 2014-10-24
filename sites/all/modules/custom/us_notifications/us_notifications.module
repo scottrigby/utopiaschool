@@ -1,0 +1,95 @@
+<?php
+
+define('US_NOTIFY_MAIL_TITLE', '[site:name] :: The class "[node:title]" has been updated');
+
+define('US_NOTIFY_MAIL_BODY',
+'Hi [user:name],
+
+The class "[node:title]" has been updated.
+
+You can see the updates at the following url:
+[node:url]
+
+You are receiving this email because you are proposing, facilitating, or following this class.
+To stop receiving updates for this class, you can click "+ Change my involvement" at [node:url].
+
+-- [site:name] team
+[site:url]');
+
+function us_notifications_node_update($node) {
+  if (!empty($node->status)) {
+    us_notifications_send($node);
+  }
+}
+
+/**
+ * Get users who should be notified of a change on a class.
+ *
+ * @param $node
+ * @return array
+ *
+ * @see us_classes_involvement_render()
+ */
+function us_notifications_get_users($node) {
+  try {
+    $wrapper = entity_metadata_wrapper('node', $node);
+
+    // Start the list of users who should be notified.
+    $ids = array();
+
+    // Proposed.
+    $uid = $wrapper->author->uid->value();
+    $ids[] = $uid;
+
+    // Facilitating.
+    $field_name = 'field_facilitators';
+    $uids = $wrapper->$field_name->raw();
+    foreach ($uids as $uid) {
+      $ids[] = $uid;
+    }
+
+    // Flagged.
+    $flag_name = 'subscribe_class';
+    $flags = flag_get_entity_flags('node', $node->nid, $flag_name);
+    foreach ($flags as $data) {
+      $ids[] = $data->uid;
+    }
+
+    return array_unique($ids);
+  }
+  catch(\EntityMetadataWrapperException $e) {
+    // Do nothing. If this fails we have done something wrong.
+  }
+}
+
+/**
+ * Implements hook_mail().
+ */
+function us_notifications_mail($key, &$message, $params) {
+  $message['subject'] = $params['subject'];
+  $message['body'][] = $params['body'];
+}
+
+function us_notifications_send($node) {
+  // Get users subscribed to this class.
+  $uids = us_notifications_get_users($node);
+  $users = user_load_multiple($uids);
+  foreach ($users as $user) {
+    // Make sure user can access node before showing node information.
+    if (!node_access('view', $node, $user)) {
+      continue;
+    }
+
+    $raw_values = array(
+      'subject' => US_NOTIFY_MAIL_TITLE,
+      'body'  => US_NOTIFY_MAIL_BODY,
+    );
+
+    $message = array();
+    foreach ($raw_values as $k => $v) {
+      $message[$k] = token_replace(t($v), array('node' => $node, 'user' => $user), array('sanitize' => FALSE));
+    }
+
+    drupal_mail('us_notifications', 'us_notifications_mail', $user->mail, user_preferred_language($user), $message);
+  }
+}
