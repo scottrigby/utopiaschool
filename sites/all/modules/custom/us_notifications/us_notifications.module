@@ -62,20 +62,16 @@ function us_notifications_send($node) {
   // actual plural values. Or does it?
   $attributes['title'] = array(
     'label' => 'Title',
-    'plural' => FALSE,
   );
   $attributes['body'] = array(
     'label' => 'Description',
-    'plural' => FALSE,
     'column' => 'value',
   );
   $attributes['field_dates'] = array(
     'label' => 'Dates',
-    'plural' => TRUE,
   );
   $attributes['field_facilitators'] = array(
     'label' => 'Facilitators',
-    'plural' => TRUE,
   );
 
   try {
@@ -113,7 +109,7 @@ function us_notifications_send($node) {
     '!attribute' => $last,
     '!attributes' => implode(', ', $changed) . ' and ' . $last,
   );
-  $body[] = format_plural($count, 'The class !attribute has changed.', 'The class !attributes have changed.', $args);
+  $body[] = format_plural($count, 'The class !attribute changed.', 'The class !attributes changed.', $args);
 
   $body[] = 'You can see the updates at the following url:
 [node:url]';
