@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Implements hook_node_insert().
+ */
 function us_notifications_node_update($node) {
   if (!empty($node->status)) {
     us_notifications_send($node);
@@ -13,6 +16,10 @@ function us_notifications_comment_insert($comment) {
   if ($comment->status == COMMENT_PUBLISHED) {
     us_notifications_comment_send($comment);
   }
+
+  // Subscribe the user.
+  $flag = flag_get_flag('subscribe_class');
+  $flag->flag('flag', $comment->nid, user_load($comment->uid), TRUE);
 }
 
 /**
