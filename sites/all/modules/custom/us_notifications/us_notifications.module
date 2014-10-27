@@ -4,7 +4,7 @@
  * Implements hook_node_insert().
  */
 function us_notifications_node_update($node) {
-  if (!empty($node->status)) {
+  if (!empty($node->status) && $node->type == 'class') {
     us_notifications_send($node);
   }
 }
@@ -14,12 +14,15 @@ function us_notifications_node_update($node) {
  */
 function us_notifications_comment_insert($comment) {
   if ($comment->status == COMMENT_PUBLISHED) {
-    us_notifications_comment_send($comment);
-  }
+    $node = node_load($comment);
+    if ($node->type == 'class') {
+      us_notifications_comment_send($comment);
 
-  // Subscribe the user.
-  $flag = flag_get_flag('subscribe_class');
-  $flag->flag('flag', $comment->nid, user_load($comment->uid), TRUE);
+      // Subscribe the user.
+      $flag = flag_get_flag('subscribe_class');
+      $flag->flag('flag', $comment->nid, user_load($comment->uid), TRUE);
+    }
+  }
 }
 
 /**
