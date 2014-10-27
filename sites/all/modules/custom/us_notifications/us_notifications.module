@@ -104,7 +104,7 @@ function us_notifications_send($node) {
   }
 
   // Build the message body.
-  $body[] = "Hi [user:name]";
+  $body[] = "Hi [user:name],";
 
   $count = count($changed);
   $last = array_pop($changed);
@@ -115,13 +115,10 @@ function us_notifications_send($node) {
   );
   $body[] = format_plural($count, 'The class !attribute !verb changed.', 'The class !attributes have changed.', $args);
 
-  $body[] = 'You can see the updates at the following url:
+  $body[] = 'You can see the updates here:
 [node:url]';
 
   $body[] = 'You are receiving this email because you are proposing, facilitating, or following this class. To stop receiving it\'s updates, you can click "+ Change my involvement" at [node:url].';
-
-  $body[] = '-- [site:name] team
-[site:url]';
 
   // Get users subscribed to this class.
   $uids = us_notifications_get_users($node);
