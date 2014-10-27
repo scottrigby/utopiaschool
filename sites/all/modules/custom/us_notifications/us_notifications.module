@@ -1,6 +1,6 @@
 <?php
 
-define('US_NOTIFY_MAIL_TITLE', '[site:name] :: The class "[node:title]" has been updated');
+define('US_NOTIFY_MAIL_TITLE', '[site:name]: The class "[node:title]" has been updated');
 
 function us_notifications_node_update($node) {
   if (!empty($node->status)) {
@@ -60,18 +60,12 @@ function us_notifications_send($node) {
   // Check attributes (fields or properties of the class node) we care about.
   // Note we can't use format_plural() because this only refers to grammar, not
   // actual plural values. Or does it?
-  $attributes['title'] = array(
-    'label' => 'Title',
-  );
-  $attributes['body'] = array(
-    'label' => 'Description',
-    'column' => 'value',
-  );
-  $attributes['field_dates'] = array(
-    'label' => 'Dates',
-  );
-  $attributes['field_facilitators'] = array(
-    'label' => 'Facilitators',
+  $attributes = array(
+    'title',
+    'body',
+    'field_dates',
+    'field_facilitators',
+    'field_resources',
   );
 
   try {
@@ -80,12 +74,18 @@ function us_notifications_send($node) {
     $original_wrapper = entity_metadata_wrapper('node', $node->original);
 
     // Iterate over the attributes to see if any have changed.
-    // @todo Find a good way to drill down to the output value, becuase body for
-    //   example has a different array structure, with additional array elements
-    //   from original to updated, even when the value->value is the same.
-    foreach ($attributes as $name => $info) {
-      $original = isset($info['column']) ? $original_wrapper->$name->{$info['column']}->value() : $original_wrapper->$name->value();
-      $updated = isset($info['column']) ? $wrapper->$name->{$info['column']}->value() : $wrapper->$name->value();
+    foreach ($attributes as $name) {
+      $info = $wrapper->$name->info();
+      // Because updated or original arrays sometimes contains more keys than
+      // the other, filter out uncommon keys before comparing. Note we typecast
+      // so we can use a recursive array function. Also comparison will fail if
+      // sorting does not match.
+      $original = (array) $original_wrapper->$name->value();
+      $updated = (array) $wrapper->$name->value();
+      $original = us_notifications_array_intersect_key_recursive($original, $updated);
+      $updated = us_notifications_array_intersect_key_recursive($updated, $original);
+      ksort($updated);
+      ksort($original);
       if (serialize($original) !== serialize($updated)) {
         $changed[] = $info['label'];
       }
@@ -140,4 +140,33 @@ function us_notifications_send($node) {
 
     drupal_mail('us_notifications', 'us_notifications_mail', $user->mail, user_preferred_language($user), $message);
   }
+}
+
+/**
+ * A recursive array_intersect_key(), which also leaves numeric deltas.
+ *
+ * @param array $master
+ * @param array $mask
+ * @return array
+ *   An array containing all the entries of master which have keys that are
+ *   numeric and or are present in mask.
+ */
+function us_notifications_array_intersect_key_recursive(array $master, array $mask) {
+  if (!is_array($master)) {
+    return $master;
+  }
+  foreach ($master as $k => $v) {
+    // If $k is numeric, leave it alone. This is a specific requirement for
+    // Drupal object attribute deltas. Otherwise, remove value from $master if
+    // the key is not present in $mask.
+    if (!is_numeric($k) && !isset($mask[$k])) {
+      unset ($master[$k]);
+      continue;
+    }
+    // Recurse when mask is an array, else simply keep value.
+    if (isset($mask[$k]) && is_array($mask[$k])) {
+      $master[$k] = us_notifications_array_intersect_key_recursive($master[$k], $mask[$k]);
+    }
+  }
+  return $master;
 }
