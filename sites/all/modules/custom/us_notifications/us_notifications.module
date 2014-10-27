@@ -115,7 +115,7 @@ function us_notifications_send($node) {
   );
   $body[] = format_plural($count, 'The class !attribute !verb changed.', 'The class !attributes have changed.', $args);
 
-  $body[] = 'See the updated class info here:
+  $body[] = 'See the updated info here:
 [node:url]';
 
   $body[] = '--
