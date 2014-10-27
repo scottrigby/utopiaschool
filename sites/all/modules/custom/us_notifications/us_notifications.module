@@ -77,17 +77,20 @@ function us_notifications_send($node) {
     foreach ($attributes as $name) {
       $info = $wrapper->$name->info();
       // Because updated or original arrays sometimes contains more keys than
-      // the other, filter out uncommon keys before comparing. Note we typecast
-      // so we can use a recursive array function. Also comparison will fail if
-      // sorting does not match.
-      $original = (array) $original_wrapper->$name->value();
-      $updated = (array) $wrapper->$name->value();
+      // the other, filter out uncommon keys before comparing.
+      $original = $original_wrapper->$name->value();
+      $updated = $wrapper->$name->value();
       $original = us_notifications_array_intersect_key_recursive($original, $updated);
       $updated = us_notifications_array_intersect_key_recursive($updated, $original);
-      ksort($updated);
-      ksort($original);
+
       if (serialize($original) !== serialize($updated)) {
         $changed[] = $info['label'];
+        // If even a single field has changed, but it has a multiple delta, it
+        // should be pluralized below.
+        reset($original);
+        if (is_numeric(key($original))) {
+          $plural = TRUE;
+        }
       }
     }
   }
@@ -108,8 +111,9 @@ function us_notifications_send($node) {
   $args = array(
     '!attribute' => $last,
     '!attributes' => implode(', ', $changed) . ' and ' . $last,
+    '!verb' => isset($plural) ? 'have' : 'has',
   );
-  $body[] = format_plural($count, 'The class !attribute changed.', 'The class !attributes changed.', $args);
+  $body[] = format_plural($count, 'The class !attribute !verb changed.', 'The class !attributes have changed.', $args);
 
   $body[] = 'You can see the updates at the following url:
 [node:url]';
@@ -143,7 +147,10 @@ function us_notifications_send($node) {
 }
 
 /**
- * A recursive array_intersect_key(), which also leaves numeric deltas.
+ * Ensures an array has the same recursive key structure as another array.
+ *
+ * - Sorts the keys (otherwise comparison will fail)
+ * - Recursively intersects keys, except leaves numeric deltas
  *
  * @param array $master
  * @param array $mask
@@ -151,10 +158,12 @@ function us_notifications_send($node) {
  *   An array containing all the entries of master which have keys that are
  *   numeric and or are present in mask.
  */
-function us_notifications_array_intersect_key_recursive(array $master, array $mask) {
+function us_notifications_array_intersect_key_recursive($master, $mask) {
   if (!is_array($master)) {
     return $master;
   }
+  ksort($master);
+  ksort($mask);
   foreach ($master as $k => $v) {
     // If $k is numeric, leave it alone. This is a specific requirement for
     // Drupal object attribute deltas. Otherwise, remove value from $master if
