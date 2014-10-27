@@ -1,10 +1,17 @@
 <?php
 
-define('US_NOTIFY_MAIL_TITLE', '[site:name]: The class "[node:title]" has been updated');
-
 function us_notifications_node_update($node) {
   if (!empty($node->status)) {
     us_notifications_send($node);
+  }
+}
+
+/**
+ * Implements hook_comment_insert().
+ */
+function us_notifications_comment_insert($comment) {
+  if ($comment->status == COMMENT_PUBLISHED) {
+    us_notifications_comment_send($comment);
   }
 }
 
@@ -131,13 +138,55 @@ You are receiving this email because you are proposing, facilitating, or followi
     }
 
     $raw_values = array(
-      'subject' => US_NOTIFY_MAIL_TITLE,
+      'subject' => '[site:name]: The class "[node:title]" has been updated',
       'body'  => implode("\n\n", $body),
     );
 
     $message = array();
     foreach ($raw_values as $k => $v) {
       $message[$k] = token_replace(t($v), array('node' => $node, 'user' => $user), array('sanitize' => FALSE));
+    }
+
+    drupal_mail('us_notifications', 'us_notifications_mail', $user->mail, user_preferred_language($user), $message);
+  }
+}
+
+function us_notifications_comment_send($comment) {
+  // Build the message body.
+  $body[] = "Hi [user:name],";
+
+  $body[] = '[comment:author] has commented on: "[comment:node:title]"';
+
+  $body[] = 'See the comment here:
+[comment:url]';
+
+  $body[] = '--
+You are receiving this email because you are proposing, facilitating, or following this class. To stop receiving it\'s updates, you can click "+ Change my involvement" at [comment:node:url].';
+
+  // Get users subscribed to this class.
+  $node = node_load($comment->nid);
+  $uids = us_notifications_get_users($node);
+  $users = user_load_multiple($uids);
+
+  // Don't send to the user who commented.
+  if (isset($users[$comment->uid])) {
+    unset($users[$comment->uid]);
+  }
+
+  foreach ($users as $user) {
+    // Make sure user can access node before showing node information.
+    if (!node_access('view', $node, $user)) {
+      continue;
+    }
+
+    $raw_values = array(
+      'subject' => '[site:name]: New comment on "[comment:node:title]"',
+      'body'  => implode("\n\n", $body),
+    );
+
+    $message = array();
+    foreach ($raw_values as $k => $v) {
+      $message[$k] = token_replace(t($v), array('node' => $node, 'user' => $user, 'comment' => $comment), array('sanitize' => FALSE));
     }
 
     drupal_mail('us_notifications', 'us_notifications_mail', $user->mail, user_preferred_language($user), $message);
