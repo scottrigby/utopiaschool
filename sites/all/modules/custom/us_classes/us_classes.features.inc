@@ -85,6 +85,14 @@ function us_classes_node_info() {
       'title_label' => t('Title'),
       'help' => '',
     ),
+    'session' => array(
+      'name' => t('Session'),
+      'base' => 'node_content',
+      'description' => '',
+      'has_title' => '1',
+      'title_label' => t('Title'),
+      'help' => '',
+    ),
   );
   drupal_alter('node_info', $items);
   return $items;
