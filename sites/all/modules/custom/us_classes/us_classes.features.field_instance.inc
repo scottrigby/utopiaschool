@@ -58,7 +58,7 @@ function us_classes_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 3,
+        'weight' => 4,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -161,7 +161,7 @@ function us_classes_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 10,
+        'weight' => 11,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -200,7 +200,7 @@ function us_classes_field_default_field_instances() {
           'image_style' => 'large',
         ),
         'type' => 'image',
-        'weight' => 5,
+        'weight' => 6,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -233,7 +233,7 @@ function us_classes_field_default_field_instances() {
         'progress_indicator' => 'bar',
       ),
       'type' => 'image_image',
-      'weight' => 5,
+      'weight' => 6,
     ),
   );
 
@@ -251,7 +251,7 @@ function us_classes_field_default_field_instances() {
           'link' => 1,
         ),
         'type' => 'entityreference_label',
-        'weight' => 4,
+        'weight' => 5,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -272,7 +272,7 @@ function us_classes_field_default_field_instances() {
       'module' => 'multiple_selects',
       'settings' => array(),
       'type' => 'multiple_selects',
-      'weight' => 8,
+      'weight' => 9,
     ),
   );
 
@@ -314,7 +314,7 @@ function us_classes_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 9,
+      'weight' => 10,
     ),
   );
 
@@ -356,7 +356,7 @@ function us_classes_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -384,7 +384,7 @@ function us_classes_field_default_field_instances() {
           'textformatter_type' => 'comma',
         ),
         'type' => 'textformatter_list',
-        'weight' => 6,
+        'weight' => 7,
       ),
       'teaser' => array(
         'label' => 'inline',
@@ -438,7 +438,7 @@ function us_classes_field_default_field_instances() {
         'module' => 'link',
         'settings' => array(),
         'type' => 'link_default',
-        'weight' => 7,
+        'weight' => 8,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -476,7 +476,71 @@ function us_classes_field_default_field_instances() {
       'module' => 'link',
       'settings' => array(),
       'type' => 'link_field',
-      'weight' => 7,
+      'weight' => 8,
+    ),
+  );
+
+  // Exported field_instance: 'node-class-field_video'
+  $field_instances['node-class-field_video'] = array(
+    'bundle' => 'class',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Currently supports Vimeo URLs.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'vimeo_link_formatter',
+        'settings' => array(
+          'autoplay' => 0,
+          'byline' => 1,
+          'color' => '00adef',
+          'height' => 281,
+          'js_api' => 0,
+          'loop' => 0,
+          'portrait' => 1,
+          'title' => 1,
+          'width' => 500,
+        ),
+        'type' => 'vimeo_link_formatter_player',
+        'weight' => 3,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_video',
+    'label' => 'Video',
+    'required' => 0,
+    'settings' => array(
+      'attributes' => array(
+        'class' => '',
+        'configurable_title' => 0,
+        'rel' => '',
+        'target' => 'default',
+        'title' => '',
+      ),
+      'display' => array(
+        'url_cutoff' => 80,
+      ),
+      'enable_tokens' => 0,
+      'rel_remove' => 'default',
+      'title' => 'none',
+      'title_maxlength' => 128,
+      'title_value' => '',
+      'url' => 0,
+      'user_register_form' => FALSE,
+      'validate_url' => 1,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'link',
+      'settings' => array(),
+      'type' => 'link_field',
+      'weight' => 5,
     ),
   );
 
@@ -529,6 +593,7 @@ function us_classes_field_default_field_instances() {
   t('Accepted classes with dates will appear on the public calendar.');
   t('Add people who will be helping to lead this class. The person who proposed the class does not necessarily need to help facilitate, but if you do want to, add yourself to the list.');
   t('Body');
+  t('Currently supports Vimeo URLs.');
   t('Dates');
   t('Description');
   t('Facilitators');
@@ -540,6 +605,7 @@ function us_classes_field_default_field_instances() {
   t('Status');
   t('TPS class');
   t('Topics');
+  t('Video');
 
   return $field_instances;
 }
