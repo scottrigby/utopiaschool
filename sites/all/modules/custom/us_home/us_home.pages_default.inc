@@ -174,8 +174,6 @@ function us_home_default_page_manager_pages() {
 <p>It\'s also never too late to&nbsp;<a href="/node/add/class">propose classes</a>&nbsp;– we\'ll help make happen&nbsp;as many as possible during October, but this is an ongoing effort to build open curricula on utopian thought and practice, intended to continue elsewhere after this month. So propose a class, get involved in existing classes, comment, join remotely or&nbsp;come in person if you can. We look forward to connecting with you!<br />
 &nbsp;</p>
 
-<p><a class="button" href="/calendar">See the schedule</a></p>
-
 <p><a class="button" href="/classes">Get involved in classes</a></p>
 
 <p><a class="button" href="/node/add/class">Propose a new class</a></p>
