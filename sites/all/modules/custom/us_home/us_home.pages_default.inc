@@ -145,6 +145,48 @@ function us_home_default_page_manager_pages() {
     $display->content['new-2efc186e-ffef-4f88-99f1-3eeb5b7f39c5'] = $pane;
     $display->panels['header'][0] = 'new-2efc186e-ffef-4f88-99f1-3eeb5b7f39c5';
     $pane = new stdClass();
+    $pane->pid = 'new-9fe6eea1-5beb-42cc-9507-113a9e59ac8f';
+    $pane->panel = 'header';
+    $pane->type = 'custom';
+    $pane->subtype = 'custom';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'admin_title' => 'REVERSE space classes',
+      'title' => 'Spring Session 2015 NYC (REVERSE)',
+      'body' => '<p><strong>@REVERSE</strong> (in Williamsburg)<br />
+28 Frost Street&nbsp;Brooklyn, New York 11211</p>
+
+<p>As part of the&nbsp;exhibition programming for&nbsp;<a href="http://reversespace.org/seastead-at-night/">SEASTEAD AT NIGHT</a>,&nbsp;Utopia School&nbsp;will be hosting 2 classes at REVERSE.</p>
+
+<h3><a href="/node/80">Utopian Response to Ecocrises?</a><br />
+SATURDAY, MARCH 14TH, 1:30PM – 3:30PM</h3>
+
+<p>A central focus of this workshop is the relationship between ecosystems and social systems and how it is being re-imagined by folks in the collective housing community. Through multi-media presentation and facilitated discussion, we will explore our own relationships to the ecosystems that support us and all life on the planet in juxtaposition to alternative eco-social relationships theorized by permaculture and specific strains of anarchism. You will leave this presentation with new ideas on how humans could or should relate to each other, to other species, and to ecosystems in an age of impending eco-crises. Dialogue, questions and commentary will follow.</p>
+
+<h3><a href="/node/171">Architectures of Desire: Seasteads and Nomadic Flows</a><br />
+SATURDAY, MARCH 21ST, 1:30PM – 3:30PM</h3>
+
+<p>Let us consider the&nbsp;term “utopian&nbsp;architecture” for a moment.&nbsp; Does it sound like an&nbsp;oxymoron?&nbsp; Must it?&nbsp; How might we change the rules of&nbsp;architecture&nbsp;without throwing away its productive aspects? &nbsp; Like goldfish, we grow to fit our containers.&nbsp; Can&nbsp;we imagine an&nbsp;architecture&nbsp;that increases&nbsp;liberty, propagates&nbsp;communalism, stokes mutual aid, and embraces interdependence? What would such an&nbsp;architecture&nbsp;– a desiring&nbsp;architecture&nbsp;– look like, and what might it want from us? Picking up on the work&nbsp;of&nbsp;visionary architect Lebbeus Woods,&nbsp;Architectures&nbsp;of Desire&nbsp;will explore expanded conditions&nbsp;of&nbsp;a built environment beyond those intended by an ideologically-driven definition of urbanism.</p>
+
+<hr />
+<p>&nbsp;</p>
+',
+      'format' => 'full_html',
+      'substitute' => TRUE,
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 1;
+    $pane->locks = array();
+    $pane->uuid = '9fe6eea1-5beb-42cc-9507-113a9e59ac8f';
+    $display->content['new-9fe6eea1-5beb-42cc-9507-113a9e59ac8f'] = $pane;
+    $display->panels['header'][1] = 'new-9fe6eea1-5beb-42cc-9507-113a9e59ac8f';
+    $pane = new stdClass();
     $pane->pid = 'new-eda2453f-17d4-4e07-aff9-de44e739a1ee';
     $pane->panel = 'sidebar';
     $pane->type = 'custom';
@@ -194,6 +236,28 @@ function us_home_default_page_manager_pages() {
     $pane->uuid = 'eda2453f-17d4-4e07-aff9-de44e739a1ee';
     $display->content['new-eda2453f-17d4-4e07-aff9-de44e739a1ee'] = $pane;
     $display->panels['sidebar'][0] = 'new-eda2453f-17d4-4e07-aff9-de44e739a1ee';
+    $pane = new stdClass();
+    $pane->pid = 'new-4d33c86d-0e2f-46e6-9c01-78e27b0f738b';
+    $pane->panel = 'sidebar';
+    $pane->type = 'block';
+    $pane->subtype = 'views-documentation-block';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'override_title' => 0,
+      'override_title_text' => '',
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 1;
+    $pane->locks = array();
+    $pane->uuid = '4d33c86d-0e2f-46e6-9c01-78e27b0f738b';
+    $display->content['new-4d33c86d-0e2f-46e6-9c01-78e27b0f738b'] = $pane;
+    $display->panels['sidebar'][1] = 'new-4d33c86d-0e2f-46e6-9c01-78e27b0f738b';
   $display->hide_title = PANELS_TITLE_NONE;
   $display->title_pane = '0';
   $handler->conf['display'] = $display;
