@@ -819,6 +819,22 @@ function us_classes_views_default_views() {
   );
   $handler->display->display_options['fields']['field_video']['delta_offset'] = '0';
   $handler->display->display_options['fields']['field_video']['separator'] = '<br /><br />';
+  /* Field: Content: Audio */
+  $handler->display->display_options['fields']['field_audio']['id'] = 'field_audio';
+  $handler->display->display_options['fields']['field_audio']['table'] = 'field_data_field_audio';
+  $handler->display->display_options['fields']['field_audio']['field'] = 'field_audio';
+  $handler->display->display_options['fields']['field_audio']['label'] = '';
+  $handler->display->display_options['fields']['field_audio']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_audio']['click_sort_column'] = 'url';
+  $handler->display->display_options['fields']['field_audio']['type'] = 'mediaelement_audio';
+  $handler->display->display_options['fields']['field_audio']['settings'] = array(
+    'controls' => 1,
+    'width' => '500',
+    'height' => '30',
+    'download_link' => 1,
+    'download_text' => 'Download',
+  );
+  $handler->display->display_options['fields']['field_audio']['delta_offset'] = '0';
   $handler->display->display_options['path'] = 'documentation';
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Documentation';
