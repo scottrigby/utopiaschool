@@ -39,6 +39,7 @@ function escape_admin_toolbar_pre_render($element) {
  */
 function escape_admin_navbar_alter(array &$items) {
   $items['home']['tab']['#title'] = t('Back to site');
+  $items['home']['tab']['#options']['attributes']['title'] = t('Return to site content');
   $items['home']['tab']['#options']['attributes']['class'] = array_diff($items['home']['tab']['#options']['attributes']['class'], array('navbar-icon-home'));
   $items['home']['tab']['#options']['attributes']['class'][] = 'toolbar-icon-escape-admin';
   $items['home']['tab']['#options']['attributes']['class'][] = 'element-hidden';

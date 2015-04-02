@@ -5,9 +5,9 @@ package = User interface
 recommends[] = toolbar
 recommends[] = navbar
 
-; Information added by Drupal.org packaging script on 2014-03-06
-version = "7.x-1.1"
+; Information added by Drupal.org packaging script on 2014-11-12
+version = "7.x-1.2"
 core = "7.x"
 project = "escape_admin"
-datestamp = "1394073214"
+datestamp = "1415814865"
 

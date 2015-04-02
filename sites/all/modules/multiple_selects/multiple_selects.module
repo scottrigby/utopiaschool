@@ -40,7 +40,17 @@ function multiple_selects_field_widget_info() {
   return array(
     'multiple_selects' => array(
       'label' => t('Multiple Selects list'),
-      'field types' => array('entityreference', 'node_reference', 'user_reference', 'taxonomy_term_reference', 'list_integer', 'list_float', 'list_text'),
+      'field types' => array(
+        'entityreference',
+        'node_reference',
+        'user_reference',
+        'taxonomy_term_reference',
+        'list_integer',
+        'list_float',
+        'list_text',
+        'list_boolean',
+        'commerce_product_reference',
+      ),
     ),
   );
 }
@@ -58,9 +68,15 @@ function multiple_selects_field_widget_form(&$form, &$form_state, $field, $insta
   $required = $element['#required'];
   $has_value = isset($items[0][$value_key]);
   $properties = _options_properties($type, $multiple, $required, $has_value);
-
+  $entity_type = $element['#entity_type'];
+  $entity = $element['#entity'];
+  
   // Prepare the list of options.
-  $options = _multiple_selects_get_options($field, $instance, $properties, NULL, NULL);
+  $options = _multiple_selects_get_options($field, $instance, $properties, $entity_type, $entity);
+
+  // Enforcing the element to have the value of the field instance label.
+  $element['#title'] = $instance['label'];
+  $element['#title_display'] = 'none';
   
   $widget = $element;
 
@@ -86,12 +102,12 @@ function multiple_selects_widget_validate($element, &$form_state) {
   $properties = $element['#properties'];
   $value = $element['#value'];
 
-  if ($element['#required'] && $element['#value'] == '_none') {
+  if ($element['#required'] && $element['#value'] === '_none') {
     form_error($element, t('!name field is required.', array('!name' => $element['#title'])));
   }
   
   if ($properties['empty_option']) {
-    if ($value == '_none') {
+    if ($value === '_none') {
       form_set_value($element, NULL, $form_state);
     }    
   }
