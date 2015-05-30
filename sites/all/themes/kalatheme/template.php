@@ -119,8 +119,13 @@ function kalatheme_process_page(&$variables) {
       // Add the JS
       drupal_add_js($base['scheme'] . ":" . KALATHEME_BOOTSTRAP_JS, 'external');
       // Add the CSS
-      $css = ($library === 'default') ? KALATHEME_BOOTSTRAP_CSS : kalatheme_get_bootswatch_theme($library)->cssCdn;
-      drupal_add_css($base['scheme'] . ":" . $css, 'external');
+      if ($library == 'default') {
+        $css = $base['scheme'] . ':' . KALATHEME_BOOTSTRAP_CSS;
+      }
+      else {
+        $css = kalatheme_get_bootswatch_theme($library)->cssCdn;
+      }
+      drupal_add_css($css, 'external');
     }
   }
   // Use Font Awesome
