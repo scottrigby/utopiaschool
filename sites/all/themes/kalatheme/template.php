@@ -118,6 +118,7 @@ function kalatheme_process_page(&$variables) {
     if ($library !== 'none' && !empty($library)) {
       // Add the JS
       drupal_add_js($base['scheme'] . ":" . KALATHEME_BOOTSTRAP_JS, 'external');
+
       // Add the CSS
       if ($library == 'default') {
         $css = $base['scheme'] . ':' . KALATHEME_BOOTSTRAP_CSS;

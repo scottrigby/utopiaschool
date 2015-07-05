@@ -1,12 +1,7 @@
 <?php
-/*
+/**
  * @file
- *
  * Admin forms for this module.
- *
- * @copyright Copyright(c) 2010 Lee Rowlands
- * @license GPL v2 http://www.fsf.org/licensing/licenses/gpl.html
- * @author Lee Rowlands contact at rowlandsgroup dot com
  */
 
 /**
@@ -34,33 +29,35 @@ function imagecache_external_admin_form($form, $form_state) {
     '#default_value' => variable_get('imagecache_external_management', 'unmanaged'),
   );
 
-  $form['imagecache_external_option'] = array(
-    '#type' => 'radios',
-    '#title' => t('Hosts list option'),
-    '#description' => t('Choose the method to filter external urls (note admin user is not affected)'),
-    '#options' => array(
-      'black' => t('Blacklist: Only deny images from the listed hosts.'),
-      'white' => t('Whitelist: Deny all images <b>except</b> the listed hosts.'),
-    ),
-    '#default_value' => variable_get('imagecache_external_option', 'white'),
+  $form['imagecache_external_use_whitelist'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use whitelist'),
+    '#description' => t('By default, all images are blocked except for images served from white-listed hosts. You can define hosts below.'),
+    '#default_value' => variable_get('imagecache_external_use_whitelist', TRUE),
   );
 
   $form['imagecache_external_hosts'] = array(
     '#type' => 'textarea',
     '#title' => t('Imagecache External hosts'),
-    '#description' => t('Add one host per line. Ex: www.flickr.com'),
+    '#description' => t('Add one host per line. You can use top-level domains to whitelist subdomains. Ex: staticflickr.com to whitelist farm1.staticflickr.com and farm2.staticflickr.com'),
     '#default_value' => variable_get('imagecache_external_hosts', ''),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="imagecache_external_use_whitelist"]' => array('checked' => TRUE),
+      ),
+    ),
   );
   return system_settings_form($form);
 }
 
+/**
+ * Validate callback for the admin form.
+ */
 function imagecache_external_admin_form_validate($form, $form_state) {
   $scheme = file_default_scheme();
   $directory = $scheme . '://' . $form_state['values']['imagecache_directory'];
   if (!file_prepare_directory($directory, FILE_CREATE_DIRECTORY)) {
-    form_set_error('imagecache_directory', t('The directory %directory does not exist or is not writable.', array(
-      '%directory' => $directory,
-    )));
+    form_set_error('imagecache_directory', t('The directory %directory does not exist or is not writable.', array('%directory' => $directory)));
     watchdog('imagecache_external', 'The directory %directory does not exist or is not writable.', array('%directory' => $directory), WATCHDOG_ERROR);
   }
 }

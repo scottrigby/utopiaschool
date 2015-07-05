@@ -183,8 +183,57 @@ ul.links {
   list-style: none outside none;
 }
 
-html.js input.form-autocomplete {
+/* Default throbber needs some help for when FontAwsome isn't on. */
+html.js input[autocomplete] {
+  background-repeat: no-repeat;
+}
+
+/* Handle the FontAwesome throbber */
+html.js input[autocomplete].fa-on,
+html.js input.throbbing.fa-on {
   background: transparent;
+}
+
+.form-control-feedback {
+  width: 13px;
+  height: 13px;
+  color: #bbb;
+  top: 60%;
+  right: 10px;
+}
+
+/* Same as adding FontAwesome fa-spin but faster */
+input.throbbing + .form-control-feedback {
+  -webkit-animation: throbber-spin 1s infinite linear;
+          animation: throbber-spin 1s infinite linear;
+}
+
+/* Set a darker color when spinning */
+input.throbbing + .form-control-feedback:before {
+  color: rgba(95, 95, 95, 1);
+}
+
+/* Copied from FontAwesome fa-spin */
+@-webkit-keyframes throbber-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
+}
+
+@keyframes throbber-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+  }
 }
 
 form .form-actions .btn {

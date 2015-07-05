@@ -1,12 +1,7 @@
 <?php
-/*
+/**
  * @file
- *
  * Allows the usage of Image Styles on external images.
- *
- * @copyright Copyright(c) 2010 Lee Rowlands
- * @license GPL v2 http://www.fsf.org/licensing/licenses/gpl.html
- * @author Lee Rowlands contact at rowlandsgroup dot com
  */
 
 /**
@@ -19,7 +14,7 @@ function imagecache_external_menu() {
     'file' => 'imagecache_external.admin.inc',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('imagecache_external_admin_form'),
-    'access arguments' => array('Administer imagecache external'),
+    'access arguments' => array('administer imagecache external'),
     'type' => MENU_NORMAL_ITEM,
   );
   $items['admin/config/media/imagecache_external/settings'] = array(
@@ -28,7 +23,7 @@ function imagecache_external_menu() {
     'file' => 'imagecache_external.admin.inc',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('imagecache_external_admin_form'),
-    'access arguments' => array('Administer imagecache external'),
+    'access arguments' => array('administer imagecache external'),
     'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => 0,
   );
@@ -38,7 +33,7 @@ function imagecache_external_menu() {
     'file' => 'imagecache_external.admin.inc',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('imagecache_external_flush_form'),
-    'access arguments' => array('Administer imagecache external'),
+    'access arguments' => array('administer imagecache external'),
     'type' => MENU_LOCAL_TASK,
     'weight' => 1,
   );
@@ -51,17 +46,9 @@ function imagecache_external_menu() {
  */
 function imagecache_external_permission() {
   return array(
-    'Fetch external images' => array(
-      'title' => t('Fetch external images'),
-      'description' => t('Allows the user to fetch unfetched images.'),
-    ),
-    'Administer imagecache external' => array(
+    'administer imagecache external' => array(
       'title' => t('Administer Imagecache External'),
       'description' => t('Change the Imagecache External settings.'),
-    ),
-    'Bypass black/white list' => array(
-      'title' => t('Bypass black/white list'),
-      'description' => t('Allows the user to bypass the URL access permissions.'),
     ),
   );
 }
@@ -194,7 +181,6 @@ function imagecache_external_field_formatter_view($entity_type, $entity, $field,
       '#path' => isset($uri) ? $uri : '',
     );
   }
-
   return $element;
 }
 
@@ -219,7 +205,7 @@ function imagecache_external_theme() {
 /**
  * Returns HTML for an image using a specific image style.
  *
- * @param $variables
+ * @param array $variables
  *   An associative array containing:
  *   - style_name: The name of the style to be used to alter the original image.
  *   - path: The path of the image file relative to the Drupal files directory.
@@ -242,24 +228,39 @@ function theme_imagecache_external($variables) {
 /**
  * Util to generate a path to an image.
  *
- * @param $url string the url to the image
- * @return string the url to the image
+ * @param string $url
+ *   The url to the image.
+ *
+ * @return string
+ *   The url to the image.
  */
 function imagecache_external_generate_path($url) {
   // Create the extenal images directory and ensure it's writable.
   $hash = md5($url);
   $filename = $hash;
+
+  // Check if this is a non-standard file stream and adjust accordingly.
+  $scheme = file_uri_scheme($url);
+  if ($scheme != 'http' && $scheme != 'https') {
+    // Obtain the "real" URL to this file.
+    $url = drupal_realpath($url);
+  }
+
+  // Parse the url to get the path components.
+  $url_parameters = drupal_parse_url($url);
+
   // Add the extension for real images.
-  if ($extension = pathinfo($url, PATHINFO_EXTENSION)) {
+  if ($extension = pathinfo($url_parameters['path'], PATHINFO_EXTENSION)) {
     if (in_array($extension, array('jpg', 'png', 'gif'))) {
       $filename .= '.' . $extension;
     }
   }
-  $scheme = file_default_scheme();
-  $directory = $scheme . '://' . variable_get('imagecache_directory', 'externals');
+
+  $default_scheme = file_default_scheme();
+  $directory = $default_scheme . '://' . variable_get('imagecache_directory', 'externals');
   if (file_prepare_directory($directory, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS)) {
-    if (file_exists($directory. '/' . $filename)) {
-      return $directory. '/' . $filename;
+    if (file_exists($directory . '/' . $filename)) {
+      return $directory . '/' . $filename;
     }
 
     if ($file_uri = imagecache_external_fetch($url, $directory . '/' . $filename)) {
@@ -273,41 +274,47 @@ function imagecache_external_generate_path($url) {
 /**
  * Api function to fetch a url.
  *
- * @param $url string url to fetch
+ * @param string $url
+ *   The url to fetch.
+ * @param string $cachepath
+ *   The directory where to save the images within the files directory.
  */
 function imagecache_external_fetch($url, $cachepath) {
-  // Now we test it against the whitelist/blacklist.
-  if (!$url) {
-    return FALSE;
-  }
-  // Extract hostname from url.
-  if (!($host = parse_url($url, PHP_URL_HOST))) {
+  // Validate the image URL against the whitelist.
+  if (imagecache_external_validate_host($url) === FALSE) {
     return FALSE;
   }
 
-  $list = preg_split('/\s+/', variable_get('imagecache_external_hosts', ''));
-
-  // Check if the list is set as a blacklist and the host is in the list or if
-  // the list is set as a whitelist and the host is not found in the list. Note
-  // that this is retrospective; a previously downloaded image can be blocked.
-  if (((variable_get('imagecache_external_option', 'white') == 'black' &&
-       in_array($host, $list)) ||
-      (variable_get('imagecache_external_option', 'white') == 'white' &&
-       !in_array($host, $list))) &&
-      !user_access('Bypass black/white list')) {
-    // If we are unsuccessful then log a message in watchdog.
-    watchdog('imagecache_external', 'The image %url could not be retrieved, it did not meet the black/white list requirements.', array('%url' => $url));
-    return FALSE;
-  }
-
-  if (!user_access('Fetch external images')) {
-    watchdog('imagecache_external', 'The image %url could not be retrieved, the user does not have permission to fetch external images.', array('%url' => $url));
-    return FALSE;
-  }
   $result = drupal_http_request($url);
   $code   = floor($result->code / 100) * 100;
   $types  = imagecache_external_allowed_mimetypes();
-  if (isset($result->data) && $result->data && $code != 400 && $code != 500 && in_array($result->headers['content-type'], $types)) {
+
+  // If content-type not set, use the default 'application/octet-stream'.
+  $response_mimetype = isset($result->headers['content-type']) ? strtolower($result->headers['content-type']) : 'application/octet-stream';
+
+  // Add extension to the cached file to allow file_entity to use it for
+  // mimetype identification.
+  $cachepath_ext = pathinfo($cachepath, PATHINFO_EXTENSION);
+  if (!$cachepath_ext) {
+    require_once DRUPAL_ROOT . '/includes/file.mimetypes.inc';
+    $map = file_mimetype_mapping();
+    $mimetype_id = array_search($response_mimetype, $map['mimetypes']);
+    if ($mimetype_id !== FALSE) {
+      $cachepath_ext = array_search($mimetype_id, $map['extensions']);
+      $cachepath .= $cachepath_ext ? '.' . $cachepath_ext : '';
+    }
+  }
+
+  // Explode content-type to handle mimetypes with more than one
+  // property (eg. image/jpeg;charset=UTF-8).
+  $content_type_array = explode(';', $response_mimetype);
+  $content_type_allowed = FALSE;
+  foreach ($content_type_array as $content_type) {
+    if (in_array(strtolower($content_type), $types)) {
+      $content_type_allowed = TRUE;
+    }
+  }
+  if (!empty($result->data) && $code != 400 && $code != 500 && $content_type_allowed) {
     if (variable_get('imagecache_external_management', 'unmanaged') == 'unmanaged') {
       return file_unmanaged_save_data($result->data, $cachepath, FILE_EXISTS_REPLACE);
     }
@@ -321,6 +328,42 @@ function imagecache_external_fetch($url, $cachepath) {
     watchdog('imagecache_external', 'The image %url could not be retrieved', array('%url' => $url));
     return FALSE;
   }
+}
+
+/**
+ * Helper function to validate the image host against the whitelist.
+ *
+ * @param string $url
+ *   The URL of the image.
+ *
+ * @return boolean
+ *   Can the image be fetched or not?
+ */
+function imagecache_external_validate_host($url) {
+  // Extract the hostname from the url.
+  if (!($host = parse_url($url, PHP_URL_HOST))) {
+    return FALSE;
+  }
+
+  // Check if a whitelist is used and if the host is in the list.
+  if (variable_get('imagecache_external_use_whitelist', TRUE)) {
+    $list = preg_split('/\s+/', variable_get('imagecache_external_hosts', ''));
+
+    $validhost = FALSE;
+    foreach ($list as $ext_host) {
+      if (preg_match('/\.?' . $ext_host . '/', $host) == 1) {
+        $validhost = TRUE;
+        break;
+      }
+    }
+    if (!$validhost) {
+      // If we are unsuccessful then log a message in watchdog.
+      watchdog('imagecache_external', 'The image %url could not be retrieved, it did not meet the whitelist requirements.', array('%url' => $url));
+      return FALSE;
+    }
+  }
+
+  return TRUE;
 }
 
 /**
@@ -342,7 +385,7 @@ function imagecache_external_module_implements_alter(&$implementations, $hook) {
  * When using the private file system, we have to let Drupal know it's OK to
  * download images from our Imagecache External directory.
  *
- * @return
+ * @return array
  *   An array keyed with HTTP Headers.
  */
 function imagecache_external_file_download($uri) {
@@ -367,15 +410,15 @@ function imagecache_external_file_download($uri) {
 /**
  * Helper function to flush caches.
  *
- * @return
+ * @return boolean
  *   A Boolean value to indicate that the operation succeeded.
  */
 function imagecache_external_flush_cache() {
-  $scheme = file_default_scheme();
-  $wrapper= file_stream_wrapper_get_instance_by_scheme($scheme);
-  $path   = realpath($wrapper->getDirectoryPath() . '/' . variable_get('imagecache_directory', 'externals'));
+  $scheme  = file_default_scheme();
+  $wrapper = file_stream_wrapper_get_instance_by_scheme($scheme);
+  $path    = realpath($wrapper->getDirectoryPath() . '/' . variable_get('imagecache_directory', 'externals'));
   if (is_dir($path)) {
-    if (file_unmanaged_delete_recursive($path)){
+    if (file_unmanaged_delete_recursive($path)) {
       watchdog('imagecache_external', 'Imagecache caches have been flushed');
       return TRUE;
     }
@@ -384,19 +427,18 @@ function imagecache_external_flush_cache() {
 }
 
 /**
- * Helper function to return the mimetypes that are allowed for
- * external caching.
+ * Helper function that returns allowed mimetypes for external caching.
  *
- * @return
- *   An array of mimetypes.
+ * @return array
+ *   The allowed mimetypes.
  */
 function imagecache_external_allowed_mimetypes() {
-  return array(
+  return variable_get('imagecache_external_allowed_mimetypes', array(
     'image/jpg',
     'image/jpeg',
+    'image/jpeg;charset=utf-8',
     'image/png',
     'image/gif',
     'application/octet-stream',
-  );
+  ));
 }
-
