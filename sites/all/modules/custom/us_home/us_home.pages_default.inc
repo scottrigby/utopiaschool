@@ -145,6 +145,81 @@ function us_home_default_page_manager_pages() {
     $display->content['new-2efc186e-ffef-4f88-99f1-3eeb5b7f39c5'] = $pane;
     $display->panels['header'][0] = 'new-2efc186e-ffef-4f88-99f1-3eeb5b7f39c5';
     $pane = new stdClass();
+    $pane->pid = 'new-8ae9c763-793e-413f-bcdc-a3f82bb7f080';
+    $pane->panel = 'header';
+    $pane->type = 'custom';
+    $pane->subtype = 'custom';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'admin_title' => 'Dome of visions',
+      'title' => 'Slumber Party Fall 2015 Copenhagen (Dome of Visions)',
+      'body' => '<p><strong>@Dome of Visions</strong><br />
+1016, Søren Kierkegaards Pl., in Copenhagen.</p>
+
+<p><strong>Update: deadline extended to Sept 14th!</strong></p>
+
+<p><em>Utopia School</em> will hold a three-day slumber party for interested people – near and far – at the <a href="http://domeofvisions.dk/">Dome of Visions</a> in Copenhagen, beginning on Friday, October 16th and adjourning on Sunday, October 18th.</p>
+
+<p>Those who wish to contribute either by leading a class and/or joining as a live-in participant, please <a href="/contact">get in touch with us</a>&nbsp;by Sept 1st, 2015. If you’re late, contact us anyway, we want to hear from you! Some of the sessions at the school will be available to join remotely. Please check the evolving online schedule to participate.</p>
+
+<p><a class="button" href="/slumber-fall-2015-party-copenhagen">Read more</a></p>
+
+<p><a class="button" href="/contact">Submit a proposal / Contact us</a></p>
+
+<hr />
+<p>&nbsp;</p>
+',
+      'format' => 'full_html',
+      'substitute' => TRUE,
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 1;
+    $pane->locks = array();
+    $pane->uuid = '8ae9c763-793e-413f-bcdc-a3f82bb7f080';
+    $display->content['new-8ae9c763-793e-413f-bcdc-a3f82bb7f080'] = $pane;
+    $display->panels['header'][1] = 'new-8ae9c763-793e-413f-bcdc-a3f82bb7f080';
+    $pane = new stdClass();
+    $pane->pid = 'new-890b59ad-4df5-4a05-9c99-ad4b869c8e0a';
+    $pane->panel = 'header';
+    $pane->type = 'custom';
+    $pane->subtype = 'custom';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'admin_title' => 'Left Forum',
+      'title' => 'Report Back and Planning Session 2015 NYC (Left Forum)',
+      'body' => '<p><strong>@Left Forum</strong>&nbsp;(Manhattan)<br />
+John Jay College of Criminal Justice, The City University of New York<br />
+524 West 59th st, New York, NY 10019</p>
+
+<p><strong>Sat&nbsp;3:15pm - 05:00pm&nbsp;in Room 8.67</strong></p>
+
+<p>This year\'s theme of Left Forum is&nbsp;"No Justice, No Peace: Confronting the Crises of Capitalism and Democracy”.&nbsp;This year even features 1,600 Speakers and 420 Panels, Workshops and events.&nbsp;Please register online at <a href="http://www.leftforum.org">www.leftforum.org</a>.</p>
+
+<hr />
+<p>&nbsp;</p>
+',
+      'format' => 'filtered_html',
+      'substitute' => TRUE,
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 2;
+    $pane->locks = array();
+    $pane->uuid = '890b59ad-4df5-4a05-9c99-ad4b869c8e0a';
+    $display->content['new-890b59ad-4df5-4a05-9c99-ad4b869c8e0a'] = $pane;
+    $display->panels['header'][2] = 'new-890b59ad-4df5-4a05-9c99-ad4b869c8e0a';
+    $pane = new stdClass();
     $pane->pid = 'new-9fe6eea1-5beb-42cc-9507-113a9e59ac8f';
     $pane->panel = 'header';
     $pane->type = 'custom';
@@ -181,11 +256,11 @@ SATURDAY, MARCH 21ST, 1:30PM – 3:30PM</h3>
     );
     $pane->css = array();
     $pane->extras = array();
-    $pane->position = 1;
+    $pane->position = 3;
     $pane->locks = array();
     $pane->uuid = '9fe6eea1-5beb-42cc-9507-113a9e59ac8f';
     $display->content['new-9fe6eea1-5beb-42cc-9507-113a9e59ac8f'] = $pane;
-    $display->panels['header'][1] = 'new-9fe6eea1-5beb-42cc-9507-113a9e59ac8f';
+    $display->panels['header'][3] = 'new-9fe6eea1-5beb-42cc-9507-113a9e59ac8f';
     $pane = new stdClass();
     $pane->pid = 'new-eda2453f-17d4-4e07-aff9-de44e739a1ee';
     $pane->panel = 'sidebar';
