@@ -5,3 +5,25 @@
  */
 
 include_once 'us_contact.features.inc';
+
+/**
+ * Implements hook_field_access().
+ *
+ * Note field_permissions module is overkill here.
+ */
+function us_contact_field_access($op, $field, $entity_type, $entity, $account) {
+  $is_committee = in_array('committee', $account->roles);
+
+
+  $fields = array(
+    'field_internal_notes',
+    'field_internal_contact',
+    'field_internal_status',
+    'field_related_classes',
+  );
+  if (in_array($field['field_name'], $fields) && $op == 'edit') {
+    return $is_committee;
+  }
+
+  return TRUE;
+}
