@@ -15,6 +15,7 @@ function us_contact_user_default_permissions() {
     'name' => 'edit any entityform',
     'roles' => array(
       'administrator' => 'administrator',
+      'committee' => 'committee',
     ),
     'module' => 'entityform',
   );
