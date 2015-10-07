@@ -24,3 +24,218 @@ function us_contact_field_access($op, $field, $entity_type, $entity, $account) {
 
   return TRUE;
 }
+
+/**
+ * Implements hook_action_info().
+ */
+function us_contact_action_info() {
+  return array(
+    'us_contact_action_create_class_from_submission' => array(
+      'type' => 'entityform',
+      'label' => 'Create class from contact submission',
+      'configurable' => TRUE,
+      'behavior' => array('views_property'),
+      // Passes the views row to the $context param of the action callback.
+      'pass rows' => TRUE,
+    ),
+  );
+}
+
+/**
+ * Configurable form for us_contact_action_create_class_from_submission().
+ */
+function us_contact_action_create_class_from_submission_form($settings, &$form_state) {
+  $form = array();
+  $form['title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Class title'),
+    '#maxlength' => 255,
+    '#required' => TRUE,
+    '#default_value' => isset($settings['settings']['title']) ? $settings['settings']['title'] : '',
+  );
+  return $form;
+}
+
+/**
+ * Submit handler for us_contact_action_create_class_from_submission().
+ */
+function us_contact_action_create_class_from_submission_submit($form, $form_state) {
+  $return = array();
+  $return['title'] = $form_state['values']['title'];
+  return $return;
+}
+
+/**
+ * Action callback to create a Class Node from a contact Entityform.
+ *
+ * @param object $entity
+ *   Selected entity from view to perform action with.
+ *
+ * @param array $context
+ *   Associative array of context info, including view, options, and rows.
+ *
+ **/
+function us_contact_action_create_class_from_submission(&$entity, $context) {
+  // First check user.
+  $new_account = FALSE;
+  if (!$account = user_load_by_mail($entity->field_email[LANGUAGE_NONE][0]['email'])) {
+    $username = $entity->field_name[LANGUAGE_NONE][0]['safe_value'];
+    $email = $entity->field_email[LANGUAGE_NONE][0]['email'];
+
+    // Create user is none exists, and send standard welcome message.
+    $account = us_contact_create_user($username, $email);
+    us_contact_create_profile($account);
+
+    $new_account = TRUE;
+  }
+
+  // Create class from contact form.
+  $title = $context['title'];
+  $body = $entity->field_message[LANGUAGE_NONE][0]['safe_value'];
+  $session = $entity->field_session_s_[LANGUAGE_NONE][0]['target_id'];
+  $class = us_contact_create_class($account, $title, $body, $session);
+
+  // Save user as author of entityform submission.
+  $entityform = entityform_load($entity->entityform_id);
+  $entityform->setUser($account);
+  // Add new class to entityform entityreference field.
+  $entityform->field_related_classes[LANGUAGE_NONE][] = array(
+    'target_id' => $class->nid,
+    'target_type' => 'node',
+  );
+  $entityform->changed = REQUEST_TIME;
+  $entityform->save();
+
+  // Subscribe the admin who created the class (so they can follow any
+  // activity).
+  global $user;
+  $flag = flag_get_flag('subscribe_class');
+  $flag->flag('flag', $class->nid, user_load($user->uid), TRUE);
+
+  // Send another email, notifying the contact form submitter that a new account
+  // and class has been created.
+  us_contact_created_class_notify_user($account, $class, $new_account);
+}
+
+/**
+ * Creates a US user account with a random password.
+ *
+ * @param $username
+ * @param $email
+ * @return \stdClass
+ *   A newly created user object.
+ * @throws \Exception
+ */
+function us_contact_create_user($username, $email) {
+  $password = user_password(40);
+  $account = array(
+    'name' => $username,
+    'pass' => $password,
+    'mail' => $email,
+    'status' => 1,
+    'init' => $email,
+    'roles' => array(DRUPAL_AUTHENTICATED_RID => TRUE),
+  );
+  // Also list in directory.
+  $account['field_directory'][LANGUAGE_NONE][0]['value'] = 'yes';
+
+  return user_save(NULL, $account);
+}
+
+/**
+ * Creates a US user profile.
+ *
+ * @param $account
+ */
+function us_contact_create_profile($account) {
+  // Profile2 required fields.
+  if (!$profile = profile2_load_by_user($account, 'main')) {
+    $profile = profile2_create(array('user' => $account, 'type' => 'main'));
+  }
+  $profile->field_name[LANGUAGE_NONE][0]['value'] = $account->name;
+  profile2_save($profile);
+}
+
+/**
+ * Creates a Class node.
+ *
+ * @param $account
+ * @param $title
+ * @param $body
+ * @param $session
+ * @return \stdClass
+ *   The Class Node object.
+ * @throws \Exception
+ */
+function us_contact_create_class($account, $title, $body, $session) {
+  $node = new stdClass();
+  $node->type = 'class';
+  $node->language = LANGUAGE_NONE;
+  node_object_prepare($node);
+  $node->uid = $account->uid;
+  $node->title = $title;
+  $node->body[LANGUAGE_NONE][0]['value'] = $body;
+  $node->body[LANGUAGE_NONE][0]['format'] = 'filtered_html';
+  $node->field_facilitators[LANGUAGE_NONE][] = array(
+    'target_id' => $account->uid,
+    'target_type' => 'user',
+  );
+  $node->field_session_s_[LANGUAGE_NONE][] = array(
+    'target_id' => $session,
+    'target_type' => 'node',
+  );
+  node_save($node);
+
+  return $node;
+}
+
+/**
+ * Implements hook_mail().
+ */
+function us_contact_mail($key, &$message, $params) {
+  $message['subject'] = $params['subject'];
+  $message['body'][] = $params['body'];
+}
+
+/**
+ * Notifies the contact form submitter about their new site account and class.
+ *
+ * @param $account
+ * @param $class
+ * @param $new_account
+ *   Whether or not the account was newly created. If so, we want to consolidate
+ *   the standard welcome message into this one rather than send two.
+ *
+ * @see _user_mail_notify()
+ */
+function us_contact_created_class_notify_user($account, $class, $new_account) {
+  $body[] = 'Hi [user:name],';
+  $body[] = 'Based on your contact form submission, a site administrator at [site:name] has created a class proposal for you, provisionally titled "[node:title]".';
+
+  if ($new_account) {
+    $body[] = 'A new account has also been automatically created for you so that you can edit your class proposal. You may now log in by clicking this link or copying and pasting it to your browser:
+[user:one-time-login-url]';
+    $body[] = 'This link can only be used once to log in and will lead you to a page where you can set your password.';
+    $body[] = 'After setting your password, you will be able to log in at [site:login-url] in the future using:
+username: [user:name]
+password: Your password';
+  }
+
+  $body[] = 'Once you log in, you may edit your class proposal at:
+[node:url]';
+  $body[] = "Please also consider adding a personal photo (the 'Edit' tab at [current-user:url]), and also a few words to your profile (the 'Public profile' tab on your account edit form). This will help other members of the Utopia School community get to know each other.";
+  $body[] = 'Thanks, and looking forward!';
+  $body[] = '--  [site:name] team';
+
+  $raw_values = array(
+    'subject' => '[site:name]: An administrator created an account and class proposal for you: "[node:title]"',
+    'body'  => implode("\n\n", $body),
+  );
+
+  $message = array();
+  foreach ($raw_values as $k => $v) {
+    $message[$k] = token_replace(t($v), array('node' => $class, 'user' => $account), array('callback' => 'user_mail_tokens', 'sanitize' => FALSE, 'clear' => TRUE));
+  }
+
+  drupal_mail('us_notifications', 'us_notifications_mail', $account->mail, user_preferred_language($account), $message);
+}
