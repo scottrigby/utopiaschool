@@ -119,7 +119,7 @@ function us_contact_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'class' => 'class',
   );
-  /* Filter criterion: Content: Session(s) (field_session_s_) */
+  /* Filter criterion: Field: Session(s) (field_session_s_) */
   $handler->display->display_options['filters']['field_session_s__target_id']['id'] = 'field_session_s__target_id';
   $handler->display->display_options['filters']['field_session_s__target_id']['table'] = 'field_data_field_session_s_';
   $handler->display->display_options['filters']['field_session_s__target_id']['field'] = 'field_session_s__target_id';
@@ -314,6 +314,21 @@ function us_contact_views_default_views() {
     ),
   );
   $handler->display->display_options['fields']['field_related_classes']['delta_offset'] = '0';
+  /* Field: Field: Session(s) */
+  $handler->display->display_options['fields']['field_session_s_']['id'] = 'field_session_s_';
+  $handler->display->display_options['fields']['field_session_s_']['table'] = 'field_data_field_session_s_';
+  $handler->display->display_options['fields']['field_session_s_']['field'] = 'field_session_s_';
+  $handler->display->display_options['fields']['field_session_s_']['label'] = 'Related session(s)';
+  $handler->display->display_options['fields']['field_session_s_']['type'] = 'editable';
+  $handler->display->display_options['fields']['field_session_s_']['settings'] = array(
+    'click_to_edit' => 1,
+    'empty_text' => '',
+    'fallback_format' => 'entityreference_label',
+    'fallback_settings' => array(
+      'link' => 1,
+    ),
+  );
+  $handler->display->display_options['fields']['field_session_s_']['delta_offset'] = '0';
   /* Sort criterion: Entityform: Date submitted */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'entityform';

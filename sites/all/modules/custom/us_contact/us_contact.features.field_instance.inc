@@ -253,6 +253,39 @@ function us_contact_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'entityform-contact-field_session_s_'
+  $field_instances['entityform-contact-field_session_s_'] = array(
+    'bundle' => 'contact',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 7,
+      ),
+    ),
+    'entity_type' => 'entityform',
+    'field_name' => 'field_session_s_',
+    'label' => 'Related sessions',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'multiple_selects',
+      'settings' => array(),
+      'type' => 'multiple_selects',
+      'weight' => 10,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('Email');
@@ -262,6 +295,7 @@ function us_contact_field_default_field_instances() {
   t('Message');
   t('Name');
   t('Related classes');
+  t('Related sessions');
 
   return $field_instances;
 }
