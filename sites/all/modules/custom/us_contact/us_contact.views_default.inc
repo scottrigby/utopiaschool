@@ -119,7 +119,7 @@ function us_contact_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'class' => 'class',
   );
-  /* Filter criterion: Field: Session(s) (field_session_s_) */
+  /* Filter criterion: Field: Related sessions (field_session_s_) */
   $handler->display->display_options['filters']['field_session_s__target_id']['id'] = 'field_session_s__target_id';
   $handler->display->display_options['filters']['field_session_s__target_id']['table'] = 'field_data_field_session_s_';
   $handler->display->display_options['filters']['field_session_s__target_id']['field'] = 'field_session_s__target_id';
@@ -169,10 +169,13 @@ function us_contact_views_default_views() {
   $handler->display->display_options['exposed_form']['options']['reset_button'] = TRUE;
   $handler->display->display_options['exposed_form']['options']['autosubmit'] = TRUE;
   $handler->display->display_options['pager']['type'] = 'full';
-  $handler->display->display_options['pager']['options']['items_per_page'] = '5';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '10';
   $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['pager']['options']['id'] = '0';
   $handler->display->display_options['pager']['options']['quantity'] = '9';
+  $handler->display->display_options['pager']['options']['expose']['items_per_page'] = TRUE;
+  $handler->display->display_options['pager']['options']['expose']['items_per_page_options'] = '10, 25, 50';
+  $handler->display->display_options['pager']['options']['expose']['items_per_page_options_all'] = TRUE;
   $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
     'created' => 'created',
@@ -314,7 +317,7 @@ function us_contact_views_default_views() {
     ),
   );
   $handler->display->display_options['fields']['field_related_classes']['delta_offset'] = '0';
-  /* Field: Field: Session(s) */
+  /* Field: Field: Related sessions */
   $handler->display->display_options['fields']['field_session_s_']['id'] = 'field_session_s_';
   $handler->display->display_options['fields']['field_session_s_']['table'] = 'field_data_field_session_s_';
   $handler->display->display_options['fields']['field_session_s_']['field'] = 'field_session_s_';
@@ -342,7 +345,7 @@ function us_contact_views_default_views() {
     'contact' => 'contact',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
-  /* Filter criterion: Field: Session(s) (field_session_s_) */
+  /* Filter criterion: Field: Related sessions (field_session_s_) */
   $handler->display->display_options['filters']['field_session_s__target_id']['id'] = 'field_session_s__target_id';
   $handler->display->display_options['filters']['field_session_s__target_id']['table'] = 'field_data_field_session_s_';
   $handler->display->display_options['filters']['field_session_s__target_id']['field'] = 'field_session_s__target_id';
