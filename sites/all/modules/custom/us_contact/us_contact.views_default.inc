@@ -167,7 +167,6 @@ function us_contact_views_default_views() {
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['exposed_form']['options']['submit_button'] = 'Filter';
   $handler->display->display_options['exposed_form']['options']['reset_button'] = TRUE;
-  $handler->display->display_options['exposed_form']['options']['autosubmit'] = TRUE;
   $handler->display->display_options['pager']['type'] = 'full';
   $handler->display->display_options['pager']['options']['items_per_page'] = '10';
   $handler->display->display_options['pager']['options']['offset'] = '0';
@@ -390,6 +389,23 @@ function us_contact_views_default_views() {
   $handler->display->display_options['filters']['field_internal_contact_target_id']['expose']['operator'] = 'field_internal_contact_target_id_op';
   $handler->display->display_options['filters']['field_internal_contact_target_id']['expose']['identifier'] = 'field_internal_contact_target_id';
   $handler->display->display_options['filters']['field_internal_contact_target_id']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+    6 => 0,
+  );
+  /* Filter criterion: Field: Name (field_name) */
+  $handler->display->display_options['filters']['field_name_value']['id'] = 'field_name_value';
+  $handler->display->display_options['filters']['field_name_value']['table'] = 'field_data_field_name';
+  $handler->display->display_options['filters']['field_name_value']['field'] = 'field_name_value';
+  $handler->display->display_options['filters']['field_name_value']['operator'] = 'contains';
+  $handler->display->display_options['filters']['field_name_value']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_name_value']['expose']['operator_id'] = 'field_name_value_op';
+  $handler->display->display_options['filters']['field_name_value']['expose']['label'] = 'Name contains';
+  $handler->display->display_options['filters']['field_name_value']['expose']['operator'] = 'field_name_value_op';
+  $handler->display->display_options['filters']['field_name_value']['expose']['identifier'] = 'field_name_value';
+  $handler->display->display_options['filters']['field_name_value']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
     3 => 0,
