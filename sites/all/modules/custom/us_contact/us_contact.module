@@ -238,4 +238,10 @@ password: Your password';
   }
 
   drupal_mail('us_notifications', 'us_notifications_mail', $account->mail, user_preferred_language($account), $message);
+
+  $creation_type = $new_account ? 'account and class' : 'class';
+  $log_message = 'Sent automated %creation_type creation e-mail to %to.';
+  $variables = array('%to' => $account->mail, '%creation_type' => $creation_type);
+  watchdog('mail', $log_message . ' Message body:' . $message['body'], $variables, WATCHDOG_INFO);
+  drupal_set_message(t($log_message, $variables));
 }
