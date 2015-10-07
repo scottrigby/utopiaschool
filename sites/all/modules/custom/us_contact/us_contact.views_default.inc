@@ -341,10 +341,29 @@ function us_contact_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'contact' => 'contact',
   );
+  $handler->display->display_options['filters']['type']['group'] = 1;
+  /* Filter criterion: Field: Session(s) (field_session_s_) */
+  $handler->display->display_options['filters']['field_session_s__target_id']['id'] = 'field_session_s__target_id';
+  $handler->display->display_options['filters']['field_session_s__target_id']['table'] = 'field_data_field_session_s_';
+  $handler->display->display_options['filters']['field_session_s__target_id']['field'] = 'field_session_s__target_id';
+  $handler->display->display_options['filters']['field_session_s__target_id']['group'] = 1;
+  $handler->display->display_options['filters']['field_session_s__target_id']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_session_s__target_id']['expose']['operator_id'] = 'field_session_s__target_id_op';
+  $handler->display->display_options['filters']['field_session_s__target_id']['expose']['label'] = 'Related sessions';
+  $handler->display->display_options['filters']['field_session_s__target_id']['expose']['operator'] = 'field_session_s__target_id_op';
+  $handler->display->display_options['filters']['field_session_s__target_id']['expose']['identifier'] = 'field_session_s__target_id';
+  $handler->display->display_options['filters']['field_session_s__target_id']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+    6 => 0,
+  );
   /* Filter criterion: Entityform: Internal status (field_internal_status) */
   $handler->display->display_options['filters']['field_internal_status_value']['id'] = 'field_internal_status_value';
   $handler->display->display_options['filters']['field_internal_status_value']['table'] = 'field_data_field_internal_status';
   $handler->display->display_options['filters']['field_internal_status_value']['field'] = 'field_internal_status_value';
+  $handler->display->display_options['filters']['field_internal_status_value']['group'] = 1;
   $handler->display->display_options['filters']['field_internal_status_value']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_internal_status_value']['expose']['operator_id'] = 'field_internal_status_value_op';
   $handler->display->display_options['filters']['field_internal_status_value']['expose']['label'] = 'Internal status';
@@ -361,6 +380,7 @@ function us_contact_views_default_views() {
   $handler->display->display_options['filters']['field_internal_contact_target_id']['id'] = 'field_internal_contact_target_id';
   $handler->display->display_options['filters']['field_internal_contact_target_id']['table'] = 'field_data_field_internal_contact';
   $handler->display->display_options['filters']['field_internal_contact_target_id']['field'] = 'field_internal_contact_target_id';
+  $handler->display->display_options['filters']['field_internal_contact_target_id']['group'] = 1;
   $handler->display->display_options['filters']['field_internal_contact_target_id']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_internal_contact_target_id']['expose']['operator_id'] = 'field_internal_contact_target_id_op';
   $handler->display->display_options['filters']['field_internal_contact_target_id']['expose']['label'] = 'Internal contact';
