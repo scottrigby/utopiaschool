@@ -223,6 +223,7 @@ password: Your password';
 
   $body[] = 'Once you log in, you may edit your class proposal at:
 [node:url]';
+  $body[] = "To make this a more open process, whenever possible let's try to use the comments on your class to discuss, plan, and organize the class. The comments have built-in email notification for anyone facilitating or following the class – you, us and anyone else interested (if you have any questions or concerns about the comments, always feel free to reach out to us on our contact form or directly).";
   $body[] = "Please also consider adding a personal photo (the 'Edit' tab at [current-user:url]), and also a few words to your profile (the 'Public profile' tab on your account edit form). This will help other members of the Utopia School community get to know each other.";
   $body[] = 'Thanks, and looking forward!';
   $body[] = '--  [site:name] team';
