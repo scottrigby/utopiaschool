@@ -25,7 +25,11 @@ function us_classes_field_default_field_instances() {
       'default' => array(
         'label' => 'above',
         'module' => 'list',
-        'settings' => array(),
+        'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
+        ),
         'type' => 'list_default',
         'weight' => 0,
       ),
@@ -56,7 +60,11 @@ function us_classes_field_default_field_instances() {
       'default' => array(
         'label' => 'above',
         'module' => 'text',
-        'settings' => array(),
+        'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
+        ),
         'type' => 'text_default',
         'weight' => 5,
       ),
@@ -103,7 +111,10 @@ function us_classes_field_default_field_instances() {
           'controls' => 1,
           'download_link' => 1,
           'download_text' => 'Download',
+          'field_wrapper' => 0,
           'height' => 30,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
           'width' => 300,
         ),
         'type' => 'mediaelement_audio',
@@ -161,8 +172,11 @@ function us_classes_field_default_field_instances() {
         'label' => 'above',
         'module' => 'date',
         'settings' => array(
+          'field_wrapper' => 0,
           'format_type' => 'long',
           'fromto' => 'both',
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
@@ -174,8 +188,11 @@ function us_classes_field_default_field_instances() {
         'label' => 'inline',
         'module' => 'date',
         'settings' => array(
+          'field_wrapper' => 0,
           'format_type' => 'long',
           'fromto' => 'both',
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
@@ -258,8 +275,11 @@ function us_classes_field_default_field_instances() {
         'label' => 'above',
         'module' => 'image',
         'settings' => array(
+          'field_wrapper' => 0,
           'image_link' => '',
           'image_style' => 'large',
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
         ),
         'type' => 'image',
         'weight' => 7,
@@ -310,6 +330,9 @@ function us_classes_field_default_field_instances() {
         'label' => 'above',
         'module' => 'entityreference',
         'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
           'link' => 1,
         ),
         'type' => 'entityreference_label',
@@ -349,6 +372,9 @@ function us_classes_field_default_field_instances() {
         'label' => 'inline',
         'module' => 'entityreference',
         'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -358,6 +384,9 @@ function us_classes_field_default_field_instances() {
         'label' => 'inline',
         'module' => 'entityreference',
         'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
@@ -394,14 +423,22 @@ function us_classes_field_default_field_instances() {
       'default' => array(
         'label' => 'inline',
         'module' => 'list',
-        'settings' => array(),
+        'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
+        ),
         'type' => 'list_default',
         'weight' => 1,
       ),
       'teaser' => array(
         'label' => 'inline',
         'module' => 'list',
-        'settings' => array(),
+        'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
+        ),
         'type' => 'list_default',
         'weight' => 4,
       ),
@@ -433,6 +470,9 @@ function us_classes_field_default_field_instances() {
         'label' => 'inline',
         'module' => 'textformatter',
         'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
           'textformatter_class' => 'textformatter-list',
           'textformatter_comma_and' => 0,
           'textformatter_comma_full_stop' => 0,
@@ -452,6 +492,9 @@ function us_classes_field_default_field_instances() {
         'label' => 'inline',
         'module' => 'textformatter',
         'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
           'textformatter_class' => 'textformatter-list',
           'textformatter_comma_and' => 0,
           'textformatter_comma_full_stop' => 0,
@@ -498,7 +541,11 @@ function us_classes_field_default_field_instances() {
       'default' => array(
         'label' => 'inline',
         'module' => 'link',
-        'settings' => array(),
+        'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
+        ),
         'type' => 'link_default',
         'weight' => 9,
       ),
@@ -558,8 +605,11 @@ function us_classes_field_default_field_instances() {
           'autoplay' => 0,
           'byline' => 1,
           'color' => '00adef',
+          'field_wrapper' => 0,
           'height' => 281,
+          'item_wrapper' => 0,
           'js_api' => 0,
+          'label_wrapper' => 0,
           'loop' => 0,
           'portrait' => 1,
           'title' => 1,
@@ -620,14 +670,21 @@ function us_classes_field_default_field_instances() {
       'default' => array(
         'label' => 'hidden',
         'module' => 'text',
-        'settings' => array(),
+        'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
+        ),
         'type' => 'text_default',
-        'weight' => 0,
+        'weight' => 3,
       ),
       'teaser' => array(
         'label' => 'hidden',
         'module' => 'text',
         'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
           'trim_length' => 600,
         ),
         'type' => 'text_summary_or_trimmed',
@@ -651,7 +708,60 @@ function us_classes_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 2,
+      'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance: 'node-session-field_image'
+  $field_instances['node-session-field_image'] = array(
+    'bundle' => 'session',
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'image',
+        'settings' => array(
+          'field_wrapper' => 0,
+          'image_link' => '',
+          'image_style' => 'large',
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
+        ),
+        'type' => 'image',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_image',
+    'label' => 'Image',
+    'required' => 0,
+    'settings' => array(
+      'alt_field' => 0,
+      'default_image' => 0,
+      'file_directory' => '',
+      'file_extensions' => 'png gif jpg jpeg',
+      'max_filesize' => '',
+      'max_resolution' => '',
+      'min_resolution' => '',
+      'title_field' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'image',
+      'settings' => array(
+        'preview_image_style' => 'thumbnail',
+        'progress_indicator' => 'throbber',
+      ),
+      'type' => 'image_image',
+      'weight' => 3,
     ),
   );
 
@@ -662,10 +772,20 @@ function us_classes_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 1,
+        'label' => 'hidden',
+        'module' => 'date',
+        'settings' => array(
+          'field_wrapper' => 'h2',
+          'format_type' => 'short',
+          'fromto' => 'both',
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
+          'multiple_from' => '',
+          'multiple_number' => '',
+          'multiple_to' => '',
+        ),
+        'type' => 'date_default',
+        'weight' => 0,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -702,6 +822,50 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-session-field_session_location'
+  $field_instances['node-session-field_session_location'] = array(
+    'bundle' => 'session',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
+        ),
+        'type' => 'text_default',
+        'weight' => 1,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_session_location',
+    'label' => 'Main location info',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 1,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 5,
+      ),
+      'type' => 'text_textarea',
+      'weight' => 2,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('Accepted classes with dates will appear on the public calendar.');
@@ -711,8 +875,10 @@ function us_classes_field_default_field_instances() {
   t('Dates');
   t('Description');
   t('Facilitators');
+  t('Image');
   t('Images');
   t('Interest');
+  t('Main location info');
   t('Optional link to TPS class or proposal (example: <em>http://ThePublicSchool.org/node/1</em>).');
   t('Resources');
   t('Session dates');

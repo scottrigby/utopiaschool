@@ -251,6 +251,27 @@ function us_classes_field_default_field_bases() {
     'type' => 'datetime',
   );
 
+  // Exported field_base: 'field_session_location'
+  $field_bases['field_session_location'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_session_location',
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'profile2_private' => FALSE,
+    ),
+    'translatable' => 0,
+    'type' => 'text_long',
+  );
+
   // Exported field_base: 'field_session_s_'
   $field_bases['field_session_s_'] = array(
     'active' => 1,
