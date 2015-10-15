@@ -4,6 +4,7 @@ package = Features
 dependencies[] = date
 dependencies[] = entityreference
 dependencies[] = fe_block
+dependencies[] = field_wrappers
 dependencies[] = flag
 dependencies[] = flagging_inline
 dependencies[] = image
