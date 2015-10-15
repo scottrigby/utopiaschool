@@ -65,3 +65,50 @@ function us_kalatheme_preprocess_comment(&$variables) {
   $user_picture = theme('user_picture', array('account' => user_load($variables['comment']->uid), 'user_picture_style' => 'tiny'));
   $variables['submitted'] = t('!user_picture Posted by !username on <time datetime="!datetime">!date</time>', array('!username' => $variables['author'], '!user_picture' => $user_picture, '!datetime' => $variables['comment']->created, '!date' => $variables['created']));
 }
+
+/**
+ * Implements theme_date_display_range().
+ *
+ * See @link https://gist.github.com/reubenmoes/ef129ab50fe8f971ae61 this gist. @endlink
+ *
+ * @todo Fine tune this later. For now just get it done for Copenhagen :)
+ */
+function us_kalatheme_date_display_range($variables) {
+  $timezone = $variables['timezone'];
+  $attributes_start = $variables['attributes_start'];
+  $attributes_end = $variables['attributes_end'];
+  $start_time = strtotime($variables['dates']['value']['formatted_iso']);
+  $end_time = strtotime($variables['dates']['value2']['formatted_iso']);
+
+  // Different year.
+  if ((date('Y', $start_time) != date('Y', $end_time))) {
+    $date1 = date('M j, Y', $start_time);
+    $date2 = date('M j, Y', $end_time);
+  }
+  // Different Month of the same year.
+  elseif ((date('F', $start_time) != date('F', $end_time))) {
+    $date1 = date('M j', $start_time);
+    $date2 = date('M j, Y', $end_time);
+  }
+  // Different day in the month.
+  else {
+    $date1 = date('M j', $start_time);
+    $date2 = date('j, Y', $end_time);
+  }
+
+  $start_date = '<span class="date-display-start"' . drupal_attributes($attributes_start) . '>' . $date1 . '</span>';
+  $end_date = '<span class="date-display-end"' . drupal_attributes($attributes_end) . '>' . $date2 . $timezone . '</span>';
+
+  // If microdata attributes for the start date property have been passed in,
+  // add the microdata in meta tags.
+  if (!empty($variables['add_microdata'])) {
+    $start_date .= '<meta' . drupal_attributes($variables['microdata']['value']['#attributes']) . '/>';
+    $end_date .= '<meta' . drupal_attributes($variables['microdata']['value2']['#attributes']) . '/>';
+  }
+
+  // Wrap the result with the attributes.
+  return t('!start-date - !end-date', array(
+    '!start-date' => $start_date,
+    '!end-date' => $end_date,
+  ));
+}
