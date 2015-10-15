@@ -2,7 +2,29 @@
  * Kalatheme (http://drupal.org/project/kalatheme) 
  */
 
-/* Images */
+/* Session listing View */
+.view-sessions .session-listing-image {
+    float: left;
+    padding-right: 2em;
+}
+.view-sessions .session-listing-content {
+    display: block;
+    overflow: hidden;
+}
+.view-sessions .session-listing-content h2,
+.view-sessions .session-listing-content h3 {
+    margin-top: 0px;
+    margin-bottom: 20px;
+}
+.view-sessions .views-row {
+    padding-bottom: 21px;
+}
+.view-sessions .views-row:not(.views-row-last) {
+    margin-bottom: 21px;
+    border-bottom: 1px solid #777;
+}
+
+    /* Images */
 img {
     max-width: 100%;
     height: auto;
