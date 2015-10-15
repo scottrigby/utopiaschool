@@ -21,6 +21,31 @@ function us_classes_views_api($module = NULL, $api = NULL) {
 }
 
 /**
+ * Implements hook_fe_date_custom_date_formats().
+ */
+function us_classes_fe_date_custom_date_formats() {
+  $custom_date_formats = array();
+  $custom_date_formats['D, M j'] = 'D, M j';
+  $custom_date_formats['g:ia'] = 'g:ia';
+  $custom_date_formats['l, F j'] = 'l, F j';
+  return $custom_date_formats;
+}
+
+/**
+ * Implements hook_date_format_types().
+ */
+function us_classes_date_format_types() {
+  $format_types = array();
+  // Exported date format type: date_no_time
+  $format_types['date_no_time'] = 'Date no time';
+  // Exported date format type: long_no_year
+  $format_types['long_no_year'] = 'Long no year';
+  // Exported date format type: time_only
+  $format_types['time_only'] = 'Time only';
+  return $format_types;
+}
+
+/**
  * Implements hook_flag_default_flags().
  */
 function us_classes_flag_default_flags() {

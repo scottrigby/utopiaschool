@@ -403,6 +403,8 @@ function us_classes_menu_alter(&$items) {
     $items[$path]['page callback'] = 'us_classes_flagging_inline_edit_flagging';
     $items[$path]['page arguments'][] = $op;
   }
+
+  $items['node/%node/view']['title'] = 'Info';
 }
 
 /**

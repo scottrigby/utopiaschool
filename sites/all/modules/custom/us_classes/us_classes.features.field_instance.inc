@@ -773,18 +773,17 @@ function us_classes_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'date',
+        'module' => 'date_range_formatter',
         'settings' => array(
-          'field_wrapper' => 'h2',
-          'format_type' => 'short',
-          'fromto' => 'both',
-          'item_wrapper' => 0,
+          'field_wrapper' => 0,
+          'item_wrapper' => 'h2',
           'label_wrapper' => 0,
-          'multiple_from' => '',
-          'multiple_number' => '',
-          'multiple_to' => '',
+          'one_month' => 'M j - {j}, Y',
+          'several_months' => 'M j - {M} {j}, Y',
+          'several_years' => 'M j, Y - {M} {j}, {Y}',
+          'single' => 'M j, Y',
         ),
-        'type' => 'date_default',
+        'type' => 'date_range_without_time',
         'weight' => 0,
       ),
       'teaser' => array(
@@ -866,6 +865,50 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-session-field_session_schedule_text'
+  $field_instances['node-session-field_session_schedule_text'] = array(
+    'bundle' => 'session',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Static Session class schedule text.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
+        ),
+        'type' => 'text_default',
+        'weight' => 4,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_session_schedule_text',
+    'label' => 'Session schedule text',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 1,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'rows' => 5,
+      ),
+      'type' => 'text_textarea',
+      'weight' => 5,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('Accepted classes with dates will appear on the public calendar.');
@@ -882,7 +925,9 @@ function us_classes_field_default_field_instances() {
   t('Optional link to TPS class or proposal (example: <em>http://ThePublicSchool.org/node/1</em>).');
   t('Resources');
   t('Session dates');
+  t('Session schedule text');
   t('Session(s)');
+  t('Static Session class schedule text.');
   t('Status');
   t('TPS class');
   t('Topics');
