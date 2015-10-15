@@ -69,32 +69,14 @@ function us_kalatheme_preprocess_comment(&$variables) {
 /**
  * Implements theme_date_display_range().
  *
- * See @link https://gist.github.com/reubenmoes/ef129ab50fe8f971ae61 this gist. @endlink
- *
- * @todo Fine tune this later. For now just get it done for Copenhagen :)
+ * Change 'to' to a hyphen, rather than Drupal string replace for now.
  */
 function us_kalatheme_date_display_range($variables) {
+  $date1 = $variables['date1'];
+  $date2 = $variables['date2'];
   $timezone = $variables['timezone'];
   $attributes_start = $variables['attributes_start'];
   $attributes_end = $variables['attributes_end'];
-  $start_time = strtotime($variables['dates']['value']['formatted_iso']);
-  $end_time = strtotime($variables['dates']['value2']['formatted_iso']);
-
-  // Different year.
-  if ((date('Y', $start_time) != date('Y', $end_time))) {
-    $date1 = date('M j, Y', $start_time);
-    $date2 = date('M j, Y', $end_time);
-  }
-  // Different Month of the same year.
-  elseif ((date('F', $start_time) != date('F', $end_time))) {
-    $date1 = date('M j', $start_time);
-    $date2 = date('M j, Y', $end_time);
-  }
-  // Different day in the month.
-  else {
-    $date1 = date('M j', $start_time);
-    $date2 = date('j, Y', $end_time);
-  }
 
   $start_date = '<span class="date-display-start"' . drupal_attributes($attributes_start) . '>' . $date1 . '</span>';
   $end_date = '<span class="date-display-end"' . drupal_attributes($attributes_end) . '>' . $date2 . $timezone . '</span>';
