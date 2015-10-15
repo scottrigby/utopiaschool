@@ -404,7 +404,7 @@ function us_classes_menu_alter(&$items) {
     $items[$path]['page arguments'][] = $op;
   }
 
-  $items['node/%node/view']['title'] = 'Info';
+  $items['node/%node/view']['title'] = 'Session info';
 }
 
 /**
