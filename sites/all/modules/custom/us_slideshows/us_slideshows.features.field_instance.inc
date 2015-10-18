@@ -20,7 +20,11 @@ function us_slideshows_field_default_field_instances() {
       'default' => array(
         'label' => 'hidden',
         'module' => 'text',
-        'settings' => array(),
+        'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
+        ),
         'type' => 'text_default',
         'weight' => 0,
       ),
@@ -28,6 +32,9 @@ function us_slideshows_field_default_field_instances() {
         'label' => 'hidden',
         'module' => 'text',
         'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
           'trim_length' => 600,
         ),
         'type' => 'text_summary_or_trimmed',
@@ -66,7 +73,10 @@ function us_slideshows_field_default_field_instances() {
         'module' => 'flexslider_fields',
         'settings' => array(
           'caption' => 0,
+          'field_wrapper' => 0,
           'image_style' => 'flexslider_full',
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
           'optionset' => 'default',
         ),
         'type' => 'flexslider',
