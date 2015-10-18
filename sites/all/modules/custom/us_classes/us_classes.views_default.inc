@@ -685,11 +685,6 @@ function us_classes_views_default_views() {
   );
   $handler->display->display_options['filters']['field_topics_tid']['type'] = 'select';
   $handler->display->display_options['filters']['field_topics_tid']['vocabulary'] = 'topics';
-  /* Filter criterion: Content: Dates -  start date (field_dates) */
-  $handler->display->display_options['filters']['field_dates_value']['id'] = 'field_dates_value';
-  $handler->display->display_options['filters']['field_dates_value']['table'] = 'field_data_field_dates';
-  $handler->display->display_options['filters']['field_dates_value']['field'] = 'field_dates_value';
-  $handler->display->display_options['filters']['field_dates_value']['operator'] = 'not empty';
   $handler->display->display_options['path'] = 'node/%/proposals';
   $handler->display->display_options['menu']['type'] = 'tab';
   $handler->display->display_options['menu']['title'] = 'All proposals';
@@ -934,6 +929,7 @@ function us_classes_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
+  $handler->display->display_options['fields']['field_dates']['group_rows'] = FALSE;
   $handler->display->display_options['fields']['field_dates']['delta_offset'] = '0';
   /* Field: Time no date */
   $handler->display->display_options['fields']['field_dates_1']['id'] = 'field_dates_1';
