@@ -26,16 +26,19 @@ function us_people_strongarm() {
     'extra_fields' => array(
       'form' => array(
         'ckeditor' => array(
-          'weight' => '10',
+          'weight' => '4',
         ),
         'profile_main' => array(
-          'weight' => '0',
+          'weight' => '1',
         ),
         'account' => array(
-          'weight' => '-10',
+          'weight' => '0',
         ),
         'timezone' => array(
-          'weight' => '6',
+          'weight' => '3',
+        ),
+        'comment_notify_settings' => array(
+          'weight' => '2',
         ),
       ),
       'display' => array(

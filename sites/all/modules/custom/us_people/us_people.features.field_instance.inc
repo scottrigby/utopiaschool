@@ -216,6 +216,42 @@ function us_people_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'user-user-field_session_s_'
+  $field_instances['user-user-field_session_s_'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Please select Utopia School sessions you have attended or are planning to attend, either in-person or remotely.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'field_wrapper' => 0,
+          'item_wrapper' => 0,
+          'label_wrapper' => 0,
+          'link' => 1,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 3,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_session_s_',
+    'label' => 'Sessions attended/attending',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_buttons',
+      'weight' => 6,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('About me');
@@ -225,6 +261,8 @@ function us_people_field_default_field_instances() {
   t('Link to some websites that represent what you\'re up to.');
   t('Locations');
   t('Name');
+  t('Please select Utopia School sessions you have attended or are planning to attend, either in-person or remotely.');
+  t('Sessions attended/attending');
   t('Tell us anything else about yourself.');
   t('Websites');
 
