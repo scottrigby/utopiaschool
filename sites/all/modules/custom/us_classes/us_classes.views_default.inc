@@ -688,7 +688,7 @@ function us_classes_views_default_views() {
   $handler->display->display_options['path'] = 'node/%/proposals';
   $handler->display->display_options['menu']['type'] = 'tab';
   $handler->display->display_options['menu']['title'] = 'All proposals';
-  $handler->display->display_options['menu']['weight'] = '20';
+  $handler->display->display_options['menu']['weight'] = '-30';
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
   $export['classes'] = $view;
@@ -1006,7 +1006,7 @@ function us_classes_views_default_views() {
   $handler->display->display_options['path'] = 'node/%/schedule';
   $handler->display->display_options['menu']['type'] = 'tab';
   $handler->display->display_options['menu']['title'] = 'Schedule';
-  $handler->display->display_options['menu']['weight'] = '10';
+  $handler->display->display_options['menu']['weight'] = '-40';
   $handler->display->display_options['menu']['context'] = 0;
   $handler->display->display_options['menu']['context_only_inline'] = 0;
 

@@ -404,7 +404,33 @@ function us_classes_menu_alter(&$items) {
     $items[$path]['page arguments'][] = $op;
   }
 
-  $items['node/%node/view']['title'] = 'Session info';
+  $items['node/%node/view']['title callback'] = 'us_classes_menu_alter_node_view_title_callback';
+  $items['node/%node/view']['title arguments'] = array(1);
+  // We want the view tab to be the leftmost tab, and - to avoid confusion - the
+  // other public-facing tabs we also make visible through Views should be just
+  // to the right of it. There are many modules that add additional tabs, and we
+  // for now it seems nicer to keep those to the right, without having to alter
+  // their weights. So this is the lightest approach to help with that.
+  // @todo Assess whether we even care about this. If not, let's just let admin
+  //   tabs keep their default weights. If we do, then reset the Views tabs
+  //   weights back to a positive value.
+  $items['node/%node/view']['weight'] = -50;
+}
+
+/**
+ * Menu title callback for 'node/%node/view'.
+ *
+ * @param $node
+ *   The menu-loaded %node object.
+ * @return string
+ *   A custom string on specified content types, otherwise, the unaltered title
+ *   callback.
+ *
+ * @see us_classes_menu_alter()
+ */
+function us_classes_menu_alter_node_view_title_callback($node) {
+  $type = node_type_load($node->type);
+  return t('@name info', array('@name' => $type->name));
 }
 
 /**
