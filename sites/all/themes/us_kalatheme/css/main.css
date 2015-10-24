@@ -298,6 +298,7 @@ img.avatar {
 }
 
 /* Override Kalatheme */
+html.js input[autocomplete].fa-on, html.js input.throbbing.fa-on,
 html.js input.form-autocomplete {
     background-image: none;
     background-color: #ffffff;
