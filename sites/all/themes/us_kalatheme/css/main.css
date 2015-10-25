@@ -140,6 +140,7 @@ header .container {
 
 /* Link styles */
 a.button,
+a.add-link,
 body .nav>li>a {
     color: #ffffff;
     background-color: #007fff;
@@ -151,6 +152,9 @@ body .nav>li>a {
 a.button:hover,
 a.button:active,
 a.button:focus,
+a.add-link:hover,
+a.add-link:active,
+a.add-link:focus,
 .nav-pills>li.active>a,
 .nav-pills>li.active>a:hover,
 .nav-pills>li.active>a:focus,
@@ -161,21 +165,14 @@ a.button:focus,
     text-decoration: none;
 }
 
-/* Views */
-
-/* Style grouping fields like H2s */
-/*.view-content caption {*/
-    /*font-size: 32px;*/
-
-    /*margin-top: 21px;*/
-    /*margin-bottom: 10.5px;*/
-    /*font-family: "Open Sans",Calibri,Candara,Arial,sans-serif;*/
-    /*font-weight: 300;*/
-    /*line-height: 1.1;*/
-    /*color: inherit;*/
-
-    /*text-align: -webkit-left;*/
-/*}*/
+/* Make add button 100% width and resemble H2 styles */
+a.add-link {
+    display: block;
+    /* Borrow from H2 styles */
+    font-size: 32px;
+    font-family: "Source Sans Pro",Calibri,Candara,Arial,sans-serif;
+    font-weight: 300;
+}
 
 .view-classes .views-row {
     padding: 0 1em;
