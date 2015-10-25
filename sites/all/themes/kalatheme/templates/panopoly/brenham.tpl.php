@@ -27,7 +27,7 @@
           <?php print $content['sidebar']; ?>
         </div>
         <div class="col-sm-<?php print kalatheme_grid_size(KALATHEME_GRID_THIRD * 2); ?> brenham-main-content">
-          <?php print $content['contentmain']; ?>
+          <?php print $content['content_main']; ?>
         </div>
       </div>
     </div>
