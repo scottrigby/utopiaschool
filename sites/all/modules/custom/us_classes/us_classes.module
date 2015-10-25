@@ -42,6 +42,55 @@ function us_classes_theme($existing, $type, $theme, $path) {
         'involvement' => NULL,
       ),
     ),
+    'us_classes_add_proposal' => array(
+      'variables' => array(
+        'sessions' => array(),
+      ),
+    ),
+  );
+}
+
+/**
+ * Returns HTML for a class add link.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - sessions: An array of session node objects.
+ *
+ * @ingroup themeable
+ *
+ * @return array
+ *   A Drupal render array for the add link markup.
+ */
+function theme_us_classes_add_proposal($variables) {
+  $query = array();
+  foreach ($variables['sessions'] as $session) {
+    $query['sessions'][] = $session->nid;
+  }
+
+  $path = 'node/add/class';
+
+  if (user_is_anonymous()) {
+    $path = 'user/login';
+    $query += drupal_get_destination();
+  }
+
+  return array(
+    '#type' => 'container',
+    '#attributes' => array(
+      'class' => array('add-proposal'),
+    ),
+    'link' => array(
+      '#theme' => 'link',
+      '#text' => '+ Add new class proposal',
+      '#path' => $path,
+      '#options' => array(
+        'attributes' => array('class' => array('add-link'), 'id' => 'add-class'),
+        // Required.
+        'html' => FALSE,
+        'query' => $query,
+      ),
+    ),
   );
 }
 
@@ -73,6 +122,8 @@ function us_classes_field_widget_multiple_selects_form_alter(&$element, &$form_s
       asort($element['target_id']['#options']);
     }
   }
+
+  // @todo prepopulate the Sessions field values if in the node/add query param.
 }
 
 /**
@@ -81,10 +132,12 @@ function us_classes_field_widget_multiple_selects_form_alter(&$element, &$form_s
  * @todo Remove this when hook_user_view() bus is fixed.
  */
 function us_classes_block_info() {
-  // This example comes from node.module.
   $blocks['user_classes_involvement'] = array(
     'info' => t('Classes involved in'),
-//    'cache' => DRUPAL_NO_CACHE
+  );
+
+  $blocks['add_class_proposal'] = array(
+    'info' => t('Add a new class proposal'),
   );
 
   return $blocks;
@@ -105,6 +158,10 @@ function us_classes_block_view($delta = '') {
         $block['content'] = us_classes_user_classes_involvement_render($account);
       }
       break;
+    case 'add_class_proposal':
+      $sessions = 'node' == arg(0) && ($node = node_load(arg(1))) && 'session' == $node->type ? array($node) : array();
+      $block['subject'] = NULL;
+      $block['content'] = theme('us_classes_add_proposal', array('sessions' => $sessions));
   }
   return $block;
 }
@@ -495,7 +552,7 @@ function us_classes_flagging_inline_edit_flagging($flag, $content_id, $op) {
 }
 
 /**
- * Returns HTML for a foo.
+ * Returns HTML for a user's class involvement.
  *
  * @param array $variables
  *   An associative array containing:
