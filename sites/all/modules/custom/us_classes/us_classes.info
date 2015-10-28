@@ -1,6 +1,7 @@
 name = us_classes
 core = 7.x
 package = Features
+dependencies[] = chosen
 dependencies[] = ctools
 dependencies[] = date
 dependencies[] = date_range_formatter

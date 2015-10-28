@@ -1,0 +1,122 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions to help with development.
+ */
+
+/**
+ * Stored variable prefix.
+ */
+define('US_DEV_VARIABLE_PREFIX', 'us_dev_var_orig__');
+
+/**
+ * Stage file proxy origin URL.
+ */
+define('US_DEV_STAGE_FILE_PROXY_ORIGIN', 'http://utopiaschool.org');
+
+/**
+ * Implements hook_enable().
+ */
+function us_dev_enable() {
+  us_dev_enable_dev_modules();
+  us_dev_hijack_variables();
+}
+
+/**
+ * Implements hook_disable().
+ */
+function us_dev_disable() {
+  us_dev_disable_dev_modules();
+  us_dev_reset_variables();
+}
+
+/**
+ * Defines development-only modules.
+ */
+function us_dev_define_modules() {
+  return array(
+    'dblog',
+    'devel',
+    'field_ui',
+    'views_ui',
+    'stage_file_proxy',
+    'maillog',
+  );
+}
+
+/**
+ * Enables development modules.
+ */
+function us_dev_enable_dev_modules() {
+  $modules = us_dev_define_modules();
+  module_enable($modules);
+
+  return features_log(t('The following modules were enabled: @modules', array('@modules' => implode(', ', $modules))), 'status');
+}
+
+/**
+ * Disables development modules.
+ */
+function us_dev_disable_dev_modules() {
+  $modules = us_dev_define_modules();
+  module_disable($modules);
+  drupal_uninstall_modules($modules);
+
+  return features_log(t('The following modules were enabled: @modules', array('@modules' => implode(', ', $modules))), 'status');
+}
+
+/**
+ * Defines development variables.
+ *
+ * @return array
+ *   An associative array of dev-only variable values, keyed by variable name.
+ */
+function us_dev_define_variables() {
+  return array(
+    'stage_file_proxy_origin' => US_DEV_STAGE_FILE_PROXY_ORIGIN,
+  );
+}
+
+/**
+ * Hijacks development variables.
+ */
+function us_dev_hijack_variables() {
+  foreach (us_dev_define_variables() as $name => $value) {
+    us_dev_store_variable($name);
+    variable_set($name, $value);
+  }
+}
+
+/**
+ * Resets development variables to their original state.
+ */
+function us_dev_reset_variables() {
+  foreach (array_keys(us_dev_define_variables()) as $name) {
+    if ($value = us_dev_retrieve_stored_variable($name)) {
+      variable_set($name, $value);
+    }
+    else {
+      variable_del($name);
+    }
+  }
+}
+
+/**
+ * Stores development variable values before we set them.
+ */
+function us_dev_store_variable($name) {
+  if ($value = variable_get($name)) {
+    variable_set(US_DEV_VARIABLE_PREFIX . $name , $value);
+  }
+}
+
+/**
+ * Retrieves stored development variable values from before we set them.
+ *
+ * @return mixed | null
+ *   The stored variable value from before we set a dev value, or NULL.
+ */
+function us_dev_retrieve_stored_variable($name) {
+  return variable_get(US_DEV_VARIABLE_PREFIX . $name);
+}

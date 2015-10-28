@@ -1,0 +1,6 @@
+name = US Dev
+description = Developer convenience module. DO NOT enable on Production.
+core = 7.x
+package = US CMS
+; Ensure the very handy features_log() is enabled.
+dependencies[] = features
