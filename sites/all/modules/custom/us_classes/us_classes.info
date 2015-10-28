@@ -13,6 +13,7 @@ dependencies[] = image
 dependencies[] = list
 dependencies[] = mediaelement
 dependencies[] = multiple_selects
+dependencies[] = select_or_other
 dependencies[] = strongarm
 dependencies[] = taxonomy
 dependencies[] = textformatter

@@ -403,7 +403,9 @@ function us_classes_field_default_field_instances() {
     'widget' => array(
       'active' => 1,
       'module' => 'options',
-      'settings' => array(),
+      'settings' => array(
+        'apply_chosen' => '',
+      ),
       'type' => 'options_select',
       'weight' => 11,
     ),
@@ -463,8 +465,9 @@ function us_classes_field_default_field_instances() {
   $field_instances['node-class-field_topics'] = array(
     'bundle' => 'class',
     'default_value' => NULL,
+    'default_value_label_token' => 0,
     'deleted' => 0,
-    'description' => '',
+    'description' => 'Start typing to search the list of topics. Select \'Other\' to add a new topic.',
     'display' => array(
       'default' => array(
         'label' => 'inline',
@@ -520,13 +523,18 @@ function us_classes_field_default_field_instances() {
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 0,
-      'module' => 'taxonomy',
+      'active' => 1,
+      'module' => 'select_or_other',
       'settings' => array(
-        'autocomplete_path' => 'taxonomy/autocomplete',
-        'size' => 60,
+        'apply_chosen' => '',
+        'available_options' => '',
+        'other' => 'Other',
+        'other_size' => 60,
+        'other_title' => '',
+        'other_unknown_defaults' => 'other',
+        'sort_options' => 0,
       ),
-      'type' => 'taxonomy_autocomplete',
+      'type' => 'select_or_other',
       'weight' => 1,
     ),
   );
@@ -922,6 +930,7 @@ function us_classes_field_default_field_instances() {
   t('Session dates');
   t('Session schedule text');
   t('Session(s)');
+  t('Start typing to search the list of topics. Select \'Other\' to add a new topic.');
   t('Static Session class schedule text.');
   t('Status');
   t('TPS class');
