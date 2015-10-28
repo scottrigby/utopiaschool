@@ -159,15 +159,16 @@ function us_contact_create_profile($account) {
 /**
  * Creates a Class node.
  *
- * @param $account
- * @param $title
- * @param $body
- * @param $session
+ * @param stdClass $account
+ * @param string $title
+ * @param string $body
+ * @param int $session
+ * @param array $topics
  * @return \stdClass
  *   The Class Node object.
  * @throws \Exception
  */
-function us_contact_create_class($account, $title, $body, $session) {
+function us_contact_create_class(stdClass $account, $title, $body, $session, array $topics = array()) {
   $node = new stdClass();
   $node->type = 'class';
   $node->language = LANGUAGE_NONE;
@@ -184,6 +185,7 @@ function us_contact_create_class($account, $title, $body, $session) {
     'target_id' => $session,
     'target_type' => 'node',
   );
+  $node->field_topics[LANGUAGE_NONE] = $topics;
   node_save($node);
 
   return $node;
