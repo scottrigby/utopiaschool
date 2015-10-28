@@ -140,6 +140,10 @@ function us_classes_block_info() {
     'info' => t('Add a new class proposal'),
   );
 
+  $blocks['easy_add_form'] = array(
+    'info' => t('Add a new class proposal'),
+  );
+
   return $blocks;
 }
 
@@ -162,8 +166,162 @@ function us_classes_block_view($delta = '') {
       $sessions = 'node' == arg(0) && ($node = node_load(arg(1))) && 'session' == $node->type ? array($node) : array();
       $block['subject'] = NULL;
       $block['content'] = theme('us_classes_add_proposal', array('sessions' => $sessions));
+      break;
+    case 'easy_add_form':
+      $block['subject'] = t('Add a new class proposal');
+      $block['content'] = drupal_get_form('us_classes_easy_add_form');
+      break;
   }
   return $block;
+}
+
+/**
+ * Form constructor for easy Class proposal add.
+ */
+function us_classes_easy_add_form($form, &$form_state) {
+  $form = array();
+
+  if (user_is_anonymous()) {
+    // @see user_account_form().
+    $form['name'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Your name'),
+      '#maxlength' => USERNAME_MAX_LENGTH,
+//      '#description' => t('Spaces are allowed; punctuation is not allowed except for periods, hyphens, apostrophes, and underscores.'),
+      '#required' => TRUE,
+      '#weight' => -100,
+    );
+    $form['mail'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Your E-mail'),
+      '#maxlength' => EMAIL_MAX_LENGTH,
+//      '#description' => t('A valid e-mail address. All e-mails from the system will be sent to this address. The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail.'),
+      '#required' => TRUE,
+      '#weight' => -99,
+    );
+  }
+  else {
+    global $user;
+    $form['name'] = array(
+      '#type' => 'hidden',
+      '#value' => $user->name,
+    );
+    $form['mail'] = array(
+      '#type' => 'hidden',
+      '#value' => $user->mail,
+    );
+  }
+
+  // @see node_content_form().
+  $form['title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Class name'),
+    '#required' => TRUE,
+    '#maxlength' => 255,
+    '#weight' => -98,
+  );
+
+  // Attach form fields.
+  $node = new stdClass();
+  $node->type = 'class';
+  $attach_form = array();
+  $field_names = array(
+    'body',
+    'field_session_s_',
+    'field_topics',
+  );
+  foreach ($field_names as $key => $field_name) {
+    $options = array('field_name' => $field_name);
+    field_attach_form('node', $node, $attach_form, $form_state, entity_language('node', $node), $options);
+    // Attach one at a time, so we set the weight correctly.
+    $form[$field_name] = $attach_form[$field_name];
+    // The order by in the array above ($key here).
+    $form[$field_name]['#weight'] = $key;
+  }
+//  $form += $attach_form;
+
+  // Modify sessions field value, based on context.
+  if ('node' == arg(0)
+    && ($current_node = node_load(arg(1)))
+    && 'session' == $current_node->type
+    && in_array($current_node->nid, array_keys($form['field_session_s_'][LANGUAGE_NONE]['#options']))) {
+    $form['field_session_s_'][LANGUAGE_NONE]['#default_value'] = $current_node->nid;
+    $form['field_session_s_'][LANGUAGE_NONE]['#disabled'] = TRUE;
+  }
+
+  // @see node_form().
+  $form['actions'] = array('#type' => 'actions');
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#access' => !form_get_errors(),
+    '#value' => t('Save'),
+    '#weight' => 5,
+  );
+
+  return $form;
+}
+
+/**
+ * Validation handler for us_classes_easy_add_form().
+ *
+ * @see us_classes_easy_add_form()
+ * @see us_classes_easy_add_form_submit()
+ */
+function us_classes_easy_add_form_validate($form, &$form_state) {
+  // Manually set the bundle for node_form_validate -> _node_extract_type().
+  $form_state['values']['type'] = 'class';
+
+  // @todo split out us_contact_action_create_class_from_submission() into
+  // reusable functions, and merge this code as well. Also do for
+  // us_classes_easy_add_form_submit().
+  $new_account = FALSE;
+  if (!$account = user_load_by_mail($form_state['values']['mail'])) {
+    $username = $form_state['values']['name'];
+    $email = $form_state['values']['mail'];
+
+    // Create user is none exists, and send standard welcome message.
+    $account = us_contact_create_user($username, $email);
+    us_contact_create_profile($account);
+
+    $new_account = TRUE;
+  }
+  $form_state['values']['new_account'] = $new_account;
+
+  // Pass account to submit handler.
+  $form_state['values']['account'] = $account;
+
+  module_load_include('inc', 'node', 'node.pages');
+  node_form_validate($form, $form_state);
+}
+
+/**
+ * Form submissions handler for us_classes_easy_add_form().
+ *
+ * @see us_classes_easy_add_form()
+ */
+function us_classes_easy_add_form_submit($form, &$form_state) {
+  // Create class from form submission.
+  $account = $form_state['values']['account'];
+  $title = $form_state['values']['title'];
+  $body = $form_state['values']['body'][LANGUAGE_NONE][0]['value'];
+  $session = $form_state['values']['field_session_s_'][LANGUAGE_NONE][0]['target_id'];
+  $topics = $form_state['values']['field_topics'][LANGUAGE_NONE];
+  $class = us_contact_create_class($account, $title, $body, $session, $topics);
+  $form_state['redirect'] = 'node/' . $class->nid;
+
+  // Send another email, notifying the contact form submitter that a new account
+  // and class has been created.
+  $new_account = $form_state['values']['new_account'];
+  us_contact_created_class_notify_user($account, $class, $new_account);
+
+  $messages[] = t('Your class proposal has been created!');
+  if ($new_account) {
+    global $base_url;
+    $messages[] = t('If you want to edit this proposal, or get involved with other class proposals, please check your email within 24 hours for a quick login link. After that, you can visit !reset_pass_url for a new login email.', array('!reset_pass_url' => $base_url . base_path() . 'user/password'));
+  }
+  foreach ($messages as $message) {
+    drupal_set_message($message);
+  }
 }
 
 /**
