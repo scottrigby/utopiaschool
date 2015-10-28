@@ -295,6 +295,14 @@ img.avatar {
 }
 
 /* Override Kalatheme */
+body .form-control {
+    height: auto;
+    padding: 0;
+}
+.chosen-container-multi .chosen-choices {
+    border: none;
+}
+
 html.js input[autocomplete].fa-on, html.js input.throbbing.fa-on,
 html.js input.form-autocomplete {
     background-image: none;
