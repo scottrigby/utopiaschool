@@ -134,7 +134,7 @@ function us_dev_hijack_permissions() {
 
 /**
  * Resets development user permissions to their original state.
- * 
+ *
  * @todo Check to make sure this doesn't let revoked permissions defined in
  *   us_dev_define_permissions() to linger, since user_role_permissions() only
  *   returns permisions that are TRUE (does not contain all FALSE ones).

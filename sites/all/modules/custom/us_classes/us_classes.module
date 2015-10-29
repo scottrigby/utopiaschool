@@ -291,6 +291,9 @@ function us_classes_easy_add_form_validate($form, &$form_state) {
   $form_state['values']['account'] = $account;
 
   module_load_include('inc', 'node', 'node.pages');
+  // @todo what happens when someone re-enters their user's email, but the
+  // username field isn't exact. Do we not get that from user_form and just
+  // create our own? (Do we do email-login-only)?
   node_form_validate($form, $form_state);
 }
 
