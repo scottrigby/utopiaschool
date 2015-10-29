@@ -121,3 +121,54 @@ function us_dev_store_variable($name) {
 function us_dev_retrieve_stored_variable($name) {
   return variable_get(US_DEV_VARIABLE_PREFIX . $name);
 }
+
+/**
+ * Hijacks development user permissions.
+ */
+function us_dev_hijack_permissions() {
+  us_dev_store_permissions();
+  foreach (us_dev_define_permissions() as $rid => $role_permissions) {
+    user_role_change_permissions($rid, $role_permissions);
+  }
+}
+
+/**
+ * Resets development user permissions to their original state.
+ * 
+ * @todo Check to make sure this doesn't let revoked permissions defined in
+ *   us_dev_define_permissions() to linger, since user_role_permissions() only
+ *   returns permisions that are TRUE (does not contain all FALSE ones).
+ */
+function us_dev_reset_permissions() {
+  foreach (variable_get(US_DEV_VARIABLE_PREFIX . 'permissions') as $rid => $role_permissions) {
+    user_role_change_permissions($rid, $role_permissions);
+  }
+}
+
+/**
+ * Defines development user permissions.
+ *
+ * @return array
+ *   Matches the $permissions param for user_role_change_permissions().
+ *
+ * @see user_role_change_permissions()
+ */
+function us_dev_define_permissions() {
+  return array(
+    DRUPAL_ANONYMOUS_RID => array(
+      'access devel information' => TRUE,
+    ),
+    DRUPAL_AUTHENTICATED_RID => array(
+      'access devel information' => TRUE,
+    ),
+  );
+}
+
+/**
+ * Stores development user permissions before we set them.
+ */
+function us_dev_store_permissions() {
+  // Get and store all permissions.
+  $permissions = user_role_permissions(array_keys(user_roles()));
+  variable_set(US_DEV_VARIABLE_PREFIX . 'permissions', $permissions);
+}
