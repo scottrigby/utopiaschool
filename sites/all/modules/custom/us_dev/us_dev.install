@@ -75,6 +75,7 @@ function us_dev_disable_dev_modules() {
 function us_dev_define_variables() {
   return array(
     'stage_file_proxy_origin' => US_DEV_STAGE_FILE_PROXY_ORIGIN,
+    'maillog_send' => 0,
   );
 }
 
