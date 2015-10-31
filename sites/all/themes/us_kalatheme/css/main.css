@@ -24,6 +24,20 @@
     border-bottom: 1px solid #777;
 }
 
+/* Session pages */
+/* Hide sessions field on easy add form while in a session context */
+body.node-type-session #us-classes-easy-add-form .field-name-field-session-s-,
+body.page-node-schedule #us-classes-easy-add-form .field-name-field-session-s-,
+body.page-node-proposals #us-classes-easy-add-form .field-name-field-session-s-,
+body.page-node-people #us-classes-easy-add-form .field-name-field-session-s- {
+    display: none;
+}
+body.not-logged-in #us-classes-easy-add-form .filter-wrapper {
+    padding: 0;
+    margin-bottom: 15px;
+}
+
+
     /* Images */
 img {
     max-width: 100%;
