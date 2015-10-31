@@ -21,6 +21,7 @@ define('US_DEV_STAGE_FILE_PROXY_ORIGIN', 'http://utopiaschool.org');
 function us_dev_enable() {
   us_dev_enable_dev_modules();
   us_dev_hijack_variables();
+  us_dev_hijack_permissions();
 }
 
 /**
@@ -29,6 +30,7 @@ function us_dev_enable() {
 function us_dev_disable() {
   us_dev_disable_dev_modules();
   us_dev_reset_variables();
+  us_dev_reset_permissions();
 }
 
 /**
