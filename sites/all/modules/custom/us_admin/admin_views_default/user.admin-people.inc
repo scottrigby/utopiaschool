@@ -119,32 +119,11 @@ $handler->display->display_options['fields']['views_bulk_operations']['vbo_setti
 $handler->display->display_options['fields']['views_bulk_operations']['vbo_settings']['force_single'] = 0;
 $handler->display->display_options['fields']['views_bulk_operations']['vbo_settings']['entity_load_capacity'] = '10';
 $handler->display->display_options['fields']['views_bulk_operations']['vbo_operations'] = array(
-  'action::system_block_ip_action' => array(
-    'selected' => 0,
-    'skip_confirmation' => 1,
-    'override_label' => 1,
-    'label' => 'Ban IP address of the current user',
-    'postpone_processing' => 0,
-  ),
-  'action::user_block_user_action' => array(
-    'selected' => 0,
-    'skip_confirmation' => 1,
-    'override_label' => 0,
-    'label' => '',
-    'postpone_processing' => 0,
-  ),
   'action::views_bulk_operations_user_cancel_action' => array(
     'selected' => 1,
     'skip_confirmation' => 0,
     'override_label' => 0,
     'label' => '',
-    'postpone_processing' => 0,
-  ),
-  'action::views_bulk_operations_delete_item' => array(
-    'selected' => 0,
-    'skip_confirmation' => 0,
-    'override_label' => 1,
-    'label' => 'Delete',
     'postpone_processing' => 0,
   ),
   'action::views_bulk_operations_modify_action' => array(
@@ -160,41 +139,11 @@ $handler->display->display_options['fields']['views_bulk_operations']['vbo_opera
     ),
     'postpone_processing' => 0,
   ),
-  'action::system_message_action' => array(
-    'selected' => 0,
-    'skip_confirmation' => 0,
-    'override_label' => 0,
-    'label' => '',
-    'postpone_processing' => 0,
-  ),
-  'action::views_bulk_operations_script_action' => array(
-    'selected' => 0,
-    'skip_confirmation' => 0,
-    'override_label' => 0,
-    'label' => '',
-    'postpone_processing' => 0,
-  ),
   'action::views_bulk_operations_user_roles_action' => array(
     'selected' => 1,
     'skip_confirmation' => 0,
     'override_label' => 1,
     'label' => 'Change user roles',
-    'postpone_processing' => 0,
-  ),
-  'action::views_bulk_operations_argument_selector_action' => array(
-    'selected' => 0,
-    'skip_confirmation' => 0,
-    'override_label' => 0,
-    'label' => '',
-    'settings' => array(
-      'url' => '',
-    ),
-  ),
-  'action::system_goto_action' => array(
-    'selected' => 0,
-    'skip_confirmation' => 0,
-    'override_label' => 0,
-    'label' => '',
     'postpone_processing' => 0,
   ),
   'action::system_send_email_action' => array(
@@ -249,6 +198,15 @@ $handler->display->display_options['fields']['cancel_node']['field'] = 'cancel_n
 $handler->display->display_options['fields']['cancel_node']['label'] = '';
 $handler->display->display_options['fields']['cancel_node']['element_label_colon'] = FALSE;
 $handler->display->display_options['fields']['cancel_node']['hide_alter_empty'] = FALSE;
+/* Field: Field: Sessions attended/attending */
+$handler->display->display_options['fields']['field_session_s_']['id'] = 'field_session_s_';
+$handler->display->display_options['fields']['field_session_s_']['table'] = 'field_data_field_session_s_';
+$handler->display->display_options['fields']['field_session_s_']['field'] = 'field_session_s_';
+$handler->display->display_options['fields']['field_session_s_']['settings'] = array(
+  'link' => 1,
+);
+$handler->display->display_options['fields']['field_session_s_']['delta_offset'] = '0';
+$handler->display->display_options['fields']['field_session_s_']['multi_type'] = 'ul';
 /* Sort criterion: User: Created date */
 $handler->display->display_options['sorts']['created']['id'] = 'created';
 $handler->display->display_options['sorts']['created']['table'] = 'users';
@@ -310,6 +268,23 @@ $handler->display->display_options['filters']['rid']['expose']['label'] = 'Role'
 $handler->display->display_options['filters']['rid']['expose']['operator'] = 'rid_op';
 $handler->display->display_options['filters']['rid']['expose']['identifier'] = 'rid';
 $handler->display->display_options['filters']['rid']['expose']['remember'] = TRUE;
+/* Filter criterion: Field: Sessions attended/attending (field_session_s_) */
+$handler->display->display_options['filters']['field_session_s__target_id']['id'] = 'field_session_s__target_id';
+$handler->display->display_options['filters']['field_session_s__target_id']['table'] = 'field_data_field_session_s_';
+$handler->display->display_options['filters']['field_session_s__target_id']['field'] = 'field_session_s__target_id';
+$handler->display->display_options['filters']['field_session_s__target_id']['exposed'] = TRUE;
+$handler->display->display_options['filters']['field_session_s__target_id']['expose']['operator_id'] = 'field_session_s__target_id_op';
+$handler->display->display_options['filters']['field_session_s__target_id']['expose']['label'] = 'Sessions attended/attending';
+$handler->display->display_options['filters']['field_session_s__target_id']['expose']['operator'] = 'field_session_s__target_id_op';
+$handler->display->display_options['filters']['field_session_s__target_id']['expose']['identifier'] = 'field_session_s__target_id';
+$handler->display->display_options['filters']['field_session_s__target_id']['expose']['multiple'] = TRUE;
+$handler->display->display_options['filters']['field_session_s__target_id']['expose']['remember_roles'] = array(
+  2 => '2',
+  1 => 0,
+  3 => 0,
+  4 => 0,
+  6 => 0,
+);
 
 /* Display: System */
 $handler = $view->new_display('system', 'System', 'system_1');
@@ -317,6 +292,7 @@ $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
 $handler->display->display_options['hide_admin_links'] = TRUE;
 $handler->display->display_options['defaults']['access'] = FALSE;
 $handler->display->display_options['path'] = 'admin/people';
+
 $translatables['admin_views_user'] = array(
   t('Defaults'),
   t('Users'),
