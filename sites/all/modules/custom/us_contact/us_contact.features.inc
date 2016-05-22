@@ -51,7 +51,7 @@ function us_contact_default_entityform_type() {
       "access_rules" : [],
       "redirect_path" : "",
       "instruction_pre" : {
-        "value" : "\\u003Cp\\u003EFeel free to contact us with any questions or proposals for the October Copenhagen slumber party. We look forward to hearing from you!\\u003C\\/p\\u003E\\r\\n",
+        "value" : "\\u003Cp\\u003EFeel free to contact us with any questions or proposals. We look forward to hearing from you!\\u003C\\/p\\u003E\\r\\n",
         "format" : "filtered_html"
       }
     },
