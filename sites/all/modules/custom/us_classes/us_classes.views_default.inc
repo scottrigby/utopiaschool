@@ -85,7 +85,7 @@ function us_classes_views_default_views() {
     'class' => 'class',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
-  /* Filter criterion: Field: Sessions attended/attending (field_session_s_) */
+  /* Filter criterion: Field: Session(s) (field_session_s_) */
   $handler->display->display_options['filters']['field_session_s__target_id']['id'] = 'field_session_s__target_id';
   $handler->display->display_options['filters']['field_session_s__target_id']['table'] = 'field_data_field_session_s_';
   $handler->display->display_options['filters']['field_session_s__target_id']['field'] = 'field_session_s__target_id';
@@ -362,7 +362,7 @@ function us_classes_views_default_views() {
     'multiple_to' => '',
   );
   $handler->display->display_options['fields']['field_dates']['delta_offset'] = '0';
-  /* Field: Field: Sessions attended/attending */
+  /* Field: Field: Session(s) */
   $handler->display->display_options['fields']['field_session_s_']['id'] = 'field_session_s_';
   $handler->display->display_options['fields']['field_session_s_']['table'] = 'field_data_field_session_s_';
   $handler->display->display_options['fields']['field_session_s_']['field'] = 'field_session_s_';

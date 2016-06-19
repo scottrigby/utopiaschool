@@ -10,7 +10,7 @@
 function us_classes_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'flagging-subscribe_class-field_interest'
+  // Exported field_instance: 'flagging-subscribe_class-field_interest'.
   $field_instances['flagging-subscribe_class-field_interest'] = array(
     'bundle' => 'subscribe_class',
     'default_value' => array(
@@ -50,7 +50,7 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-class-body'
+  // Exported field_instance: 'node-class-body'.
   $field_instances['node-class-body'] = array(
     'bundle' => 'class',
     'default_value' => NULL,
@@ -97,7 +97,7 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-class-field_audio'
+  // Exported field_instance: 'node-class-field_audio'.
   $field_instances['node-class-field_audio'] = array(
     'bundle' => 'class',
     'default_value' => NULL,
@@ -162,7 +162,7 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-class-field_dates'
+  // Exported field_instance: 'node-class-field_dates'.
   $field_instances['node-class-field_dates'] = array(
     'bundle' => 'class',
     'deleted' => 0,
@@ -229,7 +229,7 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-class-field_facilitators'
+  // Exported field_instance: 'node-class-field_facilitators'.
   $field_instances['node-class-field_facilitators'] = array(
     'bundle' => 'class',
     'default_value' => NULL,
@@ -257,15 +257,19 @@ function us_classes_field_default_field_instances() {
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'active' => 0,
-      'module' => 'multiple_selects',
-      'settings' => array(),
-      'type' => 'multiple_selects',
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete',
       'weight' => 3,
     ),
   );
 
-  // Exported field_instance: 'node-class-field_images'
+  // Exported field_instance: 'node-class-field_images'.
   $field_instances['node-class-field_images'] = array(
     'bundle' => 'class',
     'deleted' => 0,
@@ -319,7 +323,7 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-class-field_resources'
+  // Exported field_instance: 'node-class-field_resources'.
   $field_instances['node-class-field_resources'] = array(
     'bundle' => 'class',
     'default_value' => NULL,
@@ -361,7 +365,7 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-class-field_session_s_'
+  // Exported field_instance: 'node-class-field_session_s_'.
   $field_instances['node-class-field_session_s_'] = array(
     'bundle' => 'class',
     'default_value' => NULL,
@@ -411,7 +415,7 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-class-field_status'
+  // Exported field_instance: 'node-class-field_status'.
   $field_instances['node-class-field_status'] = array(
     'bundle' => 'class',
     'default_value' => array(
@@ -461,7 +465,7 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-class-field_topics'
+  // Exported field_instance: 'node-class-field_topics'.
   $field_instances['node-class-field_topics'] = array(
     'bundle' => 'class',
     'default_value' => NULL,
@@ -539,7 +543,7 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-class-field_tps_class'
+  // Exported field_instance: 'node-class-field_tps_class'.
   $field_instances['node-class-field_tps_class'] = array(
     'bundle' => 'class',
     'default_value' => NULL,
@@ -599,7 +603,7 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-class-field_video'
+  // Exported field_instance: 'node-class-field_video'.
   $field_instances['node-class-field_video'] = array(
     'bundle' => 'class',
     'default_value' => NULL,
@@ -668,7 +672,7 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-session-body'
+  // Exported field_instance: 'node-session-body'.
   $field_instances['node-session-body'] = array(
     'bundle' => 'session',
     'default_value' => NULL,
@@ -720,7 +724,7 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-session-field_image'
+  // Exported field_instance: 'node-session-field_image'.
   $field_instances['node-session-field_image'] = array(
     'bundle' => 'session',
     'deleted' => 0,
@@ -773,7 +777,7 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-session-field_session_dates'
+  // Exported field_instance: 'node-session-field_session_dates'.
   $field_instances['node-session-field_session_dates'] = array(
     'bundle' => 'session',
     'deleted' => 0,
@@ -829,7 +833,7 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-session-field_session_location'
+  // Exported field_instance: 'node-session-field_session_location'.
   $field_instances['node-session-field_session_location'] = array(
     'bundle' => 'session',
     'default_value' => NULL,
@@ -873,7 +877,7 @@ function us_classes_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-session-field_session_schedule_text'
+  // Exported field_instance: 'node-session-field_session_schedule_text'.
   $field_instances['node-session-field_session_schedule_text'] = array(
     'bundle' => 'session',
     'default_value' => NULL,

@@ -10,7 +10,7 @@
 function us_classes_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'body'
+  // Exported field_base: 'body'.
   $field_bases['body'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -33,7 +33,7 @@ function us_classes_field_default_field_bases() {
     'type' => 'text_with_summary',
   );
 
-  // Exported field_base: 'field_audio'
+  // Exported field_base: 'field_audio'.
   $field_bases['field_audio'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -63,7 +63,7 @@ function us_classes_field_default_field_bases() {
     'type' => 'link_field',
   );
 
-  // Exported field_base: 'field_dates'
+  // Exported field_base: 'field_dates'.
   $field_bases['field_dates'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -93,7 +93,7 @@ function us_classes_field_default_field_bases() {
     'type' => 'datetime',
   );
 
-  // Exported field_base: 'field_facilitators'
+  // Exported field_base: 'field_facilitators'.
   $field_bases['field_facilitators'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -108,6 +108,7 @@ function us_classes_field_default_field_bases() {
     'locked' => 0,
     'module' => 'entityreference',
     'settings' => array(
+      'behaviors' => array(),
       'handler' => 'base',
       'handler_settings' => array(
         'behaviors' => array(
@@ -130,7 +131,7 @@ function us_classes_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_images'
+  // Exported field_base: 'field_images'.
   $field_bases['field_images'] = array(
     'active' => 1,
     'cardinality' => 5,
@@ -153,7 +154,7 @@ function us_classes_field_default_field_bases() {
     'type' => 'image',
   );
 
-  // Exported field_base: 'field_interest'
+  // Exported field_base: 'field_interest'.
   $field_bases['field_interest'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -180,7 +181,7 @@ function us_classes_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_resources'
+  // Exported field_base: 'field_resources'.
   $field_bases['field_resources'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -221,7 +222,7 @@ function us_classes_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_session_dates'
+  // Exported field_base: 'field_session_dates'.
   $field_bases['field_session_dates'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -251,7 +252,7 @@ function us_classes_field_default_field_bases() {
     'type' => 'datetime',
   );
 
-  // Exported field_base: 'field_session_location'
+  // Exported field_base: 'field_session_location'.
   $field_bases['field_session_location'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -272,7 +273,7 @@ function us_classes_field_default_field_bases() {
     'type' => 'text_long',
   );
 
-  // Exported field_base: 'field_session_s_'
+  // Exported field_base: 'field_session_s_'.
   $field_bases['field_session_s_'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -313,7 +314,7 @@ function us_classes_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_session_schedule_text'
+  // Exported field_base: 'field_session_schedule_text'.
   $field_bases['field_session_schedule_text'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -334,7 +335,7 @@ function us_classes_field_default_field_bases() {
     'type' => 'text_long',
   );
 
-  // Exported field_base: 'field_status'
+  // Exported field_base: 'field_status'.
   $field_bases['field_status'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -362,7 +363,7 @@ function us_classes_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_topics'
+  // Exported field_base: 'field_topics'.
   $field_bases['field_topics'] = array(
     'active' => 1,
     'cardinality' => -1,
@@ -389,7 +390,7 @@ function us_classes_field_default_field_bases() {
     'type' => 'taxonomy_term_reference',
   );
 
-  // Exported field_base: 'field_tps_class'
+  // Exported field_base: 'field_tps_class'.
   $field_bases['field_tps_class'] = array(
     'active' => 1,
     'cardinality' => 1,
@@ -419,7 +420,7 @@ function us_classes_field_default_field_bases() {
     'type' => 'link_field',
   );
 
-  // Exported field_base: 'field_video'
+  // Exported field_base: 'field_video'.
   $field_bases['field_video'] = array(
     'active' => 1,
     'cardinality' => -1,
