@@ -199,16 +199,9 @@ function us_classes_easy_add_form($form, &$form_state) {
       '#required' => TRUE,
       '#weight' => -99,
     );
-  }
-  else {
-    global $user;
-    $form['name'] = array(
+    $form['account'] = array(
       '#type' => 'hidden',
-      '#value' => $user->name,
-    );
-    $form['mail'] = array(
-      '#type' => 'hidden',
-      '#value' => $user->mail,
+      '#value' => FALSE,
     );
   }
 
@@ -268,32 +261,30 @@ function us_classes_easy_add_form($form, &$form_state) {
  * @see us_classes_easy_add_form_submit()
  */
 function us_classes_easy_add_form_validate($form, &$form_state) {
+  // Check if the user email already exists, and if so ask them to log in. Also
+  // pass the account variable to the submit handler in case it does not exist.
+  if (!empty($form_state['values']['account'])) {
+    // @todo Redirect to login page with message and destination back. But
+    //   what if the user had spent a long time on their class proposal? All of
+    //   that would be lost. Even throwing a form error asking them to login
+    //   first would make submitting harder than it is now. Let's hold off on
+    //   this until it becomes a problem. For now let's assume anon users don't
+    //   know existing users emails.
+  }
+
   // Manually set the bundle for node_form_validate -> _node_extract_type().
   $form_state['values']['type'] = 'class';
 
-  // @todo split out us_contact_action_create_class_from_submission() into
-  // reusable functions, and merge this code as well. Also do for
-  // us_classes_easy_add_form_submit().
-  $new_account = FALSE;
-  if (!$account = user_load_by_mail($form_state['values']['mail'])) {
-    $username = $form_state['values']['name'];
-    $email = $form_state['values']['mail'];
-
-    // Create user is none exists, and send standard welcome message.
-    $account = us_contact_create_user($username, $email);
-    us_contact_create_profile($account);
-
-    $new_account = TRUE;
+  // Temporarily remove the user name to avoid errors. If there is no name,
+  // node_form_validate() calls node_validate() which assumes anonymous user for
+  // validation. In the submit handler we will use the temp_name for actual
+  // class node creation.
+  if (!empty($form_state['values']['name'])) {
+    $form_state['values']['temp_name'] = $form_state['values']['name'];
+    unset($form_state['values']['name']);
   }
-  $form_state['values']['new_account'] = $new_account;
-
-  // Pass account to submit handler.
-  $form_state['values']['account'] = $account;
 
   module_load_include('inc', 'node', 'node.pages');
-  // @todo what happens when someone re-enters their user's email, but the
-  // username field isn't exact. Do we not get that from user_form and just
-  // create our own? (Do we do email-login-only)?
   node_form_validate($form, $form_state);
 }
 
@@ -303,8 +294,36 @@ function us_classes_easy_add_form_validate($form, &$form_state) {
  * @see us_classes_easy_add_form()
  */
 function us_classes_easy_add_form_submit($form, &$form_state) {
+  global $user, $base_url;
+
+  // Initialize the class and account messages array.
+  $messages[] = t('Your class proposal has been created!');
+
+  // @todo split out us_contact_action_create_class_from_submission() into
+  // reusable functions, and merge this code as well. Also do for
+  // us_classes_easy_add_form_submit().
+
+  // Find an existing account, or make one.
+  if (!user_is_anonymous()) {
+    $account = user_load($user->uid);
+  }
+  elseif ($account = user_load_by_mail($form_state['values']['mail'])) {
+    // Do nothing. $account object is set.
+    $messages[] = t('If you want to edit this proposal, or get involved with other class proposals, please log in.');
+  }
+  else {
+    $username = $form_state['values']['temp_name'];
+    $email = $form_state['values']['mail'];
+
+    // Create user is none exists, and send standard welcome message.
+    $account = us_contact_create_user($username, $email);
+    us_contact_create_profile($account);
+    $new_account = TRUE;
+
+    $messages[] = t('If you want to edit this proposal, or get involved with other class proposals, please check your email within 24 hours for a quick login link. After that, you can visit !reset_pass_url for a new login email.', array('!reset_pass_url' => $base_url . base_path() . 'user/password'));
+  }
+
   // Create class from form submission.
-  $account = $form_state['values']['account'];
   $title = $form_state['values']['title'];
   $body = $form_state['values']['body'][LANGUAGE_NONE][0]['value'];
   $session = $form_state['values']['field_session_s_'][LANGUAGE_NONE][0]['target_id'];
@@ -312,19 +331,14 @@ function us_classes_easy_add_form_submit($form, &$form_state) {
   $class = us_contact_create_class($account, $title, $body, $session, $topics);
   $form_state['redirect'] = 'node/' . $class->nid;
 
-  // Send another email, notifying the contact form submitter that a new account
-  // and class has been created.
-  $new_account = $form_state['values']['new_account'];
-  us_contact_created_class_notify_user($account, $class, $new_account);
-
-  $messages[] = t('Your class proposal has been created!');
-  if ($new_account) {
-    global $base_url;
-    $messages[] = t('If you want to edit this proposal, or get involved with other class proposals, please check your email within 24 hours for a quick login link. After that, you can visit !reset_pass_url for a new login email.', array('!reset_pass_url' => $base_url . base_path() . 'user/password'));
-  }
+  // Display messages on screen.
   foreach ($messages as $message) {
     drupal_set_message($message);
   }
+
+  // Send another email, notifying the contact form submitter that a new class,
+  // and if they are a new user that their account, has been created.
+  us_contact_created_class_notify_user($account, $class, !empty($new_account));
 }
 
 /**
